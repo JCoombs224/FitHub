@@ -1,7 +1,7 @@
 # FithubClient
 
 <p align="center">
-  <img src="src/assets/Logo1/png/logo-color.png" width="400px" align="center">
+  <img src="src/assets/Logo2/png/logo-no-background.png" width="400px" align="right">
 </p>
 
 <p>
