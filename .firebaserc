@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "fithub-94c8b": {
+      "hosting": {
+        "fithub-client": [
+          "fithub-94c8b"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "fithub-94c8b"
+  }
+}
