@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit{
 
     // Check if all fields are filled
     if(this.loginForm.valid) {
-
+      // TODO: Create a login service
     }
     console.log("login pressed");
   }
