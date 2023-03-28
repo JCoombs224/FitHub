@@ -18,12 +18,14 @@
             <form [formGroup]="loginForm" (ngSubmit)="login()">
               <div class="row">
                 <div class="col">
-                  <input type="text" class="form-control" placeholder="Username" formControlName="username" [class.is-invalid]="username.invalid && username.touched">
+                  <input type="text" class="form-control" placeholder="E-Mail / Username" formControlName="username" [class.is-invalid]="username.invalid && username.touched">
+                  <small class="text-danger" *ngIf="username.invalid && username.touched">E-Mail / Username is required</small>
                 </div>
               </div>
               <div class="row mt-4">
                 <div class="col">
                   <input type="password" class="form-control" placeholder="Password" formControlName="password" [class.is-invalid]="password.invalid && password.touched">
+                  <small class="text-danger" *ngIf="password.invalid && password.touched">Password is required</small>
                 </div>
               </div>
               <div class="row mt-4">

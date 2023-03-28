@@ -1,0 +1,41 @@
+<div class="row home-bg min-vh-100">
+    <div class="col"></div>
+    <div class="col-8 col-xl-5 text-center">
+      <div class="card card-home">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-4 offset-4">
+              <img src="../../../assets/Logo1/png/logo-no-background.png" class="img-fluid">
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col">
+              <h1 class="display-3">FitHub Sign Up</h1>
+            </div>
+          </div>
+          <div class="row mt-5 justify-content-center">
+            <div class="col-8">
+              <form [formGroup]="signupForm" (ngSubmit)="submit()">
+                <div class="row">
+                  <div class="col">
+                    <input type="text" class="form-control" placeholder="E-Mail / Username" formControlName="username" [class.is-invalid]="username.invalid && username.touched">
+                    <small class="text-danger" *ngIf="username.invalid && username.touched">E-Mail / Username is required</small>
+                  </div>
+                </div>
+                <div class="row mt-4">
+                  <div class="col">
+                    <input type="password" class="form-control" placeholder="Password" formControlName="password" [class.is-invalid]="password.invalid && password.touched">
+                    <small class="text-danger" *ngIf="password.invalid && password.touched">Password is required</small>
+                  </div>
+                </div>
+                <div class="row mt-4">
+                  <input type="submit" class="btn btn-success col-sm-10 offset-1" value="Login">
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col"></div>
+  </div>
