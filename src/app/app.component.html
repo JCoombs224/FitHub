@@ -1,5 +1,5 @@
-<app-header-section></app-header-section>
-<div class="container-fluid mt-3">
+<app-header-section *ngIf="showHeader()" class="mb-3"></app-header-section>
+<div class="container-fluid">
   <router-outlet></router-outlet>
 </div>
 

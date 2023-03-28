@@ -1,0 +1,20 @@
+.home-bg {
+    background-image: url("../../../assets/dumbell-bg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.card-home {
+    margin-top: 2rem;
+    min-height: 85%;
+    border-color: #096A2E;
+    padding: 48px;
+}
+
+.card-home-bg {
+    background-image: linear-gradient(white, white, #73ff6c);
+}
+
+.home-section {
+    margin-top: 10vh;
+}
