@@ -1,6 +1,6 @@
-<div class="row home-bg min-vh-100">
+<div class="row login-bg min-vh-100">
   <div class="col"></div>
-  <div class="col-8 col-xl-5 text-center">
+  <div class="col-12 col-md-8 col-xxl-4 text-center">
     <div class="card card-home">
       <div class="card-body">
         <div class="row">
@@ -13,13 +13,13 @@
             <h1 class="display-3">FitHub Login</h1>
           </div>
         </div>
-        <div class="row mt-5 justify-content-center">
-          <div class="col-8">
+        <div class="row home-section justify-content-center">
+          <div class="col col-md-10">
             <form [formGroup]="loginForm" (ngSubmit)="login()">
               <div class="row">
                 <div class="col">
-                  <input type="text" class="form-control" placeholder="E-Mail / Username" formControlName="username" [class.is-invalid]="username.invalid && username.touched">
-                  <small class="text-danger" *ngIf="username.invalid && username.touched">E-Mail / Username is required</small>
+                  <input type="text" class="form-control" placeholder="E-Mail" formControlName="username" [class.is-invalid]="username.invalid && username.touched">
+                  <small class="text-danger" *ngIf="username.invalid && username.touched">E-Mail is required</small>
                 </div>
               </div>
               <div class="row mt-4">
@@ -29,11 +29,11 @@
                 </div>
               </div>
               <div class="row mt-4">
-                <input type="submit" class="btn btn-success col-sm-10 offset-1" value="Login">
+                <input type="submit" class="btn btn-success col-sm-10 offset-sm-1" value="Login">
               </div>
             </form>
             <div class="row mt-4">
-              <button type="button" class="btn btn-outline-primary col-sm-6 offset-3" (click)="authService.GoogleAuth()">
+              <button type="button" class="btn btn-outline-primary col-sm-6 offset-sm-3" (click)="authService.GoogleAuth()">
                 <div class="d-flex justify-content-evenly">
                   <fa-icon [icon]="faGoogle" style="font-size: 1rem"></fa-icon>
                   <span>Sign in with Google</span>

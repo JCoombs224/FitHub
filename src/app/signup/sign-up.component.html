@@ -1,6 +1,6 @@
-<div class="row home-bg min-vh-100">
+<div class="row login-bg min-vh-100">
     <div class="col"></div>
-    <div class="col-8 col-xl-5 text-center">
+    <div class="col-12 col-md-8 col-xl-6 col-xxl-5 text-center">
       <div class="card card-home">
         <div class="card-body">
           <div class="row">
@@ -18,7 +18,7 @@
             <h6>Let's start with your account details</h6>
           </div>
           <div class="row mt-4 justify-content-center text-start">
-            <div class="col-8">
+            <div class="col col-md-10">
               <form [formGroup]="signupForm" (ngSubmit)="submit()">
                 <div class="row">
                   <div class="col">
@@ -43,13 +43,13 @@
                 </div>
 
                 <div class="row mt-4">
-                  <input type="submit" class="btn btn-success col-sm-10 offset-1" value="Sign Up">
+                  <input type="submit" class="btn btn-success col-sm-10 offset-sm-1" value="Sign Up">
                 </div>
               </form>
             </div>
           </div>
           <div class="row mt-4">
-            <button type="button" class="btn btn-outline-primary col-sm-6 col-xl-4 offset-3 offset-xl-4" (click)="authService.GoogleAuth()">
+            <button type="button" class="btn btn-outline-primary col-sm-6 offset-sm-3" (click)="authService.GoogleAuth()">
               <div class="d-flex justify-content-evenly">
                 <fa-icon [icon]="faGoogle" style="font-size: 1rem"></fa-icon>
                 <span>Continue with Google</span>
