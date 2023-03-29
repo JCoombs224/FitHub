@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import { AuthService } from '../services/auth.service';
+import { CurrentUserService } from '../services/current-user.service';
 
 @Component({
   selector: 'app-header-section',
@@ -6,7 +8,10 @@ import {Component, OnInit} from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() {}
+  user = this.currentUserService.profile_data;
+
+  constructor(public authService: AuthService,
+              private currentUserService: CurrentUserService) {}
 
   ngOnInit() {
     
@@ -15,6 +20,6 @@ export class HeaderComponent implements OnInit {
     window.location.reload();
   }
   logOut(){
-    
+    this.authService.SignOut();
   }
 }

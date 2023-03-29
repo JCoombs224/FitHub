@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { AuthService } from '../services/auth.service';
+import { ToastrService } from 'ngx-toastr';
+import { CurrentUserService } from '../services/current-user.service';
 
 @Component({
   selector: 'app-login',
@@ -10,6 +14,8 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit{
 
+  faGoogle = faGoogle; // font awesome icon
+
   loginForm = this.fb.group({
     username: ['', Validators.required],
     password: ['', Validators.required],
@@ -17,7 +23,10 @@ export class LoginComponent implements OnInit{
 
   constructor(private router: Router,
               private title: Title,
-              private fb: FormBuilder) {}
+              private fb: FormBuilder,
+              public authService: AuthService,
+              private toastr: ToastrService,
+              private currentUserService: CurrentUserService) {}
 
   ngOnInit(): void {
       this.title.setTitle("Login | FitHub");
@@ -29,7 +38,7 @@ export class LoginComponent implements OnInit{
 
     // Check if all fields are filled
     if(this.loginForm.valid) {
-      // TODO: Create a login service
+      this.authService.SignIn(this.username.value, this.password.value);
     }
     console.log("login pressed");
   }

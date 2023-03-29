@@ -32,6 +32,14 @@
                 <input type="submit" class="btn btn-success col-sm-10 offset-1" value="Login">
               </div>
             </form>
+            <div class="row mt-4">
+              <button type="button" class="btn btn-outline-primary col-sm-6 offset-3" (click)="authService.GoogleAuth()">
+                <div class="d-flex justify-content-evenly">
+                  <fa-icon [icon]="faGoogle" style="font-size: 1rem"></fa-icon>
+                  <span>Sign in with Google</span>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
       </div>
