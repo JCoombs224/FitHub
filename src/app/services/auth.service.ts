@@ -48,11 +48,14 @@ export class AuthService {
       .then((result) => {
         /* Call the SendVerificaitonMail() function when new user sign 
         up and returns promise */
-        this.SendVerificationMail();
-        this.SetUserData(result.user);
+        if(result) {
+          this.SetUserData(result.user);
+          return true;
+        }
+        return false;
       })
       .catch((error) => {
-        window.alert(error.message);
+        this.toastr.error(error.message);
       });
   }
 

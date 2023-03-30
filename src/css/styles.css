@@ -33,3 +33,7 @@
 .glow-small {
     filter: drop-shadow(0 0 1rem #00913867);
 }
+
+.card-transition {
+    transition: 0.5s ease-in-out;
+}

@@ -1,8 +1,11 @@
 <div class="row login-bg min-vh-100">
-    <div class="col"></div>
-    <div class="col-12 col-md-8 col-xl-6 col-xxl-5 text-center">
-      <div class="card card-home">
-        <div class="card-body">
+  <div class="col"></div>
+  <div class="col-12 col-md-8 col-xl-6 col-xxl-5 text-center">
+    <div class="card card-transition card-home" >
+      <div class="card-body">
+
+        <!-------------------------------------------- PAGE 1 (Create Account) -------------------------------------------->
+        <div *ngIf="page == 1" [@slideOutAnimation]>
           <div class="row">
             <div class="col-4 offset-4">
               <img src="../../../assets/Logo1/png/logo-no-background.png" class="img-fluid">
@@ -43,7 +46,7 @@
                 </div>
 
                 <div class="row mt-4">
-                  <input type="submit" class="btn btn-success col-sm-10 offset-sm-1" value="Sign Up">
+                  <input type="submit" class="btn btn-success col-sm-10 offset-sm-1" value="Create Account">
                 </div>
               </form>
             </div>
@@ -57,7 +60,13 @@
             </button>
           </div>
         </div>
+
+        <!-------------------------------------------- PAGE 2 (Profile Details) -------------------------------------------->
+        <div *ngIf="page == 2" [@slideOutAnimation]>
+          
+        </div>
       </div>
+    </div>
     </div>
     <div class="col"></div>
   </div>
