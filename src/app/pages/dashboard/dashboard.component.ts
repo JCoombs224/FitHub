@@ -23,7 +23,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.currentUser.user);
-
+    this.title.setTitle("Dashboard | FitHub");
     // make sure user has created their profile, if not take them to the create profile page
     if(this.currentUser.user.profile.profileHandle == '') {
       this.router.navigate(["/create-profile"]);

@@ -30,7 +30,7 @@ export class AuthService {
         this.SetUserData(result.user);
         this.afAuth.authState.subscribe((user) => {
           if (user) {
-            this.router.navigate(['dashboard']);
+            // this.router.navigate(['dashboard']);
           }
         });
         console.log("success");

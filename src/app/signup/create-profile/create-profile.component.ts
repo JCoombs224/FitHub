@@ -81,7 +81,7 @@ export class CreateProfileComponent implements OnInit {
 
   submitProfile() {
     this.currentUser.newProfile(this.profileForm.getRawValue()).then((success) => {
-      this.router.navigate(["/dashboard"]);
+      // this.router.navigate(["/dashboard"]);
     }).catch((error)=>{
       this.toastr.error(error.message);
     });

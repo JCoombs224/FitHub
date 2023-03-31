@@ -118,6 +118,8 @@ export class CurrentUserService {
     this.user.profile.heightInches = profile.heightInches;
     this.user.profile.sex = profile.sex;
 
+    this.router.navigate(["/dashboard"]);
+
     if(isPlatformBrowser(this.platformId)) {
       localStorage.removeItem(this.USER_INFO);
       localStorage.setItem(this.USER_INFO, JSON.stringify(this.user));
@@ -157,6 +159,8 @@ export class CurrentUserService {
         this.user.profile.heightInches = profile.heightInches;
         this.user.profile.sex = profile.sex;
 
+        this.router.navigate(["/dashboard"]);
+
         if(isPlatformBrowser(this.platformId)) {
           localStorage.removeItem(this.USER_INFO);
           localStorage.setItem(this.USER_INFO, JSON.stringify(this.user));
@@ -164,7 +168,7 @@ export class CurrentUserService {
           sessionStorage.removeItem(this.USER_INFO);
           sessionStorage.setItem(this.USER_INFO, JSON.stringify(this.user));
         }
-      })
+      });
     }
 
     this.account.next(this.user);

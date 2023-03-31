@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit{
   googleSignIn() {
     this.authService.GoogleAuth().then((success)=>{
       if(success) {
-        this.router.navigate(["/dashboard"]);
+        // this.router.navigate(["/dashboard"]);
       }
     })
   }
