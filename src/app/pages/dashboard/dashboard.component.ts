@@ -19,9 +19,9 @@ export class DashboardComponent implements OnInit {
               private fb: FormBuilder,
               public authService: AuthService,
               private toastr: ToastrService,
-              private currentUserService: CurrentUserService) {}
+              public currentUser: CurrentUserService) {}
 
   ngOnInit(): void {
-      console.log(this.currentUserService.profile_data);
+      console.log(this.currentUser.user);
   }
 }

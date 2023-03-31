@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (this.currentUserService.profile_data.email) {
+    if (this.currentUserService.isLoggedIn()) {
       return true;
     } else {
       if(isPlatformBrowser(this.platformId)) {

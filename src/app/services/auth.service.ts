@@ -49,7 +49,7 @@ export class AuthService {
         /* Call the SendVerificaitonMail() function when new user sign 
         up and returns promise */
         if(result) {
-          this.SetUserData(result.user);
+          this.SetNewUserData(result.user);
           return true;
         }
         return false;
@@ -89,7 +89,10 @@ export class AuthService {
   // Sign in with Google
   GoogleAuth() {
     return this.AuthLogin(new auth.GoogleAuthProvider()).then((res: any) => {
-      this.router.navigate(['dashboard']);
+      if(res) {
+        return true;
+      }
+      return false;
     });
   }
 
@@ -115,11 +118,25 @@ export class AuthService {
       `users/${user.uid}`
     );
 
+    this.currentUserService.setUser(user); // set account information from auth to sign in
+
+    // Then get the user information from db and update user again
+    userRef.ref.get().then(data=>{
+      this.currentUserService.setUser(data.data());
+    });
+  }
+
+  SetNewUserData(user) {
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(
+      `users/${user.uid}`
+    );
+
     const userData = {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
       photoURL: user.photoURL,
+      profileHandle: ''
     };
 
     this.currentUserService.setUser(userData);

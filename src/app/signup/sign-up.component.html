@@ -1,16 +1,16 @@
 <div class="row login-bg min-vh-100">
   <div class="col"></div>
   <div class="col-12 col-md-8 col-xl-6 col-xxl-5 text-center">
-    <div class="card card-transition card-home" >
+    <div class="card card-transition card-home">
       <div class="card-body">
+        <div class="row">
+          <div class="col-4 offset-4">
+            <img src="../../../assets/Logo1/png/logo-no-background.png" class="img-fluid">
+          </div>
+        </div>
 
         <!-------------------------------------------- PAGE 1 (Create Account) -------------------------------------------->
         <div *ngIf="page == 1" [@slideOutAnimation]>
-          <div class="row">
-            <div class="col-4 offset-4">
-              <img src="../../../assets/Logo1/png/logo-no-background.png" class="img-fluid">
-            </div>
-          </div>
           <div class="row mt-3">
             <div class="col">
               <h1 class="display-3">FitHub Sign Up</h1>
@@ -22,12 +22,12 @@
           </div>
           <div class="row mt-4 justify-content-center text-start">
             <div class="col col-md-10">
-              <form [formGroup]="signupForm" (ngSubmit)="submit()">
+              <form [formGroup]="signupForm" (ngSubmit)="submitAccount()">
                 <div class="row">
                   <div class="col">
                     <label class="required">Email </label>
                     <input type="text" class="form-control" placeholder="E-Mail" formControlName="username" [class.is-invalid]="username.invalid && username.touched">
-                    <small class="text-danger" *ngIf="username.invalid && username.touched">E-Mail / Username is required</small>
+                    <small class="text-danger" *ngIf="username.invalid && username.touched">E-Mail is required</small>
                   </div>
                 </div>
                 <div class="row mt-3">
@@ -52,7 +52,7 @@
             </div>
           </div>
           <div class="row mt-4">
-            <button type="button" class="btn btn-outline-primary col-sm-6 offset-sm-3" (click)="authService.GoogleAuth()">
+            <button type="button" class="btn btn-outline-primary col-sm-6 offset-sm-3" (click)="googleSignUp">
               <div class="d-flex justify-content-evenly">
                 <fa-icon [icon]="faGoogle" style="font-size: 1rem"></fa-icon>
                 <span>Continue with Google</span>
@@ -63,10 +63,88 @@
 
         <!-------------------------------------------- PAGE 2 (Profile Details) -------------------------------------------->
         <div *ngIf="page == 2" [@slideOutAnimation]>
-          
+          <h1 class="display-6 mt-5">Awesome! We got your account details ready to go. Let's get started on your fitness profile.</h1>
+          <div *ngIf="transitionDone" [@slideOutAnimation]>
+
+            <div class="row mt-4 justify-content-center text-start">
+              <div class="col col-md-10">
+
+                <form [formGroup]="profileForm" (ngSubmit)="submitProfile()">
+                  <label class="required">Username </label>
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                    <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" formControlName="profileHandle" (focusout)="checkDisplayName()"
+                      [class.is-valid]="usernameAvailable && profileHandle.touched" [class.is-invalid]="(profileHandle.invalid || !usernameAvailable) && profileHandle.touched">
+                    <div class="valid-feedback" *ngIf="profileHandle.valid && usernameAvailable && profileHandle.touched">Username is available!</div>
+                    <div class="invalid-feedback" *ngIf="profileHandle.invalid && profileHandle.touched">Username is required</div>
+                    <div class="invalid-feedback" *ngIf="profileHandle.valid && profileHandle.touched && !usernameAvailable">Username is taken</div>
+                  </div>
+                  
+                  <div class="row mb-5">
+                    <div class="col">
+                      <label class="required">Name </label>
+                      <input type="text" class="form-control" formControlName="profileName" placeholder="John Smith" [class.is-invalid]="profileName.invalid && profileName.touched">
+                      <small class="text-danger" *ngIf="profileName.invalid && profileName.touched">Name is required</small>
+                    </div>
+                  </div>
+
+                  <h5>Fitness Profile</h5>
+                  <small>These fields are not required but highly recommended so that we can help cater to your fitness success</small>
+
+                  <div class="row mt-2 mb-4">
+                    <div class="col">
+                      <label>Age</label>
+                      <input type="number" min="12" max="120" class="form-control" formControlName="age">
+                    </div>
+                    <div class="col">
+                      <label>Weight</label>
+                      <div class="input-group">
+                        <input type="number" min="0" class="form-control" formControlName="weight">
+                        <div class="input-group-text">lbs</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row mb-4 justify-content-center">
+                    <div class="col-8">
+                      <label>Height</label>
+                      <div class="d-flex">
+                        <div class="input-group me-1">
+                          <input type="number" min="0" class="form-control" formControlName="heightFeet">
+                          <div class="input-group-text">Ft</div>
+                        </div>
+                        <div class="input-group">
+                          <input type="number" min="0" class="form-control" formControlName="heightInches">
+                          <div class="input-group-text">In</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row mb-4 justify-content-center">
+                    <div class="col-6">
+                      <label>Sex</label>
+                      <select class="form-select" formControlName="sex">
+                        <option disabled value="">Select</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Other</option>
+                        <option>Prefer not to state</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <input type="submit" class="btn btn-success col-sm-10 offset-sm-1" value="Create Profile">
+                  </div>
+                </form>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
     </div>
-    </div>
-    <div class="col"></div>
   </div>
+  <div class="col"></div>
+</div>

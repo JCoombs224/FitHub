@@ -8,7 +8,7 @@ import { CurrentUserService } from '../services/current-user.service';
 })
 export class HeaderComponent implements OnInit {
 
-  user = this.currentUserService.profile_data;
+  user = this.currentUserService.user;
 
   constructor(public authService: AuthService,
               private currentUserService: CurrentUserService) {}

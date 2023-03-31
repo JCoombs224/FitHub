@@ -13,7 +13,7 @@ export class HomeComponent implements OnInit {
               private router: Router) {}
 
   ngOnInit(): void {
-      if(this.currentUser.profile_data.email) {
+      if(this.currentUser.isLoggedIn()) {
         this.router.navigate(["/dashboard"]);
       }
   }

@@ -6,6 +6,7 @@ import { AuthService } from '../services/auth.service';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import {animate, style, transition, trigger} from "@angular/animations";
+import { CurrentUserService } from '../services/current-user.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -38,33 +39,66 @@ import {animate, style, transition, trigger} from "@angular/animations";
 export class SignUpComponent implements OnInit {
 
   faGoogle = faGoogle; // font awesome icon
+  transitionDone = false;
+  usernameAvailable = true;
   page = 1;
 
   signupForm = this.fb.group({
     username: ['', Validators.required],
     password: ['', Validators.required],
     confirm_password: ['', Validators.required],
+    profileHandle: [''],
   });
 
   profileForm = this.fb.group({
+    profileHandle: ['', Validators.required],
+    profileName: ['', Validators.required],
     age: [''],
-    height: [''],
+    heightFeet: [''],
+    heightInches: [''],
     weight: [''],
     sex: [''],
-    displayName: ['']
   });
 
   constructor(private router: Router,
               private title: Title,
               private fb: FormBuilder,
               public authService: AuthService,
-              private toastr: ToastrService) {}
+              private toastr: ToastrService,
+              private currentUser: CurrentUserService) {}
 
   ngOnInit(): void {
       this.title.setTitle("Sign Up | FitHub");
+      console.log(this.currentUser.user);
   }
 
-  submit() {
+  private goToProfilePage() {
+    this.page = 0;
+
+    // transition 1
+    setTimeout(()=> {
+      this.page = 2;
+    }, 750);
+
+    // transition 2
+    setTimeout(()=> {
+      this.transitionDone = true;
+    }, 1750);
+  }
+
+  checkDisplayName() {
+    this.currentUser.isUsernameAvailable(this.profileHandle.value).then((success) => {
+      if(success) {
+        this.usernameAvailable = true;
+      } else {
+        this.usernameAvailable = false;
+      }
+    }).catch((error) => {
+      this.usernameAvailable = false;
+    });
+  }
+
+  submitAccount() {
     // this will show the fields not filled in as an error
     this.signupForm.markAllAsTouched();
 
@@ -74,10 +108,8 @@ export class SignUpComponent implements OnInit {
       if(this.password.value == this.confirm_password.value) {
         this.authService.SignUp(this.username.value, this.password.value).then((success) => {
           if(success) {
-            this.page = 0;
-            setTimeout(()=> {
-              this.page = 2;
-            }, 750);
+            this.goToProfilePage();
+            this.toastr.success("Account created.")
           }
         })
       }
@@ -88,7 +120,23 @@ export class SignUpComponent implements OnInit {
     else {
       this.toastr.error("Missing required fields");
     }
-    
+  }
+
+  googleSignUp() {
+    this.authService.GoogleAuth().then((success)=>{
+      if(success) {
+        this.goToProfilePage();
+        this.toastr.success("Account created.")
+      }
+    })
+  }
+
+  submitProfile() {
+    this.currentUser.newProfile(this.profileForm.getRawValue()).then((success) => {
+      this.router.navigate(["/dashboard"]);
+    }).catch((error)=>{
+      this.toastr.error(error.message);
+    });
   }
 
   get username() {
@@ -100,4 +148,24 @@ export class SignUpComponent implements OnInit {
   get confirm_password() {
     return this.signupForm.get('confirm_password');
   }
+  
+  get profileHandle() {
+    return this.profileForm.get('profileHandle');
+  }
+  get profileName() {
+    return this.profileForm.get('profileName');
+  }
+  get age() {
+    return this.profileForm.get('age');
+  }
+  get height() {
+    return this.profileForm.get('height');
+  }
+  get weight() {
+    return this.profileForm.get('weight');
+  }
+  get sex() {
+    return this.profileForm.get('sex');
+  }
+
 }
