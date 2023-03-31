@@ -101,8 +101,8 @@ export class AuthService {
     return this.afAuth
       .signInWithPopup(provider)
       .then((result) => {
-        this.router.navigate(['dashboard']);
         this.SetUserData(result.user);
+        return true;
       })
       .catch((error) => {
         window.alert(error);

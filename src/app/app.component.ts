@@ -14,7 +14,7 @@ export class AppComponent {
   showHeader() {
     const route = this.router.url;
 
-    if(route == '/' || route == '/login' || route == '/sign-up')
+    if(route == '/' || route == '/login' || route == '/sign-up' || route == '/create-profile')
       return false;
 
     return true;

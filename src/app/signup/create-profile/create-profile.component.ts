@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import {animate, style, transition, trigger} from "@angular/animations";
-import { CurrentUserService } from '../services/current-user.service';
+import { CurrentUserService } from '../../services/current-user.service';
 
 @Component({
-  selector: 'app-sign-up',
-  templateUrl: './sign-up.component.html',
-  styleUrls: ['./sign-up.component.css'],
+  selector: 'app-create-profile',
+  templateUrl: './create-profile.component.html',
+  styleUrls: ['./create-profile.component.css'],
   animations: [
     trigger(
       'slideOutAnimation',
@@ -36,19 +36,10 @@ import { CurrentUserService } from '../services/current-user.service';
     )
   ]
 })
-export class SignUpComponent implements OnInit {
+export class CreateProfileComponent implements OnInit {
 
-  faGoogle = faGoogle; // font awesome icon
   transitionDone = false;
   usernameAvailable = true;
-  page = 1;
-
-  signupForm = this.fb.group({
-    username: ['', Validators.required],
-    password: ['', Validators.required],
-    confirm_password: ['', Validators.required],
-    profileHandle: [''],
-  });
 
   profileForm = this.fb.group({
     profileHandle: ['', Validators.required],
@@ -68,23 +59,12 @@ export class SignUpComponent implements OnInit {
               private currentUser: CurrentUserService) {}
 
   ngOnInit(): void {
-      this.title.setTitle("Sign Up | FitHub");
-      console.log(this.currentUser.user);
-  }
+      this.title.setTitle("Create Profile | FitHub");
 
-  private goToProfilePage() {
-    // this.page = 0;
-
-    // // transition 1
-    // setTimeout(()=> {
-    //   this.page = 2;
-    // }, 750);
-
-    // // transition 2
-    // setTimeout(()=> {
-    //   this.transitionDone = true;
-    // }, 1750);
-    this.router.navigate(["/create-profile"]);
+      // page transition
+      setTimeout(()=> {
+        this.transitionDone = true;
+      }, 1750);
   }
 
   checkDisplayName() {
@@ -99,55 +79,12 @@ export class SignUpComponent implements OnInit {
     });
   }
 
-  submitAccount() {
-    // this will show the fields not filled in as an error
-    this.signupForm.markAllAsTouched();
-
-    // Check if all fields are filled
-    if(this.signupForm.valid) {
-      // Check if the passwords match
-      if(this.password.value == this.confirm_password.value) {
-        this.authService.SignUp(this.username.value, this.password.value).then((success) => {
-          if(success) {
-            this.goToProfilePage();
-            this.toastr.success("Account created.")
-          }
-        })
-      }
-      else {
-        this.toastr.error("Passwords do not match")
-      }
-    }
-    else {
-      this.toastr.error("Missing required fields");
-    }
-  }
-
-  googleSignUp() {
-    this.authService.GoogleAuth().then((success)=>{
-      if(success) {
-        this.goToProfilePage();
-        this.toastr.success("Account created.")
-      }
-    })
-  }
-
   submitProfile() {
     this.currentUser.newProfile(this.profileForm.getRawValue()).then((success) => {
       this.router.navigate(["/dashboard"]);
     }).catch((error)=>{
       this.toastr.error(error.message);
     });
-  }
-
-  get username() {
-    return this.signupForm.get('username');
-  }
-  get password() {
-    return this.signupForm.get('password');
-  }
-  get confirm_password() {
-    return this.signupForm.get('confirm_password');
   }
   
   get profileHandle() {

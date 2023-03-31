@@ -22,6 +22,11 @@ export class DashboardComponent implements OnInit {
               public currentUser: CurrentUserService) {}
 
   ngOnInit(): void {
-      console.log(this.currentUser.user);
+    console.log(this.currentUser.user);
+
+    // make sure user has created their profile, if not take them to the create profile page
+    if(this.currentUser.user.profile.profileHandle == '') {
+      this.router.navigate(["/create-profile"]);
+    }
   }
 }

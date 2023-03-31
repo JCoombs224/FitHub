@@ -27,6 +27,7 @@ import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ToastrModule } from 'ngx-toastr';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { CreateProfileComponent } from './signup/create-profile/create-profile.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
     LoginComponent,
     SignUpComponent,
     DashboardComponent,
+    CreateProfileComponent,
   ],
   imports: [
     BrowserModule,

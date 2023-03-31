@@ -43,6 +43,14 @@ export class LoginComponent implements OnInit{
     console.log("login pressed");
   }
 
+  googleSignIn() {
+    this.authService.GoogleAuth().then((success)=>{
+      if(success) {
+        this.router.navigate(["/dashboard"]);
+      }
+    })
+  }
+
   get username() {
     return this.loginForm.get('username');
   }
