@@ -10,14 +10,13 @@ import { Router } from '@angular/router';
 export class HeaderComponent implements OnInit {
 
   user = this.currentUserService.user;
-  nav = this.router.url;
 
   constructor(public authService: AuthService,
               private currentUserService: CurrentUserService,
-              private router: Router) {}
+              public router: Router) {}
 
   ngOnInit() {
-    console.log(this.nav);
+    
   }
   reload(){
     window.location.reload();

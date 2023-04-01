@@ -6,6 +6,9 @@ import { SignUpComponent } from './signup/sign-up.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { AuthGuard } from './services/auth.guard';
 import { CreateProfileComponent } from './signup/create-profile/create-profile.component';
+import { SocialFeedComponent } from './pages/social-feed/social-feed.component';
+import { MyWorkoutsComponent } from './pages/my-workouts/my-workouts.component';
+import { MyProfileComponent } from './pages/my-profile/my-profile.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -13,6 +16,9 @@ const routes: Routes = [
   { path: 'sign-up', component: SignUpComponent },
   { path: 'create-profile', component: CreateProfileComponent, canActivate: [AuthGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
+  { path: 'social-feed', component: SocialFeedComponent, canActivate: [AuthGuard]},
+  { path: 'my-workouts', component: MyWorkoutsComponent, canActivate: [AuthGuard]},
+  { path: 'my-profile', component: MyProfileComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({

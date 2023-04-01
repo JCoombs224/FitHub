@@ -7,16 +7,16 @@
     <div class="navbar-collapse ms-3">
       <ul class="nav nav-pills nav-fill">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/dashboard" [class.active]="nav == '/dashboard'">Dashboard</a>
+          <a class="nav-link" routerLink="/dashboard" [class.active]="router.url == '/dashboard'">Dashboard</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/social-feed" [class.active]="nav == '/social-feed'">Social Feed</a>
+          <a class="nav-link" routerLink="/social-feed" [class.active]="router.url == '/social-feed'">Social Feed</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/workouts" [class.active]="nav == '/my-workouts'">My Workouts</a>
+          <a class="nav-link" routerLink="/my-workouts" [class.active]="router.url == '/my-workouts'">My Workouts</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/my-profile" [class.active]="nav == '/my-profile'">My Profile</a>
+          <a class="nav-link" routerLink="/my-profile" [class.active]="router.url == '/my-profile'">My Profile</a>
         </li>
         
       </ul>
