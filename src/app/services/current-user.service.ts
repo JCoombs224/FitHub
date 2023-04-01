@@ -14,28 +14,6 @@ export class CurrentUserService {
               @Inject(PLATFORM_ID) private platformId) { }
 
   private USER_INFO = "FitHubUser";
-  public account_data = {
-    uid: '',
-    email: '',
-    displayName: '',
-    photoURL: '',
-    get loggedIn() {
-      return this.email;
-    }
-  }; // Account data stores information for authentication
-
-  // Profile data stores all the information on the users profile like workouts and posts
-  public profile_data = {
-    profileHandle: '', // @user1234
-    profileName: '',
-    age: '',
-    weight: '',
-    heightFeet: '',
-    heightInches: '',
-    sex: '',
-    workouts: [{}]
-  };
-
   public user = this.initialize();
 
   public account: BehaviorSubject<any> = new BehaviorSubject<any>(this.user);
