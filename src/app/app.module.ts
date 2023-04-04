@@ -31,6 +31,7 @@ import { CreateProfileComponent } from './signup/create-profile/create-profile.c
 import { SocialFeedComponent } from './pages/social-feed/social-feed.component';
 import { MyWorkoutsComponent } from './pages/my-workouts/my-workouts.component';
 import { MyProfileComponent } from './pages/my-profile/my-profile.component';
+import { CreateWorkoutComponent } from './pages/create-workout/create-workout.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { MyProfileComponent } from './pages/my-profile/my-profile.component';
     SocialFeedComponent,
     MyWorkoutsComponent,
     MyProfileComponent,
+    CreateWorkoutComponent,
   ],
   imports: [
     BrowserModule,

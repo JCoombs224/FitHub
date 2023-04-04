@@ -1,0 +1,18 @@
+.card-new-workout {
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.card-new-workout .card{
+    transition: 0.2s;
+}
+
+.card-new-workout:hover {
+    transform: scale(1.1);
+    color: green;
+}
+
+.card-new-workout:hover .card{
+    border-color: green;
+    background-color: lightgreen;
+}

@@ -42,5 +42,10 @@
     background-color: #096a19 !important;
 }
 .nav-pills > li > a {
-    color: #3eb951 ;
+    color: #3eb951;
+    transition: 0.5s;
+}
+.nav-pills > li > a:hover {
+    color: #50fd6a;
+    background-color: rgb(23, 27, 31);
 }

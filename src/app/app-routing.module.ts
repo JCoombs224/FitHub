@@ -9,6 +9,7 @@ import { CreateProfileComponent } from './signup/create-profile/create-profile.c
 import { SocialFeedComponent } from './pages/social-feed/social-feed.component';
 import { MyWorkoutsComponent } from './pages/my-workouts/my-workouts.component';
 import { MyProfileComponent } from './pages/my-profile/my-profile.component';
+import { CreateWorkoutComponent } from './pages/create-workout/create-workout.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'social-feed', component: SocialFeedComponent, canActivate: [AuthGuard]},
   { path: 'my-workouts', component: MyWorkoutsComponent, canActivate: [AuthGuard]},
   { path: 'my-profile', component: MyProfileComponent, canActivate: [AuthGuard]},
+  { path: 'my-workouts/create', component: CreateWorkoutComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({

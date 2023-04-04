@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-my-workouts',
@@ -6,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./my-workouts.component.css']
 })
 export class MyWorkoutsComponent {
-
+  faPlusCircle = faPlusCircle;
 }
