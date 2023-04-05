@@ -24,7 +24,7 @@
         justify-content: space-between;
     }
     .header-wrap{
-        padding-bottom: 0px;    
+        padding-bottom: 0px;
     }
 
     .nav-position {
@@ -52,5 +52,8 @@
 
     .nav-label {
         font-size: 0.5rem;
+    }
+    .nav-link, .navbar {
+        padding: 4px;
     }
 }
