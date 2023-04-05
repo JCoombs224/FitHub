@@ -30,7 +30,7 @@
           <a class="nav-link" routerLink="/my-workouts" [class.active]="router.url == '/my-workouts'"><fa-icon [icon]="faDumbbell"></fa-icon><br><span class="nav-label">My Workouts</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/my-profile" [class.active]="router.url == '/my-profile'"><fa-icon [icon]="faUser"></fa-icon><br><span class="nav-label">My Profile</span></a>
+          <a class="nav-link" routerLink="/profile/{{user.profile.profileHandle}}" [class.active]="router.url == '/profile/'+user.profile.profileHandle"><fa-icon [icon]="faUser"></fa-icon><br><span class="nav-label">My Profile</span></a>
         </li>
         
       </ul>

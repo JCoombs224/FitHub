@@ -30,7 +30,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { CreateProfileComponent } from './signup/create-profile/create-profile.component';
 import { SocialFeedComponent } from './pages/social-feed/social-feed.component';
 import { MyWorkoutsComponent } from './pages/my-workouts/my-workouts.component';
-import { MyProfileComponent } from './pages/my-profile/my-profile.component';
+import { ProfileComponent } from './pages/profile/profile.component';
 import { CreateWorkoutComponent } from './pages/create-workout/create-workout.component';
 import { BsDatepickerModule, BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule,BsDropdownConfig } from 'ngx-bootstrap/dropdown';
@@ -46,7 +46,7 @@ import { BsDropdownModule,BsDropdownConfig } from 'ngx-bootstrap/dropdown';
     CreateProfileComponent,
     SocialFeedComponent,
     MyWorkoutsComponent,
-    MyProfileComponent,
+    ProfileComponent,
     CreateWorkoutComponent,
   ],
   imports: [

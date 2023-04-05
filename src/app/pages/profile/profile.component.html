@@ -1,19 +1,3 @@
-<!-- <div class="row min-vh-100 login-bg">
-  <div class="col"></div>
-  <div class="col-12 col-md-8 text-center">
-      <div class="card mt-2 min-vh-100 p-md-5">
-          <h1 class="display-1">MY PROFILE</h1>
-          <p>Welcome {{currentUser.user.profile.profileHandle}}!</p>
-          <div class="row">
-              <div class="col">
-                  <img src="https://datavizproject.com/wp-content/uploads/types/Line-Graph.png" class="img-fluid">
-              </div>
-          </div>
-      </div>
-  </div>
-  <div class="col"></div>
-</div> -->
-
 <div class="row min-vh-100 login-bg">
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
@@ -26,30 +10,31 @@
                 alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
                 style="width: 150px; z-index: 1">
               <button type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark"
-                style="z-index: 1;">
+                style="z-index: 1;" *ngIf="userProfile">
                 Edit profile
               </button>
             </div>
             <div class="ms-3" style="margin-top: 130px;">
-              <h5>@{{currentUser.user.profile.profileHandle}}</h5>
-              <p>{{currentUser.user.profile.age}}</p>
+              <h5>@{{profile.profileHandle}}</h5>
+              <p>{{profile.age}}</p>
             </div>
           </div>
           <div class="p-4 text-black" style="background-color: #f8f9fa;">
             <div class="d-flex justify-content-end text-center py-1">
               <div>
-                <p class="mb-1 h5">{{currentUser.user.profile.workouts.length - 1}}</p>
+                <p class="mb-1 h5">{{profile.workouts.length - 1}}</p>
                 <p class="small text-muted mb-0">Workouts Logged</p>
               </div>
               <div class="px-3">
-                <!--TODO: reference and display the number of followers the user has-->
-                <p class="mb-1 h5">{{currentUser.user.profile.followers.length - 1}}</p>
+                <p class="mb-1 h5">{{profile.followers.length - 1}}</p>
                 <p class="small text-muted mb-0">Followers</p>
               </div>
               <div>
-                <!--TODO: reference and display the number of users the user is following-->
-                <p class="mb-1 h5">{{currentUser.user.profile.following.length - 1}}</p>
+                <p class="mb-1 h5">{{profile.following.length - 1}}</p>
                 <p class="small text-muted mb-0">Following</p>
+              </div>
+              <div>
+                
               </div>
             </div>
           </div>
@@ -58,7 +43,7 @@
               <!--TODO: reference and display the information the user wants to display about themselves-->
               <p class="lead fw-normal mb-1">About</p>
               <div class="p-4" style="background-color: #f8f9fa;">
-                {{currentUser.user.profile.about.value}}
+                {{profile.about}}
               </div>
             </div>
             <div class="d-flex justify-content-between align-items-center mb-4">
