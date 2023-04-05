@@ -40,7 +40,6 @@ export class LoginComponent implements OnInit{
     if(this.loginForm.valid) {
       this.authService.SignIn(this.username.value, this.password.value);
     }
-    console.log("login pressed");
   }
 
   googleSignIn() {
