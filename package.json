@@ -24,6 +24,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.2.1",
     "@fortawesome/free-regular-svg-icons": "^6.2.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
+    "@popperjs/core": "^2.11.7",
     "bootstrap": "^5.2.3",
     "firebase": "^9.18.0",
     "jquery": "^3.6.4",

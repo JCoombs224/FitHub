@@ -32,6 +32,8 @@ import { SocialFeedComponent } from './pages/social-feed/social-feed.component';
 import { MyWorkoutsComponent } from './pages/my-workouts/my-workouts.component';
 import { MyProfileComponent } from './pages/my-profile/my-profile.component';
 import { CreateWorkoutComponent } from './pages/create-workout/create-workout.component';
+import { BsDatepickerModule, BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { BsDropdownModule,BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 
 @NgModule({
   declarations: [
@@ -67,6 +69,8 @@ import { CreateWorkoutComponent } from './pages/create-workout/create-workout.co
     provideStorage(() => getStorage()),
     FontAwesomeModule,
     BrowserAnimationsModule, // required animations module
+    BsDatepickerModule,
+    BsDropdownModule,
     ToastrModule.forRoot(
       {
         positionClass: 'toast-bottom-right',
@@ -76,7 +80,7 @@ import { CreateWorkoutComponent } from './pages/create-workout/create-workout.co
       }
     ), // ToastrModule added
   ],
-  providers: [AuthService],
+  providers: [AuthService, BsDatepickerConfig, BsDropdownConfig],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
