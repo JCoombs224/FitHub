@@ -1,22 +1,35 @@
 <!---TODO: Add mobile version for header-->
-
+<div class="mobile-header-top bg-dark">
+  <img height="80px" class="p-1" src="../assets/Logo1/png/logo-no-background.png" alt="FitHub" title="FitHub">
+  <div class="btn-group" dropdown #dropdown="bs-dropdown" [autoClose]="true">
+    <button id="button-basic" dropdownToggle type="button" class="btn btn-text text-light dropdown-toggle" aria-controls="dropdown-basic"><fa-icon style="font-size: 1.2rem;" [icon]="faCog"></fa-icon>
+    </button>
+    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic">
+       <!-- <li role="menuitem"><a class="dropdown-item" href="#">File</a></li>
+       <li role="menuitem"><a class="dropdown-item" href="#">Edit</a></li>
+       <li role="menuitem"><a class="dropdown-item" href="#">Search</a></li>
+       <li class="divider dropdown-divider"></li> -->
+       <li role="menuitem"><button class="dropdown-item" (click)="logOut()">Log Out</button></li>
+    </ul>
+  </div>
+</div>
 <div class="d-flex header-wrap text-white">
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+  <nav class="navbar navbar-expand navbar-dark bg-dark nav-position">
     <div class="container-fluid">
     <a class="navbar-brand p-2" href="#"><img height="60px" src="../assets/Logo1/png/logo-no-background.png" alt="FitHub" title="FitHub"></a>
-    <div class="navbar-collapse ms-3">
+    <div class="navbar-collapse ms-md-3">
       <ul class="nav nav-pills nav-fill">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/dashboard" [class.active]="router.url == '/dashboard'"><fa-icon [icon]="faHouse"></fa-icon><br>Dashboard</a>
+          <a class="nav-link" routerLink="/dashboard" [class.active]="router.url == '/dashboard'"><fa-icon [icon]="faHouse"></fa-icon><br><span class="nav-label">Dashboard</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/social-feed" [class.active]="router.url == '/social-feed'"><fa-icon [icon]="faFeed"></fa-icon><br>Social Feed</a>
+          <a class="nav-link" routerLink="/social-feed" [class.active]="router.url == '/social-feed'"><fa-icon [icon]="faFeed"></fa-icon><br><span class="nav-label">Social Feed</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/my-workouts" [class.active]="router.url == '/my-workouts'"><fa-icon [icon]="faDumbbell"></fa-icon><br>My Workouts</a>
+          <a class="nav-link" routerLink="/my-workouts" [class.active]="router.url == '/my-workouts'"><fa-icon [icon]="faDumbbell"></fa-icon><br><span class="nav-label">My Workouts</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/my-profile" [class.active]="router.url == '/my-profile'"><fa-icon [icon]="faUser"></fa-icon><br>My Profile</a>
+          <a class="nav-link" routerLink="/my-profile" [class.active]="router.url == '/my-profile'"><fa-icon [icon]="faUser"></fa-icon><br><span class="nav-label">My Profile</span></a>
         </li>
         
       </ul>

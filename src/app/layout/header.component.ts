@@ -18,13 +18,16 @@ export class HeaderComponent implements OnInit {
 
   user = this.currentUserService.user;
   dropdownOpen = false;
+  mobile = false;
 
   constructor(public authService: AuthService,
               private currentUserService: CurrentUserService,
               public router: Router) {}
 
   ngOnInit() {
-    
+    if (window.screen.width === 360) { // 768px portrait
+      this.mobile = true;
+    }
   }
   reload(){
     window.location.reload();
