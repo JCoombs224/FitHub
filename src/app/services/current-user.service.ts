@@ -34,7 +34,7 @@ export class CurrentUserService {
                 this.initialize();
               }
 
-  initialize() {
+  private initialize() {
     if (isPlatformBrowser(this.platformId)) {
       let localUser = sessionStorage.getItem(this.USER_INFO);
       if (!localUser) {

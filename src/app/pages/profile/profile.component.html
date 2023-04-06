@@ -46,6 +46,14 @@
                 {{profile.about}}
               </div>
             </div>
+            <div class="ms-4 mt-5 d-flex flex-column" style="margin: 0;">
+              <div style="text-align:center">
+                <button type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark"
+                  style="z-index: 1;" *ngIf="userProfile">
+                  Create post+
+                </button>
+              </div>
+            </div>
             <div class="d-flex justify-content-between align-items-center mb-4">
               <p class="lead fw-normal mb-0">Recent workouts</p>
               <p class="mb-0"><a href="#!" class="text-muted">Show all</a></p>

@@ -21,16 +21,16 @@
     <div class="navbar-collapse ms-md-3">
       <ul class="nav nav-pills nav-fill">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/dashboard" [class.active]="router.url == '/dashboard'"><fa-icon [icon]="faHouse"></fa-icon><br><span class="nav-label">Dashboard</span></a>
+          <a class="nav-link" routerLink="/dashboard" routerLinkActive="active"><fa-icon [icon]="faHouse"></fa-icon><br><span class="nav-label">Dashboard</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/social-feed" [class.active]="router.url == '/social-feed'"><fa-icon [icon]="faFeed"></fa-icon><br><span class="nav-label">Social Feed</span></a>
+          <a class="nav-link" routerLink="/social-feed" routerLinkActive="active"><fa-icon [icon]="faFeed"></fa-icon><br><span class="nav-label">Social Feed</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/my-workouts" [class.active]="router.url == '/my-workouts'"><fa-icon [icon]="faDumbbell"></fa-icon><br><span class="nav-label">My Workouts</span></a>
+          <a class="nav-link" routerLink="/my-workouts" routerLinkActive="active"><fa-icon [icon]="faDumbbell"></fa-icon><br><span class="nav-label">My Workouts</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/profile/{{user.profile.profileHandle}}" [class.active]="router.url == '/profile/'+user.profile.profileHandle"><fa-icon [icon]="faUser"></fa-icon><br><span class="nav-label">My Profile</span></a>
+          <a class="nav-link" routerLink="/profile/{{user.profile.profileHandle}}" routerLinkActive="active"><fa-icon [icon]="faUser"></fa-icon><br><span class="nav-label">My Profile</span></a>
         </li>
         
       </ul>

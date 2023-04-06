@@ -34,6 +34,9 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { CreateWorkoutComponent } from './pages/create-workout/create-workout.component';
 import { BsDatepickerModule, BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule,BsDropdownConfig } from 'ngx-bootstrap/dropdown';
+import { CreatePostModalComponent } from './modals/create-post-modal/create-post-modal.component';
+import { RouteReuseStrategy } from '@angular/router';
+import { CustomRouteReuseStrategy } from './providers/route-reuse-strategy';
 
 @NgModule({
   declarations: [
@@ -48,6 +51,7 @@ import { BsDropdownModule,BsDropdownConfig } from 'ngx-bootstrap/dropdown';
     MyWorkoutsComponent,
     ProfileComponent,
     CreateWorkoutComponent,
+    CreatePostModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -80,7 +84,7 @@ import { BsDropdownModule,BsDropdownConfig } from 'ngx-bootstrap/dropdown';
       }
     ), // ToastrModule added
   ],
-  providers: [AuthService, BsDatepickerConfig, BsDropdownConfig],
+  providers: [AuthService, BsDatepickerConfig, BsDropdownConfig, { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

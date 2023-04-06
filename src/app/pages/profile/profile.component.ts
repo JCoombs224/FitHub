@@ -16,7 +16,7 @@ import { ProfileService } from 'src/app/services/profile.service';
 })
 export class ProfileComponent {
   
-  private urlDisplayName;
+  private urlProfileHandle;
   profile = this.profileService.initProfile;
   userProfile = false;
   
@@ -32,17 +32,24 @@ export class ProfileComponent {
 
   
   ngOnInit(): void {
-    // Get the profile handle from the url
-    this.urlDisplayName = this.route.snapshot.paramMap.get('name');
+    // Subscribe to the url param for the profile username and update the page based on that
+    this.route.paramMap.subscribe(params => {
+      this.urlProfileHandle = params.get('name');
+      this.loadProfileData();
+      this.title.setTitle(`@${this.urlProfileHandle} | FitHub`);
+    });
+  }
 
+  private loadProfileData() {
     // Check if the profile handle is the current user
-    if(this.urlDisplayName == this.currentUser.user.profile.profileHandle) {
+    if(this.urlProfileHandle == this.currentUser.user.profile.profileHandle) {
       // Set the profile to the current user information
       this.profile = this.currentUser.user.profile;
       this.userProfile = true;
     }
     else {
-      this.profileService.getProfile(this.urlDisplayName).ref.get().then(data => {
+      this.userProfile = false;
+      this.profileService.getProfile(this.urlProfileHandle).ref.get().then(data => {
         const profData = data.data();
 
         this.profile.uid = profData.uid;
@@ -58,8 +65,6 @@ export class ProfileComponent {
         this.profile.following = profData.following;
       });
     }
-    
-    this.title.setTitle(`@${this.urlDisplayName} | FitHub`);
-  } 
+  }
   
 }
