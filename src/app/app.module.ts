@@ -32,11 +32,15 @@ import { SocialFeedComponent } from './pages/social-feed/social-feed.component';
 import { MyWorkoutsComponent } from './pages/my-workouts/my-workouts.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { CreateWorkoutComponent } from './pages/create-workout/create-workout.component';
-import { BsDatepickerModule, BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { BsDropdownModule,BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { CreatePostModalComponent } from './modals/create-post-modal/create-post-modal.component';
 import { RouteReuseStrategy } from '@angular/router';
 import { CustomRouteReuseStrategy } from './providers/route-reuse-strategy';
+import { CarouselModule } from 'ngx-bootstrap/carousel';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { BsDatepickerModule, BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { BsDropdownModule,BsDropdownConfig } from 'ngx-bootstrap/dropdown';
+import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
+import { AccordionModule } from 'ngx-bootstrap/accordion';
 
 @NgModule({
   declarations: [
@@ -75,6 +79,9 @@ import { CustomRouteReuseStrategy } from './providers/route-reuse-strategy';
     BrowserAnimationsModule, // required animations module
     BsDatepickerModule,
     BsDropdownModule,
+    ModalModule,
+    CollapseModule,
+    AccordionModule,
     ToastrModule.forRoot(
       {
         positionClass: 'toast-bottom-right',
@@ -82,7 +89,7 @@ import { CustomRouteReuseStrategy } from './providers/route-reuse-strategy';
         preventDuplicates: true,
         resetTimeoutOnDuplicate: true,
       }
-    ), // ToastrModule added
+    ),
   ],
   providers: [AuthService, BsDatepickerConfig, BsDropdownConfig, { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy }],
   bootstrap: [AppComponent]

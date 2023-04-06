@@ -24,26 +24,32 @@ export class CreateWorkoutComponent {
     groups: new FormArray([])
   });
 
-  workoutGroup = this.fb.group({
-    groupType: [''], // cardio, triceps, biceps, etc.
-    exercises: new FormArray([])
-  });
+  get newGroup() {
+    return this.fb.group({
+      groupType: [''], // cardio, triceps, biceps, etc.
+      exercises: new FormArray([])
+    });
+  }
 
-  muscleExercise = this.fb.group({
-    exerciseId: [''], // The exercise UID from the database
-    name: [''],
-    sets: [''],
-    reps: [''],
-    notes: ['']
-  });
+  get newMuscleExercise() {
+    return this.fb.group({
+      exerciseId: [''], // The exercise UID from the database
+      name: [''],
+      sets: [''],
+      reps: [''],
+      notes: ['']
+    });  
+  }
 
-  cardioExercise = this.fb.group({
-    name: [''],
-    distance: [''],
-    duration: [''],
-    incline: [''],
-    calories_burned: ['']
-  });
+  get newCardioExercise() {
+    return this.fb.group({
+      name: [''],
+      distance: [''],
+      duration: [''],
+      incline: [''],
+      calories_burned: ['']
+    });
+  }
 
   editingName = false;
   
@@ -56,10 +62,30 @@ export class CreateWorkoutComponent {
 
   ngOnInit(): void {
     this.title.setTitle("New Workout | FitHub");
+    this.addGroup();
+  }
+
+  addGroup() {
+    this.groups.push(this.newGroup);
+  }
+  addMuscleExerciseAt(i) {
+    this.getExercisesAt(i).push(this.newMuscleExercise);
+  }
+  addCardioExerciseAt(i) {
+    this.getExercisesAt(i).push(this.newCardioExercise);
   }
 
   get name() {
     return this.workoutForm.get('name');
+  }
+  get groups() {
+    return this.workoutForm.get('groups') as FormArray;
+  }
+  getGroupAt(i) {
+    return this.groups.at(i);
+  }
+  getExercisesAt(i) {
+    return this.groups.at(i).get('exercises') as FormArray;
   }
 
 }

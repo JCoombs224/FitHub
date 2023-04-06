@@ -8,6 +8,8 @@ import { ToastrService } from 'ngx-toastr';
 import { CurrentUserService } from 'src/app/services/current-user.service';
 import { GeneralService } from 'src/app/services/general.service';
 import { ProfileService } from 'src/app/services/profile.service';
+import { BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
+import { CreatePostModalComponent } from 'src/app/modals/create-post-modal/create-post-modal.component';
 
 @Component({
   selector: 'app-profile',
@@ -16,6 +18,8 @@ import { ProfileService } from 'src/app/services/profile.service';
 })
 export class ProfileComponent {
   
+  modalRef; // modal reference variable
+
   private urlProfileHandle;
   profile = this.profileService.initProfile;
   userProfile = false;
@@ -27,6 +31,7 @@ export class ProfileComponent {
               public authService: AuthService,
               private toastr: ToastrService,
               private profileService: ProfileService,
+              private modalService: BsModalService,
               public currentUser: CurrentUserService,
               private generalService: GeneralService) {}
 
@@ -38,6 +43,25 @@ export class ProfileComponent {
       this.loadProfileData();
       this.title.setTitle(`@${this.urlProfileHandle} | FitHub`);
     });
+  }
+
+  /**
+   * Opens a modal component to create a post
+   */
+  createPost() {
+    const initialState = {
+      initialState: {
+        callback: (result) => {
+          if(result) {
+            this.toastr.success("Submitted");
+          }
+        },
+      },
+      title: 'modal',
+      backdrop: 'static',
+      class: 'modal-lg'
+    };
+    this.modalRef = this.modalService.show(CreatePostModalComponent, initialState as ModalOptions);
   }
 
   private loadProfileData() {

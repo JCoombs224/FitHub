@@ -11,6 +11,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^15.2.0",
+    "@angular/cdk": "^15.0.0",
     "@angular/common": "^15.2.0",
     "@angular/compiler": "^15.2.0",
     "@angular/core": "^15.2.0",
@@ -26,6 +27,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@popperjs/core": "^2.11.7",
     "bootstrap": "^5.2.3",
+    "chart.js": "^3.1.1",
     "firebase": "^9.18.0",
     "jquery": "^3.6.4",
     "jquery-ui": "^1.13.2",

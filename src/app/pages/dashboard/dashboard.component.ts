@@ -13,13 +13,19 @@ import { CurrentUserService } from 'src/app/services/current-user.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-
+  
   constructor(private router: Router,
               private title: Title,
               private fb: FormBuilder,
               public authService: AuthService,
               private toastr: ToastrService,
               public currentUser: CurrentUserService) {}
+
+  // workoutProgress = {
+  //   totalWorkouts: 7,
+  //   workoutsCompleted: 4,
+  //   workoutsRemaining: 3,
+  // }
 
   ngOnInit(): void {
     console.log(this.currentUser.user);
