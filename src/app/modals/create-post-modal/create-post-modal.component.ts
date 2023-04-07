@@ -1,33 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/services/auth.service'; 
-import { ToastrService } from 'ngx-toastr';
-import { CurrentUserService } from 'src/app/services/current-user.service';
-// import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
-
+import { Component, OnInit } from "@angular/core";
 
 @Component({
-  selector: 'app-create-post-modal',
-  templateUrl: './create-post-modal.component.html',
-  styleUrls: ['./create-post-modal.component.css']
+  selector: "my-app",
+  templateUrl: "./create-post-modal.component.html",
 })
-export class CreatePostModalComponent {
+export class CreatePostModalComponent implements OnInit {
+  constructor() {}
 
-  constructor(private fb: FormBuilder,
-              public authService: AuthService,
-              private toastr: ToastrService,
-              public currentUser: CurrentUserService) {}
+  ngOnInit() {}
 
-  postForm = this.fb.group({
-    postText: ['', Validators.required],
-    postImage: ['']
-  });
+  displayStyle = "none";
 
-  openModal() {
-
+  postToProfile() {
+    this.displayStyle = "block";
   }
-
-  createPost() {
-    
+  closePopup() {
+    this.displayStyle = "none";
   }
 }

@@ -19,9 +19,12 @@ export class ProfileService {
       heightInches: '',
       sex: '',
       about: '',
+      profilePicture: '',
+      isPrivate: Boolean,
       workouts: [{}],
       followers: [],
-      following: []
+      following: [],
+      posts: []
     };
   }
 

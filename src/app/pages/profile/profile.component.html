@@ -6,57 +6,101 @@
           <div class="rounded-top text-white d-flex flex-row" style="background-color: #096A2E; height:200px;">
             <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
               <!--TODO: reference user's profile pic and display here in img-->
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
+              <img src="https://nwfblogs.wpenginepowered.com/wp-content/blogs.dir/11/files/2012/11/Turkey_strut-494x620.jpg"
                 alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
                 style="width: 150px; z-index: 1">
-              <button type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark"
-                style="z-index: 1;" *ngIf="userProfile">
+                <!--TODO: create modal for the user to be able to-->
+              <button
+                type="button"
+                id="editProfile"
+                class="btn btn-outline-dark"
+                data-mdb-ripple-color="dark"
+                style="z-index: 1;"
+                *ngIf="userProfile">
                 Edit profile
+              </button>
+              <!--TODO: add profile owner to user's following list-->
+              <button
+                type="button"
+                id="editProfile"
+                class="btn btn-outline-dark"
+                data-mdb-ripple-color="dark"
+                style="z-index: 1;"
+                *ngIf="!userProfile">
+                Follow+
               </button>
             </div>
             <div class="ms-3" style="margin-top: 130px;">
               <h5>@{{profile.profileHandle}}</h5>
-              <p>{{profile.age}}</p>
+            </div>
+            <div class="ms-3" style="margin-top: 108px;" *ngIf="!isPrivate">
+              <p>Age: {{profile.age}}<br>{{profile.heightFeet}}' {{profile.heightInches}}"<br>{{profile.weight}} lbs.</p>
+            </div>
+            <div class="ms-3" style="margin-top: 108px;" *ngIf="isPrivate">
+              <p>This profile is private.</p>
             </div>
           </div>
           <div class="p-4 text-black" style="background-color: #f8f9fa;">
             <div class="d-flex justify-content-end text-center py-1">
               <div>
-                <p class="mb-1 h5">{{profile.workouts.length - 1}}</p>
+                <p class="mb-1 h5" *ngIf="profile.workouts">{{profile.workouts.length - 1}}</p>
                 <p class="small text-muted mb-0">Workouts Logged</p>
               </div>
               <div class="px-3">
-                <p class="mb-1 h5">{{profile.followers.length - 1}}</p>
+                <p class="mb-1 h5">{{profile.followers.length}}</p>
                 <p class="small text-muted mb-0">Followers</p>
               </div>
               <div>
-                <p class="mb-1 h5">{{profile.following.length - 1}}</p>
+                <p class="mb-1 h5">{{profile.following.length}}</p>
                 <p class="small text-muted mb-0">Following</p>
               </div>
               <div>
-                
+
               </div>
             </div>
           </div>
           <div class="card-body p-4 text-black">
             <div class="mb-5">
-              <!--TODO: reference and display the information the user wants to display about themselves-->
               <p class="lead fw-normal mb-1">About</p>
               <div class="p-4" style="background-color: #f8f9fa;">
                 {{profile.about}}
               </div>
             </div>
+            <div class="mb-5">
+              <p class="lead fw-normal mb-0">Posts</p>
+              <li class="p-4" style="background-color: #f8f9fa;" *ngFor="let post of profile.posts">
+                {{post}}
+              </li>
+              <p *ngIf="!profile.posts">This user hasn't made any posts yet.</p>
+            </div>
             <div class="ms-4 mt-5 d-flex flex-column" style="margin: 0;">
               <div style="text-align:center">
-                <button type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark"
-                  style="z-index: 1;" *ngIf="userProfile">
+                <!-- Button trigger modal -->
+                <button
+                  type="button"
+                  class="btn btn-outline-dark"
+                  data-mdb-ripple-color="dark"
+                  style="z-index: 1;"
+                  style="margin-right: 16px"
+                  *ngIf="userProfile"
+                  data-target="#createPostModal"
+                  data-toggle="modal">
                   Create post+
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-dark"
+                  data-mdb-ripple-color="dark"
+                  style="z-index: 1;"
+                  *ngIf="userProfile"
+                  data-target="#createWorkout"
+                  data-toggle="modal">
+                  Create workout
                 </button>
               </div>
             </div>
             <div class="d-flex justify-content-between align-items-center mb-4">
               <p class="lead fw-normal mb-0">Recent workouts</p>
-              <p class="mb-0"><a href="#!" class="text-muted">Show all</a></p>
             </div>
             <div class="row g-2">
               <div class="col mb-2">

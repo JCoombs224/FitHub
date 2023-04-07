@@ -3,13 +3,11 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { AuthService } from 'src/app/services/auth.service'; 
+import { AuthService } from 'src/app/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { CurrentUserService } from 'src/app/services/current-user.service';
 import { GeneralService } from 'src/app/services/general.service';
 import { ProfileService } from 'src/app/services/profile.service';
-import { BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
-import { CreatePostModalComponent } from 'src/app/modals/create-post-modal/create-post-modal.component';
 
 @Component({
   selector: 'app-profile',
@@ -17,13 +15,13 @@ import { CreatePostModalComponent } from 'src/app/modals/create-post-modal/creat
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent {
-  
-  modalRef; // modal reference variable
 
   private urlProfileHandle;
   profile = this.profileService.initProfile;
   userProfile = false;
-  
+  isPrivate;
+
+
   constructor(private router: Router,
               private route: ActivatedRoute,
               private title: Title,
@@ -31,11 +29,10 @@ export class ProfileComponent {
               public authService: AuthService,
               private toastr: ToastrService,
               private profileService: ProfileService,
-              private modalService: BsModalService,
               public currentUser: CurrentUserService,
               private generalService: GeneralService) {}
 
-  
+
   ngOnInit(): void {
     // Subscribe to the url param for the profile username and update the page based on that
     this.route.paramMap.subscribe(params => {
@@ -45,24 +42,6 @@ export class ProfileComponent {
     });
   }
 
-  /**
-   * Opens a modal component to create a post
-   */
-  createPost() {
-    const initialState = {
-      initialState: {
-        callback: (result) => {
-          if(result) {
-            this.toastr.success("Submitted");
-          }
-        },
-      },
-      title: 'modal',
-      backdrop: 'static',
-      class: 'modal-lg'
-    };
-    this.modalRef = this.modalService.show(CreatePostModalComponent, initialState as ModalOptions);
-  }
 
   private loadProfileData() {
     // Check if the profile handle is the current user
@@ -87,8 +66,14 @@ export class ProfileComponent {
         this.profile.about = profData.about;
         this.profile.followers = profData.followers;
         this.profile.following = profData.following;
+        this.profile.posts = profData.posts;
+        this.profile.isPrivate = profData.isPrivate;
+        this.profile.profilePicture = profData.profilePicture;
       });
     }
   }
-  
+
+  loadProfilePic() {
+    return this.profile.profilePicture;
+  }
 }

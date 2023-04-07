@@ -30,7 +30,7 @@ export class CurrentUserService {
   constructor(private router: Router,
               public afs: AngularFirestore,
               private profileService: ProfileService,
-              @Inject(PLATFORM_ID) private platformId) { 
+              @Inject(PLATFORM_ID) private platformId) {
                 this.initialize();
               }
 
@@ -65,8 +65,8 @@ export class CurrentUserService {
 
   /**
    * Sets/updates the profile data in the database.
-   * @param profile 
-   * @returns 
+   * @param profile
+   * @returns
    */
   newProfile(profile) {
     const profileRef: AngularFirestoreDocument<any> = this.afs.doc(
@@ -128,6 +128,7 @@ export class CurrentUserService {
       this.user.profile.about = profile.about;
       this.user.profile.followers = profile.followers;
       this.user.profile.following = profile.following;
+      this.user.profile.posts = profile.posts;
 
       if (isPlatformBrowser(this.platformId)) {
         localStorage.removeItem(this.USER_INFO);
