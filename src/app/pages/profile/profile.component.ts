@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CurrentUserService } from 'src/app/services/current-user.service';
 import { GeneralService } from 'src/app/services/general.service';
 import { ProfileService } from 'src/app/services/profile.service';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
@@ -24,6 +25,7 @@ export class ProfileComponent {
   isPrivate = false;
 
   constructor(
+    private db: AngularFireDatabase,
     private router: Router,
     private route: ActivatedRoute,
     private title: Title,
@@ -43,6 +45,8 @@ export class ProfileComponent {
       this.loadProfileData();
       this.title.setTitle(`@${this.urlProfileHandle} | FitHub`);
     });
+
+    this.checkFollowers();
   }
 
 
@@ -93,6 +97,34 @@ export class ProfileComponent {
     docRefTarget.update({
       followers: firebase.firestore.FieldValue.arrayUnion(this.currentUser.user.profile.profileHandle)
     });
+  }
+
+  removeFromFollowing() {
+    const db = firebase.firestore();
+    const docRefUser = db.collection('profiles').doc(this.currentUser.user.profile.profileHandle);
+    const docRefTarget = db.collection('profiles').doc(this.urlProfileHandle);
+
+    docRefUser.update({
+      following: firebase.firestore.FieldValue.arrayRemove(this.profile.profileHandle)
+    });
+
+    //  Update the other user's followers by calling arrayUnion and adding the value in the PostText element on the HTML doc.
+    docRefTarget.update({
+      followers: firebase.firestore.FieldValue.arrayRemove(this.currentUser.user.profile.profileHandle)
+    });
+  }
+
+  checkFollowers(): boolean {
+    if(this.profile.followers.length === 0) {
+      return false;
+    }
+    for (let i = 0; i < this.profile.followers.length; i++) {
+      if(this.profile.followers[i] === this.currentUser.user.profile.profileHandle) {
+        console.log(this.profile.followers[i] + " and " + this.currentUser.user.profile.profileHandle);
+        return true;
+      }
+    }
+    return false;
   }
 
   loadProfilePic() {

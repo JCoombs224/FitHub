@@ -44,7 +44,6 @@ import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { CreatePostComponent } from './pages/create-post/create-post.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
-
 @NgModule({
   declarations: [
     AppComponent,
