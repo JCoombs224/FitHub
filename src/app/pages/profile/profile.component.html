@@ -13,7 +13,7 @@
               <button
                 type="button"
                 id="editProfile"
-                class="btn btn-outline-dark"
+                class="btn btn-outline-success"
                 data-mdb-ripple-color="dark"
                 style="z-index: 1;"
                 *ngIf="userProfile">
@@ -23,18 +23,22 @@
               <button
                 type="button"
                 id="editProfile"
-                class="btn btn-outline-dark"
+                class="btn btn-outline-success"
                 data-mdb-ripple-color="dark"
                 style="z-index: 1;"
-                *ngIf="!userProfile">
+                *ngIf="!userProfile"
+                (click)="addToFollowing()">
                 Follow+
               </button>
             </div>
             <div class="ms-3" style="margin-top: 130px;">
               <h5>@{{profile.profileHandle}}</h5>
+              <div class="ms-3" *ngIf="profile.isPrivate">
+                <p>This profile is set to private.</p>
+              </div>
             </div>
-            <div class="ms-3" style="margin-top: 108px;" *ngIf="!isPrivate">
-              <p>Age: {{profile.age}}<br>{{profile.heightFeet}}' {{profile.heightInches}}"<br>{{profile.weight}} lbs.</p>
+            <div class="ms-3" style="margin-top: 108px;" *ngIf="!profile.isPrivate">
+              <p>{{profile.age}}<br>{{profile.heightFeet}}' {{profile.heightInches}}"<br>{{profile.weight}} lbs.</p>
             </div>
             <div class="ms-3" style="margin-top: 108px;" *ngIf="isPrivate">
               <p>This profile is private.</p>
@@ -44,7 +48,7 @@
             <div class="d-flex justify-content-end text-center py-1">
               <div>
                 <p class="mb-1 h5" *ngIf="profile.workouts">{{profile.workouts.length - 1}}</p>
-                <p class="small text-muted mb-0">Workouts Logged</p>
+                <p class="small text-muted mb-0">Workouts</p>
               </div>
               <div class="px-3">
                 <p class="mb-1 h5">{{profile.followers.length}}</p>
@@ -68,19 +72,32 @@
             </div>
             <div class="mb-5">
               <p class="lead fw-normal mb-0">Posts</p>
-              <li class="p-4" style="background-color: #f8f9fa;" *ngFor="let post of profile.posts">
-                {{post}}
-              </li>
+              <div class="card" style="width: 25rem; margin-bottom: 5px;" *ngFor="let post of profile.posts">
+                <div class="card-body">
+                  <p class="card-text">{{post}}</p>
+                  <a href="#" class="btn btn-success" style="margin-right: 5px;">Like</a>
+                  <a href="#" class="btn btn-secondary">Comment</a>
+                </div>
+              </div>
               <p *ngIf="!profile.posts">This user hasn't made any posts yet.</p>
             </div>
             <div class="ms-4 mt-5 d-flex flex-column" style="margin: 0;">
               <div style="text-align:center">
                 <!-- Button trigger modal -->
-                <button
+                <ul class="nav nav-pills nav-fill">
+                  <li class="nav-item">
+                    <a class="nav-link" routerLink="/profile/{{profile.profileHandle}}/create-post" style="color: #096A2E" href="#" *ngIf="userProfile">Create Post+</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" routerLink="/my-workouts/create" style="color: #096A2E" href="#" *ngIf="userProfile">Create Workout+</a>
+                  </li>
+                </ul>
+                <!-- <button
                   type="button"
-                  class="btn btn-outline-dark"
+                  role="button"
+                  class="btn btn-outline-success"
                   data-mdb-ripple-color="dark"
-                  style="z-index: 1;"
+                  style="z-index: 1; margin: 0;"
                   style="margin-right: 16px"
                   *ngIf="userProfile"
                   data-target="#createPostModal"
@@ -89,14 +106,15 @@
                 </button>
                 <button
                   type="button"
-                  class="btn btn-outline-dark"
+                  role="button"
+                  class="btn btn-outline-success"
                   data-mdb-ripple-color="dark"
-                  style="z-index: 1;"
+                  style="z-index: 1; margin: 0;"
                   *ngIf="userProfile"
                   data-target="#createWorkout"
                   data-toggle="modal">
-                  Create workout
-                </button>
+                  Create workout+
+                </button> -->
               </div>
             </div>
             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -107,11 +125,13 @@
                 <!--TODO: reference and display workouts[workouts.length - 1] (The user's last workout)-->
                 <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(112).webp"
                   alt="image 1" class="w-100 rounded-3">
+                  <p>A picture</p>
               </div>
               <div class="col mb-2">
                 <!--TODO: reference and display workouts[workouts.length - 2] (The user's last workout)-->
                 <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(107).webp"
                   alt="image 1" class="w-100 rounded-3">
+                  <p>Another picture</p>
               </div>
             </div>
             <div class="row g-2">
@@ -119,11 +139,13 @@
                 <!--TODO: reference and display workouts[workouts.length - 3] (The user's last workout)-->
                 <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(108).webp"
                   alt="image 1" class="w-100 rounded-3">
+                  <p>A third picture</p>
               </div>
               <div class="col">
                 <!--TODO: reference and display workouts[workouts.length - 4] (The user's last workout)-->
                 <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(114).webp"
                   alt="image 1" class="w-100 rounded-3">
+                  <p>The final picture</p>
               </div>
             </div>
           </div>
@@ -131,4 +153,3 @@
       </div>
     </div>
   </div>
-</div>

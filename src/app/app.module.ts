@@ -41,6 +41,7 @@ import { BsDatepickerModule, BsDatepickerConfig } from 'ngx-bootstrap/datepicker
 import { BsDropdownModule,BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
+import { CreatePostComponent } from './pages/create-post/create-post.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { AccordionModule } from 'ngx-bootstrap/accordion';
     ProfileComponent,
     CreateWorkoutComponent,
     CreatePostModalComponent,
+    CreatePostComponent,
   ],
   imports: [
     BrowserModule,

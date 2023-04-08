@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,6 +8,8 @@ import { ToastrService } from 'ngx-toastr';
 import { CurrentUserService } from 'src/app/services/current-user.service';
 import { GeneralService } from 'src/app/services/general.service';
 import { ProfileService } from 'src/app/services/profile.service';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 
 @Component({
   selector: 'app-profile',
@@ -19,18 +21,19 @@ export class ProfileComponent {
   private urlProfileHandle;
   profile = this.profileService.initProfile;
   userProfile = false;
-  isPrivate;
+  isPrivate = false;
 
-
-  constructor(private router: Router,
-              private route: ActivatedRoute,
-              private title: Title,
-              private fb: FormBuilder,
-              public authService: AuthService,
-              private toastr: ToastrService,
-              private profileService: ProfileService,
-              public currentUser: CurrentUserService,
-              private generalService: GeneralService) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private title: Title,
+    private fb: FormBuilder,
+    public authService: AuthService,
+    private toastr: ToastrService,
+    private profileService: ProfileService,
+    public currentUser: CurrentUserService,
+    private generalService: GeneralService
+    ) {}
 
 
   ngOnInit(): void {
@@ -71,6 +74,25 @@ export class ProfileComponent {
         this.profile.profilePicture = profData.profilePicture;
       });
     }
+  }
+
+  addToFollowing() {
+    //  Reference the firebase database
+    const db = firebase.firestore();
+
+    //  Reference the profiles document associated with the current user's and the target user's profilehandles
+    const docRefUser = db.collection('profiles').doc(this.currentUser.user.profile.profileHandle);
+    const docRefTarget = db.collection('profiles').doc(this.profile.profileHandle);
+
+    //  Update the following by calling arrayUnion and adding the value in the PostText element on the HTML doc.
+    docRefUser.update({
+      following: firebase.firestore.FieldValue.arrayUnion(this.urlProfileHandle)
+    });
+
+    //  Update the other user's followers by calling arrayUnion and adding the value in the PostText element on the HTML doc.
+    docRefTarget.update({
+      followers: firebase.firestore.FieldValue.arrayUnion(this.currentUser.user.profile.profileHandle)
+    });
   }
 
   loadProfilePic() {
