@@ -3,6 +3,7 @@ import { Post } from './post.model';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Comment } from './comment.model';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({

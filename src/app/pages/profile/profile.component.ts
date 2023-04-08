@@ -96,6 +96,8 @@ export class ProfileComponent {
     //  Update the other user's followers by calling arrayUnion and adding the value in the PostText element on the HTML doc.
     docRefTarget.update({
       followers: firebase.firestore.FieldValue.arrayUnion(this.currentUser.user.profile.profileHandle)
+    }).then(() => {
+      this.profile.followers.push(this.currentUser.user.profile.profileHandle);
     });
   }
 
@@ -111,7 +113,10 @@ export class ProfileComponent {
     //  Update the other user's followers by calling arrayUnion and adding the value in the PostText element on the HTML doc.
     docRefTarget.update({
       followers: firebase.firestore.FieldValue.arrayRemove(this.currentUser.user.profile.profileHandle)
+    }).then(() => {
+      this.profile.followers.splice(this.profile.followers.indexOf(this.currentUser.user.profile.profileHandle));
     });
+    
   }
 
   checkFollowers(): boolean {
