@@ -81,7 +81,6 @@ export class EditProfileComponent {
   }
 
   updateProfile() {
-
     var updatesHandled = '';
     const profileRef = this.fs.collection('profiles').doc(this.profile.profileHandle);
 
@@ -121,18 +120,23 @@ export class EditProfileComponent {
       updatesHandled += "About you: " + (<HTMLInputElement>document.getElementById('about')).value + " ";
     }
 
+    //  Create a reference to the form element Visibility
     const form = document.querySelector('form');
     const visibility = form.elements['Visibility'];
 
+    //  Visibility to be changed through this variable
     let visibilitySelected;
 
+    //  Determine which radio button is checked
     for (let i = 0; i < visibility.length; i++) {
       if(visibility[i].checked) {
         visibilitySelected = visibility[i].value;
       }
     }
 
+    //  Only update if the other two radio buttons are selected
     if (visibilitySelected !== 'NoChange') {
+      //  Update isPrivate to true and set the profile to private
       if (visibilitySelected === 'Private') {
         const updateIsPrivate = {
           isPrivate: true
@@ -141,6 +145,7 @@ export class EditProfileComponent {
         updatesHandled += "Profile visibility: Private";
       }
 
+      //  Update isPrivate to false and set the profile to public
       else {
         const updateIsPrivate = {
           isPrivate: false
@@ -148,17 +153,23 @@ export class EditProfileComponent {
         profileRef.update(updateIsPrivate);
         updatesHandled += "Profile visibility: Public";
       }
-
-
     }
 
+    //  Show the user the changes that they made when updatesHandled has a value other than empty
     if (updatesHandled !== '') {
       alert(updatesHandled);
     }
 
+    //  Tell the user that no changes were made
     else {
       alert("No changes were made.");
     }
+
+    (<HTMLInputElement>document.getElementById('profileName')).value = '';
+    (<HTMLInputElement>document.getElementById('age')).value = '';
+    (<HTMLInputElement>document.getElementById('weight')).value = '';
+    (<HTMLInputElement>document.getElementById('about')).value = '';
+    visibility[0].checked = true;
   }
 
   cancelEdit() {
