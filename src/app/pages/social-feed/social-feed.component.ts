@@ -11,6 +11,7 @@ import { Comment } from './comment.model';
   styleUrls: ['./social-feed.component.css'],
 })
 export class SocialFeedComponent {
+    // Sample data for the social feed
   posts: Post[] = [
     new Post(
       'Username1',
@@ -36,9 +37,10 @@ export class SocialFeedComponent {
     ),
   ];
   
-
+   // Set to store the liked posts by their index
   likedPosts = new Set<number>();
 
+  // Handles the like functionality for a post
   onLike(post: Post) {
     const postId = this.posts.indexOf(post);
     if (this.likedPosts.has(postId)) {
@@ -51,6 +53,7 @@ export class SocialFeedComponent {
     post.liked = this.likedPosts.has(postId);
   }
   
+  // Toggles the visibility of comments on a post
   onComment(post: Post) {
     if (post.showComments) {
       post.comments.forEach((comment) => {
@@ -60,6 +63,7 @@ export class SocialFeedComponent {
     post.showComments = !post.showComments;
   }
   
+   // Adds a new comment to a post
   postComment(post: Post) {
     if (post.newComment.trim()) {
       post.comments.push(new Comment('CurrentUsername', post.newComment, 0, [], false, ''));
@@ -67,7 +71,7 @@ export class SocialFeedComponent {
       post.commentsCount++;
     }
   }
-
+  // Handles the like functionality for a comment
   onCommentLike(comment: Comment) {
     const postIndex = this.posts.findIndex(post => post.comments.includes(comment));
     const post = this.posts[postIndex];
@@ -86,17 +90,17 @@ export class SocialFeedComponent {
     }
   }
   
-  
-
+   // Adds a new reply to a comment
   postReply(comment, replyContent: string) {
     if (replyContent.trim()) {
       comment.replies.push({
-        username: 'CurrentUsername', // Replace with the current user's name
+        username: 'CurrentUsername',
         content: replyContent,
       });
     }
   }
 
+   // Loads more posts and adds them to the social feed
   loadMorePosts() {
     const newPosts: Post[] = [
       new Post('Username3', new Date('2023-04-05'), 'Yet another sample post.', 15, [], 0, false, '', 3),
@@ -104,7 +108,7 @@ export class SocialFeedComponent {
     ];
 
     of(newPosts)
-      .pipe(delay(1000)) // Simulate an API call with a delay
+      .pipe(delay(1000))
       .subscribe((loadedPosts) => {
         this.posts = [...this.posts, ...loadedPosts];
       });
