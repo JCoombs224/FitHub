@@ -42,6 +42,8 @@ import { BsDropdownModule,BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { CreatePostComponent } from './pages/create-post/create-post.component';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+
 
 @NgModule({
   declarations: [
@@ -92,6 +94,8 @@ import { CreatePostComponent } from './pages/create-post/create-post.component';
         resetTimeoutOnDuplicate: true,
       }
     ),
+    InfiniteScrollModule,
+    FormsModule,
   ],
   providers: [AuthService, BsDatepickerConfig, BsDropdownConfig, { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy }],
   bootstrap: [AppComponent]
