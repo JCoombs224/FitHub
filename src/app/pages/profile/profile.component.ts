@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { AuthService } from 'src/app/services/auth.service';
-import { ToastrService } from 'ngx-toastr';
 import { CurrentUserService } from 'src/app/services/current-user.service';
-import { GeneralService } from 'src/app/services/general.service';
 import { ProfileService } from 'src/app/services/profile.service';
-import { AngularFireDatabase } from '@angular/fire/compat/database';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
+// import { FormBuilder, Validators } from '@angular/forms';
+// import { AngularFireDatabase } from '@angular/fire/compat/database';
+// import { GeneralService } from 'src/app/services/general.service';
+// import { ToastrService } from 'ngx-toastr';
+// import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 @Component({
   selector: 'app-profile',
@@ -25,16 +25,16 @@ export class ProfileComponent {
   isPrivate = false;
 
   constructor(
-    private db: AngularFireDatabase,
-    private router: Router,
     private route: ActivatedRoute,
     private title: Title,
-    private fb: FormBuilder,
     public authService: AuthService,
-    private toastr: ToastrService,
     private profileService: ProfileService,
     public currentUser: CurrentUserService,
-    private generalService: GeneralService
+    // private fb: FormBuilder,
+    // private generalService: GeneralService
+    // private db: AngularFireDatabase,
+    // private router: Router,
+    // private toastr: ToastrService,
     ) {}
 
 

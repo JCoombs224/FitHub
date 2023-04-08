@@ -11,6 +11,7 @@ import { MyWorkoutsComponent } from './pages/my-workouts/my-workouts.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { CreateWorkoutComponent } from './pages/create-workout/create-workout.component';
 import { CreatePostComponent } from './pages/create-post/create-post.component';
+import { EditProfileComponent } from './pages/edit-profile/edit-profile.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'profile/:name', component: ProfileComponent, canActivate: [AuthGuard]},
   { path: 'my-workouts/create', component: CreateWorkoutComponent, canActivate: [AuthGuard]},
   { path: 'profile/:name/create-post', component: CreatePostComponent, canActivate: [AuthGuard]},
+  { path: 'profile/:name/edit-profile', component: EditProfileComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({

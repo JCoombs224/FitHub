@@ -43,6 +43,7 @@ import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { CreatePostComponent } from './pages/create-post/create-post.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { EditProfileComponent } from './pages/edit-profile/edit-profile.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     CreateWorkoutComponent,
     CreatePostModalComponent,
     CreatePostComponent,
+    EditProfileComponent,
   ],
   imports: [
     BrowserModule,
