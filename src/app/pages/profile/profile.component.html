@@ -19,7 +19,6 @@
                 *ngIf="userProfile">
                 Edit profile
               </button>
-              <!--TODO: Check if the other profile owner is followed by the user and display the appropriate button-->
               <ng-container *ngIf="!userProfile">
                 <button
                   type="button"
@@ -49,7 +48,7 @@
                 <p>This profile is set to private.</p>
               </div>
             </div>
-            <div class="ms-3" style="margin-top: 108px;" *ngIf="!profile.isPrivate">
+            <div class="ms-5" style="margin-top: 108px;" *ngIf="!profile.isPrivate">
               <p>{{profile.age}}<br>{{profile.heightFeet}}' {{profile.heightInches}}"<br>{{profile.weight}} lbs.</p>
             </div>
             <div class="ms-3" style="margin-top: 108px;" *ngIf="isPrivate">
@@ -58,17 +57,22 @@
           </div>
           <div class="p-4 text-black" style="background-color: #f8f9fa;">
             <div class="d-flex justify-content-end text-center py-1">
-              <div>
+              <!--TODO:
+                --route these buttons appropriately:
+                ----Workouts to profile owner's list of workouts
+                ----Followers launches scrollable modal listing profile owner's followers array (also to be clickable and routed to follower's profile)
+                ----Following launches scrollable modal listing profile owner's following array (also to be clickable and routed to followed's profile)-->
+              <div class="btn btn-outline-success" data-mdb-ripple-color="dark">
                 <p class="mb-1 h5" *ngIf="profile.workouts">{{profile.workouts.length - 1}}</p>
-                <p class="small text-muted mb-0">Workouts</p>
+                <p style="z-index: 1;">Workouts</p>
               </div>
-              <div class="px-3">
+              <div class="btn btn-outline-success" data-mdb-ripple-color="dark">
                 <p class="mb-1 h5">{{profile.followers.length}}</p>
-                <p class="small text-muted mb-0">Followers</p>
+                <p style="z-index: 1;">Followers</p>
               </div>
-              <div>
+              <div class="btn btn-outline-success" data-mdb-ripple-color="dark">
                 <p class="mb-1 h5">{{profile.following.length}}</p>
-                <p class="small text-muted mb-0">Following</p>
+                <p style="z-index: 1;">Following</p>
               </div>
               <div>
 
@@ -97,10 +101,10 @@
               <div style="text-align:center">
                 <ul class="nav nav-pills nav-fill">
                   <li class="nav-item">
-                    <button class="btn btn-outline-success" routerLink="/profile/{{profile.profileHandle}}/create-post" style="color: #000000;" href="#" *ngIf="userProfile">Create Post+</button>
+                    <button class="btn btn-outline-success" routerLink="/profile/{{profile.profileHandle}}/create-post" data-mdb-ripple-color="dark" href="#" *ngIf="userProfile">Create Post+</button>
                   </li>
                   <li class="nav-item">
-                    <button class="btn btn-outline-success" routerLink="/my-workouts/create" style="color: #000000" href="#" *ngIf="userProfile">Create Workout+</button>
+                    <button class="btn btn-outline-success" routerLink="/my-workouts/create" data-mdb-ripple-color="dark" href="#" *ngIf="userProfile">Create Workout+</button>
                   </li>
                 </ul>
               </div>
@@ -116,7 +120,7 @@
                   <p>A picture</p>
               </div>
               <div class="col mb-2">
-                <!--TODO: reference and display workouts[workouts.length - 2] (The user's last workout)-->
+                <!--TODO: reference and display workouts[workouts.length - 2] (The user's workout before last)-->
                 <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(107).webp"
                   alt="image 1" class="w-100 rounded-3">
                   <p>Another picture</p>
@@ -124,13 +128,13 @@
             </div>
             <div class="row g-2">
               <div class="col">
-                <!--TODO: reference and display workouts[workouts.length - 3] (The user's last workout)-->
+                <!--TODO: reference and display workouts[workouts.length - 3] (The user's workout before the workout before their last workout)-->
                 <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(108).webp"
                   alt="image 1" class="w-100 rounded-3">
                   <p>A third picture</p>
               </div>
               <div class="col">
-                <!--TODO: reference and display workouts[workouts.length - 4] (The user's last workout)-->
+                <!--TODO: reference and display workouts[workouts.length - 4] (The user's workout before the workout before the workout before their last workout)-->
                 <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(114).webp"
                   alt="image 1" class="w-100 rounded-3">
                   <p>The final picture</p>

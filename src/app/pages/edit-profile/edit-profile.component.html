@@ -32,32 +32,24 @@
                 <label for="UpdateYourAbout">About:</label>
                 <textarea class="form-control" placeholder="{{profile.about}}" id="about" rows="5"></textarea>
               </div>
-              <div class="form-group" style="margin-bottom: 10px;">
-                <div>
-                  <label for="UpdateProfileVisibility">Profile Visibility (Private selected by default):</label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="Visibility" id="NoChangeRadio" value="NoChange" checked>
-                  <label class="form-check-label" for="exampleRadios1">
-                    Do not change
+              <div>Profile Visibility:</div>
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-secondary active">
+                  <input type="radio" name="Visibility" id="NoChangeRadio" autocomplete="off" value="NoChange" checked>
+                  No change
+                </label>
+                <label class="btn btn-secondary">
+                  <input type="radio" name="Visibility" id="PrivateRadio" autocomplete="off" value="Private">
+                  Private
                   </label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="Visibility" id="PrivateRadio" value="Private">
-                  <label class="form-check-label" for="exampleRadios1">
-                    Private (Only people I follow and follow me can see my personal details)
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="Visibility" id="PublicRadio" value="Public">
-                  <label class="form-check-label" for="exampleRadios2">
-                    Public (Everyone can see my personal details)
-                  </label>
-                </div>
+                <label class="btn btn-secondary">
+                  <input type="radio" name="Visibility" id="PublicRadio" autocomplete="off" value="Public">
+                  Public
+                </label>
               </div>
             </form>
             <h5 style="margin-top: 25px;">Would you like to save all of your changes?</h5>
-            <button class="btn btn-primary-dark btn-lg btn-outline-success" style="color: #096A2E; margin: 0;" (click)="updateProfile()">
+            <button class="btn btn-primary-dark btn-lg btn-outline-success" style="margin: 0;" data-mdb-ripple-color="dark" (click)="updateProfile()">
               Accept
             </button>
             <button class="btn btn-secondary bt-lg btn-outline-success;" style="margin: 0;" (click)="cancelEdit()">
