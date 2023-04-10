@@ -118,8 +118,6 @@ export class AuthService {
       `users/${user.uid}`
     );
 
-    this.currentUserService.setUser(user); // set account information from auth to sign in
-
     // Then get the user information from db and update user again
     userRef.ref.get().then(data=>{
       this.currentUserService.setUser(data.data());

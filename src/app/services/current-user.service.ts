@@ -10,20 +10,23 @@ import { ProfileService } from './profile.service';
 })
 export class CurrentUserService {
 
+  private get BASE_USER() {
+    return {
+      account: {
+        uid: '',
+        email: '',
+        displayName: '',
+        photoURL: '',
+        profileHandle: '',
+        get loggedIn() {
+          return this.email;
+        }
+      },
+      profile: this.profileService.initProfile
+    };
+  }
   private USER_INFO = "FitHubUser";
-  public user = {
-    account: {
-      uid: '',
-      email: '',
-      displayName: '',
-      photoURL: '',
-      profileHandle: '',
-      get loggedIn() {
-        return this.email;
-      }
-    },
-    profile: this.profileService.initProfile
-  };
+  public user = this.BASE_USER;
 
   public account: BehaviorSubject<any> = new BehaviorSubject<any>(this.user);
 
@@ -42,7 +45,9 @@ export class CurrentUserService {
       }
       if (localUser) {
         this.user = JSON.parse(localUser);
-        this.getProfile(this.user.account);
+        if(this.user.account.profileHandle) {
+          this.getProfile(this.user.account);
+        }
       }
     }
   }
@@ -70,7 +75,7 @@ export class CurrentUserService {
    */
   newProfile(profile) {
     const profileRef: AngularFirestoreDocument<any> = this.afs.doc(
-      `/profiles/${profile.profileHandle}`
+      `profiles/${profile.profileHandle}`
     );
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
       `users/${this.user.account.uid}`
@@ -110,11 +115,7 @@ export class CurrentUserService {
   private getProfile(user) {
     this.user.account.profileHandle = user.profileHandle;
 
-    // Get user's profile info then update
-    const profileRef: AngularFirestoreDocument<any> = this.afs.doc(
-      `/profiles/${user.profileHandle}`
-    );
-    profileRef.ref.get().then(data => {
+    this.profileService.getProfile(user.profileHandle).ref.get().then(data => {
       const profile = data.data();
 
       this.user.profile.uid = profile.uid;
@@ -129,6 +130,7 @@ export class CurrentUserService {
       this.user.profile.followers = profile.followers;
       this.user.profile.following = profile.following;
       this.user.profile.posts = profile.posts;
+      this.user.profile.isPrivate= profile.isPrivate;
 
       if (isPlatformBrowser(this.platformId)) {
         localStorage.removeItem(this.USER_INFO);
@@ -137,7 +139,7 @@ export class CurrentUserService {
         sessionStorage.removeItem(this.USER_INFO);
         sessionStorage.setItem(this.USER_INFO, JSON.stringify(this.user));
       }
-    });
+    })
 
   }
 
@@ -149,8 +151,12 @@ export class CurrentUserService {
     this.user.account.profileHandle = user.profileHandle;
 
     if (user.profileHandle) {
+      // Update the profile info and navigate to dashboard if profile exists or create profile if not
       this.getProfile(user);
       this.router.navigate(["/dashboard"]);
+    } else {
+      // Navigate to create profile page
+      this.router.navigate(["/create-profile"]);
     }
 
     this.account.next(this.user);
@@ -170,7 +176,7 @@ export class CurrentUserService {
       sessionStorage.removeItem(this.USER_INFO);
     }
     setTimeout(() => {
-      this.initialize();
+      this.user = this.BASE_USER;   
       // this.account.next(this.account_data);
       this.router.navigate(['']);
     }, 500);
