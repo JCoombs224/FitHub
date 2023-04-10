@@ -53,10 +53,10 @@
                         <div class="row">
                           <div class="col">
                             <ol class="list-group" formArrayName="exercises">
-                              <li class="list-group-item" *ngFor="let exercise of getExercisesAt(i).controls; let j = index" [formGroupName]="j">
-                                <select class="form-select" formControlName="name">
-                                  <option *ngFor="let ex of exercises">{{ex.name}}</option>
-                                </select>
+                              <li class="list-group-item" *ngFor="let ex of getExercisesAt(i).controls; let j = index" [formGroupName]="j">
+                                <h5><strong>Exercise: </strong>{{ex.value.name}}</h5>
+                                <p><strong>Instructions: </strong> {{ex.value.instructions}} </p>
+                                <p><strong>Secondary Muscles: </strong> {{ex.value.secondaryMuscles|titlecase}} </p>
                               </li>
                               <button *ngIf="getGroupAt(i).get('groupType').value" class="btn btn-primary" (click)="this.addMuscleExerciseAt(i)">Add Exercise</button>
                             </ol>

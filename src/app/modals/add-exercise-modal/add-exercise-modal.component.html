@@ -6,14 +6,25 @@
 </div>
 <div class="modal-body">
   <ul class="list-group">
-    <li *ngFor="let ex of exercises" class="list-group-item list-group-item-action">{{ex.name}}</li>
+    <li *ngFor="let ex of exercises; let i = index" class="list-group-item list-group-item-action" [class.active]="openExerciseIndex == i" (click)="openExerciseIndex = i">
+      <h4>{{ex.name}}</h4>
+      <div class="card card-body text-black" *ngIf="openExerciseIndex == i" [@slideOutAnimation]>
+        <p><strong>Instructions: </strong><span *ngFor="let ins of ex.instructions">{{ins|titlecase}} </span></p>
+        <p><strong>Equipment: </strong> {{ex.equipment|titlecase}}</p>
+        <p><strong>Primary Muscles: </strong> {{ex.primaryMuscles[0]|titlecase}}</p>
+        <p>
+          <strong>Secondary Muscles: </strong>
+          <span *ngFor="let mus of ex.secondaryMuscles; let last = last;">
+            {{mus|titlecase}}<span *ngIf="!last">, </span>
+          </span>
+        </p>
+        <button class="btn btn-primary" (click)="addExercise(ex)">Add +</button>
+      </div>
+    </li>
   </ul>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-secondary" (click)="cancel()">
     Cancel
-  </button>
-  <button type="button" class="btn btn-primary" >
-    Done
   </button>
 </div>

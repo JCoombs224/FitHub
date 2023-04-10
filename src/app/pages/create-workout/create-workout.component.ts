@@ -35,10 +35,12 @@ export class CreateWorkoutComponent {
     });
   }
 
-  get newMuscleExercise() {
+  newMuscleExercise(name = '', instructions = '', secondaryMuscles = '') {
     return this.fb.group({
       exerciseId: [''], // The exercise UID from the database
-      name: [''],
+      name: name,
+      instructions: [instructions],
+      secondaryMuscles: [secondaryMuscles],
       sets: [''],
       reps: [''],
       notes: ['']
@@ -83,14 +85,17 @@ export class CreateWorkoutComponent {
   addGroup() {
     this.groups.push(this.newGroup);
   }
+
   addMuscleExerciseAt(i) {
     const initialState = {
       initialState: {
         group: this.getGroupAt(i).get('groupType').value,
-        callback: (result) => {
-          if(result) {
+        callback: (exercise) => {
+          console.log(exercise)
+          if(exercise) {
             this.toastr.success("Added exercise to workout!");
-            this.getExercisesAt(i).push(this.newMuscleExercise);
+            this.getExercisesAt(i).push(this.newMuscleExercise(exercise.name, exercise.instructions.join(" "), exercise.secondaryMuscles.join(", ")));
+            // this.getExercisesAt(i).get('exerciseId').setValue(exercise.id);
           }
         },
       },
