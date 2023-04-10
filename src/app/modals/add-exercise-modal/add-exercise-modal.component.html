@@ -1,0 +1,19 @@
+<div class="modal-header">
+  <h4 class="modal-title">Add {{group|titlecase}} Exercise</h4>
+  <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="cancel()">
+    <span aria-hidden="true" class="visually-hidden">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <ul class="list-group">
+    <li *ngFor="let ex of exercises" class="list-group-item list-group-item-action">{{ex.name}}</li>
+  </ul>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="cancel()">
+    Cancel
+  </button>
+  <button type="button" class="btn btn-primary" >
+    Done
+  </button>
+</div>

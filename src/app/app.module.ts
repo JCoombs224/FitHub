@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './layout/header.component';
@@ -44,6 +43,7 @@ import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { CreatePostComponent } from './pages/create-post/create-post.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { EditProfileComponent } from './pages/edit-profile/edit-profile.component';
+import { AddExerciseModalComponent } from './modals/add-exercise-modal/add-exercise-modal.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +61,7 @@ import { EditProfileComponent } from './pages/edit-profile/edit-profile.componen
     CreatePostModalComponent,
     CreatePostComponent,
     EditProfileComponent,
+    AddExerciseModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -98,7 +99,7 @@ import { EditProfileComponent } from './pages/edit-profile/edit-profile.componen
     InfiniteScrollModule,
     FormsModule,
   ],
-  providers: [AuthService, BsDatepickerConfig, BsDropdownConfig, { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy }],
+  providers: [AuthService, BsModalService, BsDatepickerConfig, BsDropdownConfig, { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

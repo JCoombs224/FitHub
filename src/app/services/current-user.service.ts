@@ -117,7 +117,6 @@ export class CurrentUserService {
 
     this.profileService.getProfile(user.profileHandle).ref.get().then(data => {
       const profile = data.data();
-      this.router.navigate(["/dashboard"]);
 
       this.user.profile.uid = profile.uid;
       this.user.profile.profileHandle = profile.profileHandle;
@@ -154,6 +153,9 @@ export class CurrentUserService {
     if (user.profileHandle) {
       // Update the profile info and navigate to dashboard if profile exists or create profile if not
       this.getProfile(user);
+      setTimeout(() => { 
+        this.router.navigate(["/dashboard"]);
+       }, 500);
     } else {
       // Navigate to create profile page
       this.router.navigate(["/create-profile"]);

@@ -8,6 +8,9 @@ import { ToastrService } from 'ngx-toastr';
 import { CurrentUserService } from 'src/app/services/current-user.service';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { WorkoutsService } from 'src/app/services/workouts.service';
+import {BsModalService, ModalOptions} from "ngx-bootstrap/modal";
+import { AddExerciseModalComponent } from 'src/app/modals/add-exercise-modal/add-exercise-modal.component';
 
 
 @Component({
@@ -18,6 +21,7 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
 export class CreateWorkoutComponent {
 
   faEdit = faEdit;
+  modalRef;
 
   workoutForm = this.fb.group({
     name: ['New Workout'],
@@ -52,24 +56,50 @@ export class CreateWorkoutComponent {
   }
 
   editingName = false;
+  exercises = [];
   
   constructor(private router: Router,
     private title: Title,
     private fb: FormBuilder,
     public authService: AuthService,
+    private modalService: BsModalService,
     private toastr: ToastrService,
-    public currentUser: CurrentUserService) {}
+    public currentUser: CurrentUserService,
+    private workoutService: WorkoutsService) {}
 
   ngOnInit(): void {
     this.title.setTitle("New Workout | FitHub");
     this.addGroup();
   }
 
+  getExercises(i) {
+    this.exercises = [];
+    this.workoutService.getExercises(this.getGroupAt(i).get('groupType').value).get().subscribe(data=>data.forEach(el=>{
+      this.exercises.push(el.data());
+      }));
+    this.addMuscleExerciseAt(i);
+  }
+
   addGroup() {
     this.groups.push(this.newGroup);
   }
   addMuscleExerciseAt(i) {
-    this.getExercisesAt(i).push(this.newMuscleExercise);
+    const initialState = {
+      initialState: {
+        group: this.getGroupAt(i).get('groupType').value,
+        callback: (result) => {
+          if(result) {
+            this.toastr.success("Added exercise to workout!");
+            this.getExercisesAt(i).push(this.newMuscleExercise);
+          }
+        },
+      },
+      title: 'modal',
+      backdrop: 'static',
+      class: 'modal-lg'
+    };
+    this.modalRef = this.modalService.show(AddExerciseModalComponent, initialState as ModalOptions);
+    
   }
   addCardioExerciseAt(i) {
     this.getExercisesAt(i).push(this.newCardioExercise);

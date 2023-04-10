@@ -30,22 +30,38 @@
                     </h2>
                     <div class="accordion-collapse collapse show">
                       <div class="accordion-body">
-                        <label>Exercise Group Type</label>
-                        <select class="form-select form-select-lg" formControlName="groupType">
-                          <option disabled value="">Select Exercise Group Type</option>
-                          <option value="cardio">Cardio</option>
-                          <hr>
-                          <option value="abdominals">Abdominals</option>
-                          <option value="back">Back</option>
-                          <option value="biceps">Biceps</option>
-                          <option value="calves">Calves</option>
-                          <option value="chest">Chest</option>
-                          <option value="glutes">Glutes</option>
-                          <option value="hamstrings">Hamstrings</option>
-                          <option value="quads">Quads</option>
-                          <option value="shoulders">Shoulders</option>
-                          <option value="triceps">Triceps</option>
-                        </select>
+                        <div class="row">
+                          <div class="col">
+                            <label>Exercise Group Type</label>
+                            <select class="form-select form-select-lg" formControlName="groupType" (change)="getExercises(i)">
+                              <option disabled value="">Select Exercise Group Type</option>
+                              <option value="cardio">Cardio</option>
+                              <hr>
+                              <option value="abdominals">Abdominals</option>
+                              <option value="back">Back</option>
+                              <option value="biceps">Biceps</option>
+                              <option value="calves">Calves</option>
+                              <option value="chest">Chest</option>
+                              <option value="glutes">Glutes</option>
+                              <option value="hamstrings">Hamstrings</option>
+                              <option value="quads">Quads</option>
+                              <option value="shoulders">Shoulders</option>
+                              <option value="triceps">Triceps</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col">
+                            <ol class="list-group" formArrayName="exercises">
+                              <li class="list-group-item" *ngFor="let exercise of getExercisesAt(i).controls; let j = index" [formGroupName]="j">
+                                <select class="form-select" formControlName="name">
+                                  <option *ngFor="let ex of exercises">{{ex.name}}</option>
+                                </select>
+                              </li>
+                              <button *ngIf="getGroupAt(i).get('groupType').value" class="btn btn-primary" (click)="this.addMuscleExerciseAt(i)">Add Exercise</button>
+                            </ol>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
