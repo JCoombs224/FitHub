@@ -8,19 +8,17 @@
         </div>
         <!--TODO Create list of workouts here-->
         <div class="row row-cols-1 row-cols-lg-2 row-cols-xxl-3 g-4 p-5">
-          <div class="col card-new-workout">
-            <div class="card h-100">
+          <div class="col card-new-workout" *ngFor="let workout of workouts">
+            <div class="card h-100" (click)="openWorkout(workout)">
               <div class="card-body">
-                <h5 class="card-title">Workout 1</h5>
+                <h5 class="card-title">{{workout.name}}</h5>
                 <p class="card-text">
                   Here is the description of the workout.
                 </p>
               </div>
               <div class="card-body pb-2"><h6 class="m-0 p-0">Muscle Groups</h6></div>
               <ul class="list-group list-group-flush">
-                <li class="list-group-item">An item</li>
-                <li class="list-group-item">A second item</li>
-                <li class="list-group-item">A third item</li>
+                <li *ngFor="let group of workout.groups" class="list-group-item">{{group.groupType|titlecase}}</li>
               </ul>
               <!-- <div class="card-footer text-center">
                 <button class="btn btn-success">View Workout</button>

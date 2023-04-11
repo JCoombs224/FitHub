@@ -88,7 +88,7 @@ import { NgChartsModule } from 'ng2-charts';
     BsDropdownModule,
     ModalModule,
     CollapseModule,
-    AccordionModule,
+    AccordionModule.forRoot(),
     ToastrModule.forRoot(
       {
         positionClass: 'toast-bottom-right',

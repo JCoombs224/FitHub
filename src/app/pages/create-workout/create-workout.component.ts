@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { AuthService } from 'src/app/services/auth.service'; 
 import { ToastrService } from 'ngx-toastr';
@@ -11,17 +11,44 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { WorkoutsService } from 'src/app/services/workouts.service';
 import {BsModalService, ModalOptions} from "ngx-bootstrap/modal";
 import { AddExerciseModalComponent } from 'src/app/modals/add-exercise-modal/add-exercise-modal.component';
+import {animate, style, transition, trigger} from "@angular/animations";
+import { faX } from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({
   selector: 'app-create-workout',
   templateUrl: './create-workout.component.html',
-  styleUrls: ['./create-workout.component.css']
+  styleUrls: ['./create-workout.component.css'],
+  animations: [
+    trigger(
+      'slideOutAnimation',
+      [
+        transition(
+          ':enter',
+          [
+            style({ height: 0, opacity: 0 }),
+            animate('0.4s ease-out',
+              style({ }))
+          ]
+        ),
+        transition(
+          ':leave',
+          [
+            style({  }),
+            animate('0.4s ease-in',
+              style({ height: 0, opacity: 0 }))
+          ]
+        )
+      ]
+    )
+  ]
 })
 export class CreateWorkoutComponent {
 
   faEdit = faEdit;
+  faX = faX;
   modalRef;
+  private uid;
 
   workoutForm = this.fb.group({
     name: ['New Workout'],
@@ -30,7 +57,7 @@ export class CreateWorkoutComponent {
 
   get newGroup() {
     return this.fb.group({
-      groupType: [''], // cardio, triceps, biceps, etc.
+      groupType: ['New Group'], // cardio, triceps, biceps, etc.
       exercises: new FormArray([])
     });
   }
@@ -57,11 +84,14 @@ export class CreateWorkoutComponent {
     });
   }
 
+  tabsOpen = [];
   editingName = false;
   exercises = [];
+  editingWorkout = false;
   
   constructor(private router: Router,
     private title: Title,
+    private route: ActivatedRoute,
     private fb: FormBuilder,
     public authService: AuthService,
     private modalService: BsModalService,
@@ -70,8 +100,29 @@ export class CreateWorkoutComponent {
     private workoutService: WorkoutsService) {}
 
   ngOnInit(): void {
-    this.title.setTitle("New Workout | FitHub");
-    this.addGroup();
+    // Get the workout UID from the URL
+    this.uid = this.route.snapshot.paramMap.get('uid');
+
+    // If we're editing a workout, load the workout data into the form
+    if(this.uid) {
+      this.title.setTitle("Edit Workout | FitHub");
+      this.workoutService.openWorkout(this.route.snapshot.paramMap.get('uid')).subscribe(data=>{
+        // Add the groups and exercises to the form to be filled from data
+        for(let group of data.groups) {
+          this.groups.push(this.newGroup);
+          for(let exercise of group.exercises) {
+            this.getExercisesAt(this.groups.length-1).push(this.newMuscleExercise(exercise.name, exercise.instructions, exercise.secondaryMuscles));
+          }
+        }
+        // Fill the form with the data
+        this.workoutForm.patchValue(data);
+        this.editingWorkout = true;
+      });
+     }
+     else {
+      this.title.setTitle("Create Workout | FitHub");
+      this.addGroup();
+     }
   }
 
   getExercises(i) {
@@ -104,10 +155,39 @@ export class CreateWorkoutComponent {
       class: 'modal-lg'
     };
     this.modalRef = this.modalService.show(AddExerciseModalComponent, initialState as ModalOptions);
-    
   }
+
   addCardioExerciseAt(i) {
     this.getExercisesAt(i).push(this.newCardioExercise);
+  }
+
+  removeExerciseAt(i, j) {
+    this.getExercisesAt(i).removeAt(j);
+    this.toastr.error("Removed exercise from workout");
+  }
+
+  removeGroupAt(i) {
+    this.groups.removeAt(i);
+    this.toastr.error("Removed group from workout");
+  }
+
+  // save workout to firebase under the current users profile
+  saveWorkout() { 
+
+    // If we're editing a workout, update it
+    if(this.editingWorkout) { 
+      this.workoutService.updateWorkout({uid: this.uid, workout: this.workoutForm.getRawValue()}).then(() => {
+        this.toastr.success("Workout updated!");
+        this.router.navigate(['/my-workouts']);
+      });
+      return;
+    }
+
+    // If we're creating a new workout, save it
+    this.workoutService.newWorkout(this.workoutForm.getRawValue()).then(() => {
+      this.toastr.success("Workout saved!");
+      this.router.navigate(['/my-workouts']);
+    });
   }
 
   get name() {

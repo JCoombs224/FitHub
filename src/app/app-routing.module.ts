@@ -23,6 +23,7 @@ const routes: Routes = [
   { path: 'my-workouts', component: MyWorkoutsComponent, canActivate: [AuthGuard]},
   { path: 'profile/:name', component: ProfileComponent, canActivate: [AuthGuard]},
   { path: 'my-workouts/create', component: CreateWorkoutComponent, canActivate: [AuthGuard]},
+  { path: 'my-workouts/:uid', component: CreateWorkoutComponent, canActivate: [AuthGuard]},
   { path: 'profile/:name/create-post', component: CreatePostComponent, canActivate: [AuthGuard]},
   { path: 'profile/:name/edit-profile', component: EditProfileComponent, canActivate: [AuthGuard]},
 ];

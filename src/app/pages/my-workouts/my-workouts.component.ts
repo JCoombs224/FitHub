@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { CurrentUserService } from 'src/app/services/current-user.service';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { WorkoutsService } from 'src/app/services/workouts.service';
 
 @Component({
   selector: 'app-my-workouts',
@@ -15,19 +16,34 @@ import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 })
 export class MyWorkoutsComponent {
   faPlusCircle = faPlusCircle;
+  workouts = [];
 
   constructor(private router: Router,
     private title: Title,
     private fb: FormBuilder,
     public authService: AuthService,
     private toastr: ToastrService,
-    public currentUser: CurrentUserService) {}
+    public currentUser: CurrentUserService,
+    private workoutService: WorkoutsService) {}
 
   ngOnInit(): void {
     this.title.setTitle("My Workouts | FitHub");
+    this.getWorkouts();
+  }
+
+  // Set workouts array to the value of the user's workouts collection
+  getWorkouts() {
+    this.workoutService.getWorkouts().subscribe(workouts => {
+      this.workouts = workouts;
+      console.log(this.workouts);
+    });
   }
 
   newWorkout() {
     this.router.navigate(["my-workouts/create"]);
+  }
+
+  openWorkout(workout) {
+    this.router.navigate(["my-workouts/" + workout.uid]);
   }
 }

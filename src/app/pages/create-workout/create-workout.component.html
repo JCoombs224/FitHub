@@ -3,7 +3,11 @@
   <div class="col-12 col-xl-10 col-xxl-8 p-0">
     <div class="card min-vh-100">
       <div class="card-body">
-
+        <div class="row justify-content-end">
+          <div class="col-auto">
+            <button class="btn btn-success" (click)="saveWorkout()">Save</button>
+          </div>
+        </div>
         <form [formGroup]="workoutForm" (ngSubmit)="editingName = false">
           <div class="row justify-content-center text-center">
             <div class="col-8">
@@ -19,62 +23,60 @@
         <form [formGroup]="workoutForm">
           <div class="row">
             <div class="col">
-              <div class="accordion">
-                
-                <span formArrayName="groups">
-                  <div class="accordion-item" *ngFor="let group of groups.controls; let i = index" [formGroupName]="i">
-                    <h2 class="accordion-header">
-                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                        {{getGroupAt(i).get('groupType').value}}
-                      </button>
-                    </h2>
-                    <div class="accordion-collapse collapse show">
-                      <div class="accordion-body">
-                        <div class="row">
-                          <div class="col">
-                            <label>Exercise Group Type</label>
-                            <select class="form-select form-select-lg" formControlName="groupType" (change)="getExercises(i)">
-                              <option disabled value="">Select Exercise Group Type</option>
-                              <option value="cardio">Cardio</option>
-                              <hr>
-                              <option value="abdominals">Abdominals</option>
-                              <option value="back">Back</option>
-                              <option value="biceps">Biceps</option>
-                              <option value="calves">Calves</option>
-                              <option value="chest">Chest</option>
-                              <option value="glutes">Glutes</option>
-                              <option value="hamstrings">Hamstrings</option>
-                              <option value="quads">Quads</option>
-                              <option value="shoulders">Shoulders</option>
-                              <option value="triceps">Triceps</option>
-                            </select>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col">
-                            <ol class="list-group" formArrayName="exercises">
-                              <li class="list-group-item" *ngFor="let ex of getExercisesAt(i).controls; let j = index" [formGroupName]="j">
-                                <h5><strong>Exercise: </strong>{{ex.value.name}}</h5>
-                                <p><strong>Instructions: </strong> {{ex.value.instructions}} </p>
-                                <p><strong>Secondary Muscles: </strong> {{ex.value.secondaryMuscles|titlecase}} </p>
-                              </li>
-                              <button *ngIf="getGroupAt(i).get('groupType').value" class="btn btn-primary" (click)="this.addMuscleExerciseAt(i)">Add Exercise</button>
-                            </ol>
-                          </div>
-                        </div>
-                      </div>
+              <accordion [isAnimated]="true" formArrayName="groups">
+                <accordion-group [heading]="getGroupAt(i).get('groupType').value|titlecase" [isOpen]="true" *ngFor="let group of groups.controls; let i = index" [formGroupName]="i">
+                  <div class="row mb-4">
+                    <div class="col">
+                      <label>Exercise Group Type</label>
+                      <select class="form-select form-select-lg" formControlName="groupType" (change)="getExercises(i)">
+                        <option disabled value="">Select Exercise Group Type</option>
+                        <option value="cardio">Cardio</option>
+                        <hr>
+                        <option value="abdominals">Abdominals</option>
+                        <option value="back">Back</option>
+                        <option value="biceps">Biceps</option>
+                        <option value="calves">Calves</option>
+                        <option value="chest">Chest</option>
+                        <option value="glutes">Glutes</option>
+                        <option value="hamstrings">Hamstrings</option>
+                        <option value="quads">Quads</option>
+                        <option value="shoulders">Shoulders</option>
+                        <option value="triceps">Triceps</option>
+                      </select>
                     </div>
                   </div>
-                </span>
-
-                <div class="row justify-content-center">
-                  <div class="col-6 text-center">
-                    <button type="button" class="btn btn-lg btn-primary">Add Workout Group +</button>
+                  <div class="row">
+                    <div class="col">
+                      <h4 *ngIf="getGroupAt(i).get('groupType').value != 'New Group'">Exercises:</h4>
+                    </div>
                   </div>
-                </div>
-
-
+                  <div class="row mb-2">
+                    <div class="col">
+                      <ol class="list-group list-group-numbered" formArrayName="exercises">
+                        <li class="list-group-item" *ngFor="let ex of getExercisesAt(i).controls; let j = index" [formGroupName]="j">
+                          <span class="display-6">{{ex.value.name}}</span>
+                          <span class="float-end"><fa-icon [icon]="faX" (click)="removeExerciseAt(i, j)" style="cursor: pointer; font-size: 1.3rem;"></fa-icon></span>
+                          <hr>
+                          <p><strong>Instructions: </strong> {{ex.value.instructions}} </p>
+                          <p><strong>Secondary Muscles: </strong> {{ex.value.secondaryMuscles|titlecase}} </p>
+                        </li>
+                      </ol>
+                    </div>
+                  </div>
+                  <div class="row justify-content-center">
+                    <button *ngIf="getGroupAt(i).get('groupType').value != 'New Group'" class="col-auto btn btn-primary" (click)="this.addMuscleExerciseAt(i)">Add Exercise</button>
+                  </div>
+                  <div class="row justify-content-end pe-2">
+                    <button class="col-auto btn btn-sm btn-danger" (click)="removeGroupAt(i)">Remove Group</button>
+                  </div>
+                  
+                </accordion-group>
+             </accordion>
+             <div class="row mt-2 justify-content-center">
+              <div class="col-6 text-center">
+                <button type="button" (click)="addGroup()" class="btn btn-lg btn-primary">Add Workout Group +</button>
               </div>
+            </div>
             </div>
           </div>
         </form>
