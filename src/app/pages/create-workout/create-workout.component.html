@@ -24,7 +24,7 @@
           <div class="row">
             <div class="col">
               <accordion [isAnimated]="true" formArrayName="groups">
-                <accordion-group [heading]="getGroupAt(i).get('groupType').value|titlecase" [isOpen]="true" *ngFor="let group of groups.controls; let i = index" [formGroupName]="i">
+                <accordion-group [heading]="getGroupAt(i).get('groupType').value|titlecase" [isOpen]="getGroupAt(i).get('groupType').value == 'New Group'" *ngFor="let group of groups.controls; let i = index" [formGroupName]="i">
                   <div class="row mb-4">
                     <div class="col">
                       <label>Exercise Group Type</label>
