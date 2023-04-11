@@ -80,7 +80,7 @@ export class EditProfileComponent {
     }
   }
 
-  updateProfile() {
+  updateProfileName() : string {
     var updatesHandled = '';
     const profileRef = this.fs.collection('profiles').doc(this.profile.profileHandle);
 
@@ -92,6 +92,12 @@ export class EditProfileComponent {
       profileRef.update(updateProfileName);
       updatesHandled += "Your Name: " + (<HTMLInputElement>document.getElementById('profileName')).value + " ";
     }
+    return updatesHandled;
+  }
+
+  updateAge () : string {
+    var updatesHandled = '';
+    const profileRef = this.fs.collection('profiles').doc(this.profile.profileHandle);
 
     //  Update the user's age field in firebase
     if ((<HTMLInputElement>document.getElementById('age')).value !== '') {
@@ -102,6 +108,13 @@ export class EditProfileComponent {
       updatesHandled += "Your Age: " + (<HTMLInputElement>document.getElementById('age')).value + " ";
     }
 
+    return updatesHandled;
+  }
+
+  updateWeight () : string {
+    var updatesHandled = '';
+    const profileRef = this.fs.collection('profiles').doc(this.profile.profileHandle);
+
     //  Update the user's weight field in firebase
     if ((<HTMLInputElement>document.getElementById('weight')).value !== '') {
       const updateWeight = {
@@ -110,6 +123,12 @@ export class EditProfileComponent {
       profileRef.update(updateWeight);
       updatesHandled += "Your Weight: " + (<HTMLInputElement>document.getElementById('weight')).value + " ";
     }
+    return updatesHandled;
+  }
+
+  updateAbout () : string {
+    var updatesHandled = '';
+    const profileRef = this.fs.collection('profiles').doc(this.profile.profileHandle);
 
     //  Update the user's about field in firebase
     if ((<HTMLInputElement>document.getElementById('about')).value !== '') {
@@ -119,6 +138,12 @@ export class EditProfileComponent {
       profileRef.update(updateAbout);
       updatesHandled += "About you: " + (<HTMLInputElement>document.getElementById('about')).value + " ";
     }
+    return updatesHandled;
+  }
+
+  updateVisibility () : string {
+    var updatesHandled = '';
+    const profileRef = this.fs.collection('profiles').doc(this.profile.profileHandle);
 
     //  Create a reference to the form element Visibility
     const form = document.querySelector('form');
@@ -155,25 +180,41 @@ export class EditProfileComponent {
       }
     }
 
+    visibility[0].checked = true;
+
+    return updatesHandled;
+  }
+
+  resetFields () {
+    (<HTMLInputElement>document.getElementById('profileName')).value = '';
+    (<HTMLInputElement>document.getElementById('age')).value = '';
+    (<HTMLInputElement>document.getElementById('weight')).value = '';
+    (<HTMLInputElement>document.getElementById('about')).value = '';
+  }
+
+  reportChanges(updates: string) {
     //  Show the user the changes that they made when updatesHandled has a value other than empty
-    if (updatesHandled !== '') {
-      alert(updatesHandled);
+    if (updates !== '') {
+      alert(updates);
     }
 
     //  Tell the user that no changes were made
     else {
       alert("No changes were made.");
     }
+  }
 
-    (<HTMLInputElement>document.getElementById('profileName')).value = '';
-    (<HTMLInputElement>document.getElementById('age')).value = '';
-    (<HTMLInputElement>document.getElementById('weight')).value = '';
-    (<HTMLInputElement>document.getElementById('about')).value = '';
-    visibility[0].checked = true;
+  updateProfile() {
+    var updatesHandled = '';
+    updatesHandled += this.updateProfileName() + this.updateAge() + this.updateWeight() + this.updateAbout() + this.updateVisibility();
+    this.reportChanges(updatesHandled);
+    this.resetFields();
   }
 
   cancelEdit() {
     this.location.back();
     alert("Cancelled profile editing. No changes were made.")
   }
+
+
 }

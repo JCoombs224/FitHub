@@ -19,7 +19,7 @@
 }
 
 .card-home-bg {
-    background-image: linear-gradient(white, white, #73ff6c);
+    background-image: linear-gradient(white, white, #096A2E);
 }
 
 .home-section {
@@ -48,4 +48,16 @@
 .nav-pills > li > a:hover {
     color: #50fd6a;
     background-color: rgb(23, 27, 31);
+}
+
+.zoom-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.zoom-btn:hover {
+  transform: scale(1.05);
 }

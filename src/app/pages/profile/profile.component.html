@@ -13,7 +13,7 @@
                 type="button"
                 routerLink="/profile/{{profile.profileHandle}}/edit-profile"
                 id="editProfile"
-                class="btn btn-outline-success"
+                class="btn zoom-btn  btn-outline-success"
                 data-mdb-ripple-color="dark"
                 style="z-index: 1;"
                 *ngIf="userProfile">
@@ -62,15 +62,15 @@
                 ----Workouts to profile owner's list of workouts
                 ----Followers launches scrollable modal listing profile owner's followers array (also to be clickable and routed to follower's profile)
                 ----Following launches scrollable modal listing profile owner's following array (also to be clickable and routed to followed's profile)-->
-              <div class="btn btn-outline-success" data-mdb-ripple-color="dark">
+              <div class="btn zoom-btn btn-outline-success" style="margin: 5px;" data-mdb-ripple-color="dark">
                 <p class="mb-1 h5" *ngIf="profile.workouts">{{profile.workouts.length - 1}}</p>
                 <p style="z-index: 1;">Workouts</p>
               </div>
-              <div class="btn btn-outline-success" data-mdb-ripple-color="dark">
+              <div class="btn zoom-btn btn-outline-success" style="margin: 5px;" data-mdb-ripple-color="dark">
                 <p class="mb-1 h5">{{profile.followers.length}}</p>
                 <p style="z-index: 1;">Followers</p>
               </div>
-              <div class="btn btn-outline-success" data-mdb-ripple-color="dark">
+              <div class="btn zoom-btn btn-outline-success" style="margin: 5px;"   data-mdb-ripple-color="dark">
                 <p class="mb-1 h5">{{profile.following.length}}</p>
                 <p style="z-index: 1;">Following</p>
               </div>
@@ -91,8 +91,8 @@
               <div class="card" style="width: 25rem; margin-bottom: 5px;" *ngFor="let post of profile.posts">
                 <div class="card-body">
                   <p class="card-text">{{post}}</p>
-                  <a href="#" class="btn btn-success" style="margin-right: 5px;">Like</a>
-                  <a href="#" class="btn btn-secondary">Comment</a>
+                  <a href="#" class="btn zoom-btn  btn-success" style="margin-right: 5px;">Like</a>
+                  <a href="#" class="btn zoom-btn  btn-secondary">Comment</a>
                 </div>
               </div>
               <p *ngIf="!profile.posts">This user hasn't made any posts yet.</p>
@@ -101,10 +101,10 @@
               <div style="text-align:center">
                 <ul class="nav nav-pills nav-fill">
                   <li class="nav-item">
-                    <button class="btn btn-outline-success" routerLink="/profile/{{profile.profileHandle}}/create-post" data-mdb-ripple-color="dark" href="#" *ngIf="userProfile">Create Post+</button>
+                    <button class="btn zoom-btn btn-outline-success" routerLink="/profile/{{profile.profileHandle}}/create-post" data-mdb-ripple-color="dark" href="#" *ngIf="userProfile">Create Post+</button>
                   </li>
                   <li class="nav-item">
-                    <button class="btn btn-outline-success" routerLink="/my-workouts/create" data-mdb-ripple-color="dark" href="#" *ngIf="userProfile">Create Workout+</button>
+                    <button class="btn zoom-btn btn-outline-success" routerLink="/my-workouts/create" data-mdb-ripple-color="dark" href="#" *ngIf="userProfile">Create Workout+</button>
                   </li>
                 </ul>
               </div>

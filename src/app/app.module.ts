@@ -17,7 +17,7 @@ import { LoginComponent } from './login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SignUpComponent } from './signup/sign-up.component';
 import { AuthService } from './services/auth.service';
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
@@ -45,6 +45,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { EditProfileComponent } from './pages/edit-profile/edit-profile.component';
 import { AddExerciseModalComponent } from './modals/add-exercise-modal/add-exercise-modal.component';
 import { NgChartsModule } from 'ng2-charts';
+import { FollowersModalComponent } from './modals/followers-modal/followers-modal.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,8 @@ import { NgChartsModule } from 'ng2-charts';
     CreatePostComponent,
     EditProfileComponent,
     AddExerciseModalComponent,
+    FollowersModalComponent,
+
   ],
   imports: [
     BrowserModule,
