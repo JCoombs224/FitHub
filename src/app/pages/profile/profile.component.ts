@@ -6,6 +6,11 @@ import { CurrentUserService } from 'src/app/services/current-user.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
+import { BsModalRef } from 'ngx-bootstrap/modal';
+import { BsModalService, ModalOptions } from "ngx-bootstrap/modal";
+import { FollowersService } from 'src/app/services/followers.service';
+import { FollowersModalComponent } from 'src/app/modals/followers-modal/followers-modal.component';
+
 // import { FormBuilder, Validators } from '@angular/forms';
 // import { AngularFireDatabase } from '@angular/fire/compat/database';
 // import { GeneralService } from 'src/app/services/general.service';
@@ -15,7 +20,7 @@ import 'firebase/compat/firestore';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent {
 
@@ -23,13 +28,17 @@ export class ProfileComponent {
   profile = this.profileService.initProfile;
   userProfile = false;
   isPrivate = false;
+  followers: any[] = [];
+  followersModalRef: BsModalRef;
 
   constructor(
+    private modalService: BsModalService,
     private route: ActivatedRoute,
     private title: Title,
     public authService: AuthService,
     private profileService: ProfileService,
     public currentUser: CurrentUserService,
+    private followersService: FollowersService,
     // private fb: FormBuilder,
     // private generalService: GeneralService
     // private db: AngularFireDatabase,
@@ -116,7 +125,7 @@ export class ProfileComponent {
     }).then(() => {
       this.profile.followers.splice(this.profile.followers.indexOf(this.currentUser.user.profile.profileHandle));
     });
-    
+
   }
 
   checkFollowers(): boolean {
@@ -130,9 +139,5 @@ export class ProfileComponent {
       }
     }
     return false;
-  }
-
-  loadProfilePic() {
-    return this.profile.profilePicture;
   }
 }
