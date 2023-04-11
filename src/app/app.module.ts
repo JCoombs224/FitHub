@@ -44,6 +44,7 @@ import { CreatePostComponent } from './pages/create-post/create-post.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { EditProfileComponent } from './pages/edit-profile/edit-profile.component';
 import { AddExerciseModalComponent } from './modals/add-exercise-modal/add-exercise-modal.component';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -98,6 +99,7 @@ import { AddExerciseModalComponent } from './modals/add-exercise-modal/add-exerc
     ),
     InfiniteScrollModule,
     FormsModule,
+    NgChartsModule,
   ],
   providers: [AuthService, BsModalService, BsDatepickerConfig, BsDropdownConfig, { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy }],
   bootstrap: [AppComponent]

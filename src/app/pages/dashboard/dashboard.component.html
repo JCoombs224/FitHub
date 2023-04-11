@@ -1,35 +1,110 @@
 <div class="row min-vh-100 login-bg">
-  <div class="col"></div>
-  <div class="col-12 col-md-8 text-center">
-    <div class="card mt-2 min-vh-100 p-md-5">
-      <h1 class="display-1">DASHBOARD</h1>
-      <p>Welcome {{currentUser.user.profile.profileHandle}}!</p>
-      <div class="row">
-        <div class="col">
-          <!-- <img src="https://datavizproject.com/wp-content/uploads/types/Line-Graph.png" class="img-fluid"> -->
-          <div class="card-home-bg row col-5">
-              <div class="card-header">
-                My Progress
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-12 col-lg-2 d-flex">
+        <div class="card w-100 min-vh-100 d-flex flex-column mb-4">
+          <div class="card-body text-center">
+            <h5 class="card-title custom-text-color">Feed</h5>
+            <div class="bg-light p-3 rounded">
+              <h6 class="custom-text-color mb-3 pb-2 border-bottom border-dark">Favorite Workouts</h6>
+              <div *ngFor="let workout of favoriteWorkouts" class="bg-white p-3 mb-2 rounded shadow-sm d-flex justify-content-between align-items-center">
+                <a [routerLink]="['/workout', workout.id]" class="text-decoration-none text-dark">{{ workout.name }}</a>
+                <i class="fas fa-heart text-danger"></i>
               </div>
-              <div class="card-body">
-                <p>Workout Progress: </p>
-                <p>Workouts Complete: </p>
-                <p>Workouts Remaining: </p>
-              </div>
+            </div>
           </div>
-          <div class="card-home-bg">
-            <div class="card-header">
-              Workout History
-            </div>
-            <div class="card-body">
-              <p>Workout Progress: </p>
-              <p>Workouts Complete: </p>
-              <p>Workouts Remaining: </p>
-            </div>
         </div>
+      </div>
+      <div class="col-12 col-lg-10 d-flex flex-column">
+        <div class="row d-flex">
+          <div class="col-12 col-lg-4 d-flex">
+            <div class="card mb-4 w-100 align-self-stretch custom-height">
+              <div class="card-body text-center">
+                <h5 class="card-title custom-text-color">My Progress</h5>
+                <p class="card-text">{{progressSummary}}</p>
+                <a href="/my-progress" class="btn btn-outline-success" data-mdb-ripple-color="dark">View My Progress</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-lg-8 d-flex">
+            <div class="card mb-4 w-100 align-self-stretch custom-height">
+              <div class="card-body text-center">
+                <h5 class="card-title custom-text-color">Workout History</h5>
+                <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"></canvas>
+                <!-- <a href="/workout-history" class="btn btn-outline-success" data-mdb-ripple-color="dark">View Workout History</a> -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-auto mb-4">
+          <div class="col-12">
+            <div class="card w-100 align-self-center custom-height">
+              <div class="card-body text-center">
+                <div class="container mt-5">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <h1 class="mb-5">Explore Our Features</h1>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6 mb-4">
+                      <div class="card h-100">
+                        <img src="assets/Images/MainFeature.jpg" class="card-img-top" alt="Main Feature">
+                        <div class="card-body">
+                          <h4 class="card-title">Main Feature</h4>
+                          <p class="card-text">Description of the main feature.</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                          <div class="card h-100">
+                            <img src="assets/Images/Feature1.jpg" class="card-img-top" alt="Feature 1">
+                            <div class="card-body">
+                              <h5 class="card-title">Feature 1</h5>
+                              <p class="card-text">Description of the first feature.</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <div class="card h-100">
+                            <img src="assets/Images/Feature2.jfif" class="card-img-top" alt="Feature 2">
+                            <div class="card-body">
+                              <h5 class="card-title">Feature 2</h5>
+                              <p class="card-text">Description of the second feature.</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6 mb-4">
+                          <div class="card h-100">
+                            <img src="assets/Images/Feature3.jpg" class="card-img-top" alt="Feature 3">
+                            <div class="card-body">
+                              <h5 class="card-title">Feature 3</h5>
+                              <p class="card-text">Description of the third feature.</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                          <div class="card h-100">
+                            <img src="assets/Images/Feature4.jpg" class="card-img-top" alt="Feature 4">
+                            <div class="card-body">
+                              <h5 class="card-title">Feature 4</h5>
+                              <p class="card-text">Description of the fourth feature.</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="col"></div>
 </div>

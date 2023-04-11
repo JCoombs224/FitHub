@@ -1,0 +1,29 @@
+.row.h-50 {
+  min-height: 50vh;
+}
+
+.card.custom-height {
+  min-height: 50vh;
+}
+
+.custom-text-color {
+  color: #0b8200;
+}
+
+h1 {
+  font-weight: bold;
+}
+
+.card {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
+}
+
+.card-title {
+  font-weight: bold;
+}
