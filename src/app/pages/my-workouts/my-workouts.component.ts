@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -14,9 +14,10 @@ import { WorkoutsService } from 'src/app/services/workouts.service';
   templateUrl: './my-workouts.component.html',
   styleUrls: ['./my-workouts.component.css']
 })
-export class MyWorkoutsComponent {
+export class MyWorkoutsComponent implements OnInit, OnDestroy {
   faPlusCircle = faPlusCircle;
   workouts = [];
+  private subscription;
 
   constructor(private router: Router,
     private title: Title,
@@ -25,6 +26,9 @@ export class MyWorkoutsComponent {
     private toastr: ToastrService,
     public currentUser: CurrentUserService,
     private workoutService: WorkoutsService) {}
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 
   ngOnInit(): void {
     this.title.setTitle("My Workouts | FitHub");
@@ -33,7 +37,7 @@ export class MyWorkoutsComponent {
 
   // Set workouts array to the value of the user's workouts collection
   getWorkouts() {
-    this.workoutService.getWorkouts().subscribe(workouts => {
+    this.subscription = this.workoutService.getWorkouts().subscribe(workouts => {
       this.workouts = workouts;
       console.log(this.workouts);
     });

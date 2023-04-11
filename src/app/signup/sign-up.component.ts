@@ -124,7 +124,7 @@ export class SignUpComponent implements OnInit {
   }
 
   googleSignUp() {
-    this.authService.GoogleAuth().then((success)=>{
+    this.authService.GoogleAuthSignUp().then((success)=>{
       if(success) {
         this.goToProfilePage();
         this.toastr.success("Account created.")

@@ -144,6 +144,7 @@ export class CurrentUserService {
   }
 
   setUser(user) {
+    console.log(user);
     this.user.account.uid = user.uid;
     this.user.account.email = user.email;
     this.user.account.displayName = user.displayName;

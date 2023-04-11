@@ -1,5 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
-import { CurrentUserService } from './current-user.service'; 
+import { CurrentUserService } from './current-user.service';
 import * as auth from 'firebase/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
@@ -14,12 +14,12 @@ export class AuthService {
   userData: any; // Save logged in user data
 
   constructor(public afs: AngularFirestore, // Inject Firestore service
-              public afAuth: AngularFireAuth, // Inject Firebase auth service
-              public router: Router,
-              public ngZone: NgZone,
-              private toastr: ToastrService,
-              private currentUserService: CurrentUserService) {
-    
+    public afAuth: AngularFireAuth, // Inject Firebase auth service
+    public router: Router,
+    public ngZone: NgZone,
+    private toastr: ToastrService,
+    private currentUserService: CurrentUserService) {
+
   }
 
   // Sign in with email/password
@@ -48,7 +48,7 @@ export class AuthService {
       .then((result) => {
         /* Call the SendVerificaitonMail() function when new user sign 
         up and returns promise */
-        if(result) {
+        if (result) {
           this.SetNewUserData(result.user);
           return true;
         }
@@ -87,9 +87,9 @@ export class AuthService {
   }
 
   // Sign in with Google
-  GoogleAuth() {
+  GoogleAuthLogin() {
     return this.AuthLogin(new auth.GoogleAuthProvider()).then((res: any) => {
-      if(res) {
+      if (res) {
         return true;
       }
       return false;
@@ -101,7 +101,30 @@ export class AuthService {
     return this.afAuth
       .signInWithPopup(provider)
       .then((result) => {
+        console.log(result);
         this.SetUserData(result.user);
+        return true;
+      })
+      .catch((error) => {
+        window.alert(error);
+      });
+  }
+
+  GoogleAuthSignUp() {
+    return this.AuthSignUp(new auth.GoogleAuthProvider()).then((res: any) => {
+      if (res) {
+        return true;
+      }
+      return false;
+    });
+  }
+
+  AuthSignUp(provider: any) {
+    return this.afAuth
+      .signInWithPopup(provider)
+      .then((result) => {
+        console.log(result);
+        this.SetNewUserData(result.user);
         return true;
       })
       .catch((error) => {
@@ -119,7 +142,7 @@ export class AuthService {
     );
 
     // Then get the user information from db and update user again
-    userRef.ref.get().then(data=>{
+    userRef.ref.get().then(data => {
       this.currentUserService.setUser(data.data());
     });
   }

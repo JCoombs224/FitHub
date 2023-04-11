@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit{
   }
 
   googleSignIn() {
-    this.authService.GoogleAuth().then((success)=>{
+    this.authService.GoogleAuthLogin().then((success)=>{
       if(success) {
         // this.router.navigate(["/dashboard"]);
       }
