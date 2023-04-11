@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -43,12 +43,13 @@ import { faX } from '@fortawesome/free-solid-svg-icons';
     )
   ]
 })
-export class CreateWorkoutComponent {
+export class CreateWorkoutComponent implements OnInit, OnDestroy {
 
   faEdit = faEdit;
   faX = faX;
   modalRef;
   private uid;
+  private subscription;
 
   workoutForm = this.fb.group({
     name: ['New Workout'],
@@ -99,15 +100,22 @@ export class CreateWorkoutComponent {
     public currentUser: CurrentUserService,
     private workoutService: WorkoutsService) {}
 
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
   ngOnInit(): void {
+    this.workoutForm.reset();
+    console.log("resetting form");
     // Get the workout UID from the URL
     this.uid = this.route.snapshot.paramMap.get('uid');
 
     // If we're editing a workout, load the workout data into the form
     if(this.uid) {
       this.title.setTitle("Edit Workout | FitHub");
-      this.workoutService.openWorkout(this.route.snapshot.paramMap.get('uid')).subscribe(data=>{
+      this.subscription = this.workoutService.openWorkout(this.route.snapshot.paramMap.get('uid')).subscribe(data=>{
         // Add the groups and exercises to the form to be filled from data
+        console.log(data);
         for(let group of data.groups) {
           this.groups.push(this.newGroup);
           for(let exercise of group.exercises) {

@@ -44,6 +44,6 @@ export class MyWorkoutsComponent {
   }
 
   openWorkout(workout) {
-    this.router.navigate(["my-workouts/" + workout.uid]);
+    this.router.navigate(["workout/" + workout.uid]);
   }
 }

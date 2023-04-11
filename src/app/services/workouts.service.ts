@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { CurrentUserService } from './current-user.service';
+import { debounceTime } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +42,11 @@ export class WorkoutsService {
 
   // Get a specific workout for the current user
   openWorkout(uid) {
-    return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('workouts').doc(uid).valueChanges();
+    return this.afs.collection('profiles')
+    .doc(this.currentUser.user.profile.profileHandle)
+    .collection('workouts')
+    .doc(uid)
+    .valueChanges()
+    .pipe(debounceTime(250)); // Debounce time to prevent multiple calls to the database, which fixed an issue where the workout would load multiple times
   }
 }
