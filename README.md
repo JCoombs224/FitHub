@@ -1,4 +1,4 @@
-# FithubClient
+# Fithub
 
 <p align="right">
   <img src="src/assets/Logo2/png/logo-no-background.png" width="400px" align="right">
