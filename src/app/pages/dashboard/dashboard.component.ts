@@ -44,6 +44,14 @@ export class DashboardComponent implements OnInit {
     }
   ];
 
+  progressValue = 75;
+  strokeDashoffset: number;
+  circumference: number;
+
+  calculateStrokeDashoffset(progressValue: number, circleRadius: number): number {
+    return (1 - progressValue / 100) * (2 * Math.PI * circleRadius);
+  }
+
   constructor(private router: Router,
               private title: Title,
               private fb: FormBuilder,
@@ -58,5 +66,7 @@ export class DashboardComponent implements OnInit {
     if(this.currentUserService.user.profile.profileHandle == '') {
       this.router.navigate(["/create-profile"]);
     }
+    this.circumference = 2 * Math.PI * 82;
+    this.strokeDashoffset = this.calculateStrokeDashoffset(this.progressValue, 82);
   }
 }
