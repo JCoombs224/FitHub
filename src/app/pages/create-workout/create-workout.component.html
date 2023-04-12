@@ -1,5 +1,5 @@
 <div class="row login-bg">
-  <div class="col p-0 p-xl-1">
+  <div class="col d-none d-xl-block p-0 p-xl-1">
     <div class="card">
       <div class="card-header text-center">
         <h3>Equipment</h3>
@@ -38,7 +38,7 @@
           <div class="row justify-content-center text-center">
             <div class="col-8">
               <div class="input-group" *ngIf="editingName">
-                <input type="text" class="form-control form-control-lg text-center" formControlName="name" placeholder="Workout Name">
+                <input type="text" class="form-control form-control-lg text-center" formControlName="name" placeholder="Enter Workout Name">
                 <button class="btn btn-outline-secondary" type="submit">Done</button>
               </div>
               <h1 class="display-4" *ngIf="!editingName">{{name.value}} <fa-icon [icon]="faEdit" (click)="editingName = true;" style="cursor: pointer; font-size: 2rem;"></fa-icon></h1>
@@ -49,8 +49,34 @@
           </div>
         </form>
         <hr class="mb-5">
-
-        <form [formGroup]="workoutForm">
+        <div class="col d-block d-xl-none d-xl-block p-0 p-xl-1 mb-5">
+          <div class="card">
+            <div class="card-header text-center" style="cursor: pointer;" (click)="hideEquipment = !hideEquipment">
+              <h3>Equipment <span style="float: right"><span *ngIf="!hideEquipment">▲</span><span *ngIf="hideEquipment">▼</span></span></h3>
+            </div>
+            <div *ngIf="!hideEquipment" class="card-body" [@slideOutAnimation]>
+              <div class="row">
+                <div class="col">
+                  <h5>Equipment Group <fa-icon class="text-primary" [icon]="faInfoCircle" title="New exercises that are added will be filtered by what equipment you have selected in your equipment group" (click)="showInfo = !showInfo" style="cursor: pointer;"></fa-icon></h5>
+                  <select class="form-select mb-2" [formControl]="equipment" (click)="showInfo = false">
+                    <option disabled>Select Equipment Group</option>
+                    <option>All</option>
+                    <option>Gym</option>
+                    <option>Home</option>
+                  </select>
+                  <div *ngIf="showInfo" class="card card-body bg-primary bg-gradient text-light rounded-5">
+                    <label>New exercises that are added will be filtered by what equipment you have selected in your equipment group</label>
+                  </div>
+                  <hr>
+                  <ul class="list-group">
+                    <li class="list-group-item">All Equipment Selected</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <form [formGroup]="workoutForm" *ngIf="this.name.value && !editingName" [@slideOutAnimation]>
           <div class="row">
             <div class="col">
               <accordion [isAnimated]="true" formArrayName="groups">

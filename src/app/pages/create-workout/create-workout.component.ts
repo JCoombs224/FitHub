@@ -53,11 +53,14 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
   private subscription; // The subscription to the workout data if we're editing a workout
   loading = true;
   showInfo = false;
-
+  editingName = true;
+  exercises = [];
+  editingWorkout = false;
+  hideEquipment = false;
   equipment = this.fb.control(['All']);
 
   workoutForm = this.fb.group({
-    name: ['New Workout'],
+    name: [''],
     groups: new FormArray([])
   });
 
@@ -89,11 +92,6 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
       calories_burned: ['']
     });
   }
-
-  tabsOpen = [];
-  editingName = false;
-  exercises = [];
-  editingWorkout = false;
 
   constructor(private router: Router,
               private title: Title,
