@@ -40,6 +40,7 @@
     .nav {
         width: 100%;
         justify-content: space-evenly;
+        padding-bottom: 12px;
     }
 
     .navbar-brand {

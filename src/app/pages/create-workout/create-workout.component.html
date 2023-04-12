@@ -1,6 +1,32 @@
-<div class="row min-vh-100 login-bg">
-  <div class="col"></div>
-  <div class="col-12 col-xl-10 col-xxl-8 p-0">
+<div class="row login-bg">
+  <div class="col p-0 p-xl-1">
+    <div class="card">
+      <div class="card-header text-center">
+        <h3>Equipment</h3>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col">
+            <h5>Equipment Group <fa-icon class="text-primary" [icon]="faInfoCircle" title="New exercises that are added will be filtered by what equipment you have selected in your equipment group" (click)="showInfo = !showInfo" style="cursor: pointer;"></fa-icon></h5>
+            <select class="form-select mb-2" [formControl]="equipment" (click)="showInfo = false">
+              <option disabled>Select Equipment Group</option>
+              <option>All</option>
+              <option>Gym</option>
+              <option>Home</option>
+            </select>
+            <div *ngIf="showInfo" class="card card-body bg-primary bg-gradient text-light rounded-5">
+              <label>New exercises that are added will be filtered by what equipment you have selected in your equipment group</label>
+            </div>
+            <hr>
+            <ul class="list-group">
+              <li class="list-group-item">All Equipment Selected</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-xl-8 col-xxl-6 p-0">
     <div class="card min-vh-100">
       <div class="card-body">
         <div class="row justify-content-end">
@@ -16,15 +42,20 @@
                 <button class="btn btn-outline-secondary" type="submit">Done</button>
               </div>
               <h1 class="display-4" *ngIf="!editingName">{{name.value}} <fa-icon [icon]="faEdit" (click)="editingName = true;" style="cursor: pointer; font-size: 2rem;"></fa-icon></h1>
+              <div *ngIf="loading" class="spinner-border text-success" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
             </div>
           </div>
         </form>
+        <hr class="mb-5">
 
         <form [formGroup]="workoutForm">
           <div class="row">
             <div class="col">
               <accordion [isAnimated]="true" formArrayName="groups">
-                <accordion-group [heading]="getGroupAt(i).get('groupType').value|titlecase" [isOpen]="getGroupAt(i).get('groupType').value == 'New Group'" *ngFor="let group of groups.controls; let i = index" [formGroupName]="i">
+                <accordion-group [heading]="getGroupAt(i).get('groupType').value|titlecase" [isOpen]="getGroupAt(i).get('groupType').value == 'New Group'"
+                  *ngFor="let group of groups.controls; let i = index" [formGroupName]="i">
                   <div class="row mb-4">
                     <div class="col">
                       <label>Exercise Group Type</label>
@@ -69,19 +100,19 @@
                   <div class="row justify-content-end pe-2">
                     <button class="col-auto btn btn-sm btn-danger" (click)="removeGroupAt(i)">Remove Group</button>
                   </div>
-                  
+
                 </accordion-group>
-             </accordion>
-             <div class="row mt-2 justify-content-center">
-              <div class="col-6 text-center">
-                <button type="button" (click)="addGroup()" class="btn btn-lg btn-primary">Add Workout Group +</button>
+              </accordion>
+              <div class="row mt-2 justify-content-center">
+                <div class="col-6 text-center">
+                  <button type="button" (click)="addGroup()" class="btn btn-lg btn-primary">Add Workout Group +</button>
+                </div>
               </div>
-            </div>
             </div>
           </div>
         </form>
       </div>
     </div>
   </div>
-  <div class="col"></div>
+  <div class="col d-none d-xxl-block"></div>
 </div>

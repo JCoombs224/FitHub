@@ -12,7 +12,7 @@ import { WorkoutsService } from 'src/app/services/workouts.service';
 import { BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { AddExerciseModalComponent } from 'src/app/modals/add-exercise-modal/add-exercise-modal.component';
 import { animate, style, transition, trigger } from "@angular/animations";
-import { faX } from '@fortawesome/free-solid-svg-icons';
+import { faX, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({
@@ -47,9 +47,14 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
 
   faEdit = faEdit;
   faX = faX;
+  faInfoCircle = faInfoCircle;
   modalRef;
   private uid; // The workout UID if we're editing a workout
   private subscription; // The subscription to the workout data if we're editing a workout
+  loading = true;
+  showInfo = false;
+
+  equipment = this.fb.control(['All']);
 
   workoutForm = this.fb.group({
     name: ['New Workout'],
@@ -109,6 +114,11 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    window.scroll({ 
+      top: 0, 
+      left: 0, 
+      behavior: 'smooth' 
+    });
     // Get the workout UID from the URL
     this.uid = this.route.snapshot.paramMap.get('uid');
 
@@ -127,10 +137,12 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
         // Fill the form with the data
         this.workoutForm.patchValue(data);
         this.editingWorkout = true;
+        this.loading = false;
       });
     }
     else {
       this.title.setTitle("Create Workout | FitHub");
+      this.loading = false;
       this.addGroup();
     }
   }

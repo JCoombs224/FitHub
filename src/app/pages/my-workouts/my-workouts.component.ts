@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { AuthService } from 'src/app/services/auth.service'; 
 import { ToastrService } from 'ngx-toastr';
 import { CurrentUserService } from 'src/app/services/current-user.service';
@@ -18,6 +17,7 @@ export class MyWorkoutsComponent implements OnInit, OnDestroy {
   faPlusCircle = faPlusCircle;
   workouts = [];
   private subscription;
+  loading = true;
 
   constructor(private router: Router,
     private title: Title,
@@ -39,7 +39,7 @@ export class MyWorkoutsComponent implements OnInit, OnDestroy {
   getWorkouts() {
     this.subscription = this.workoutService.getWorkouts().subscribe(workouts => {
       this.workouts = workouts;
-      console.log(this.workouts);
+      this.loading = false;
     });
   }
 

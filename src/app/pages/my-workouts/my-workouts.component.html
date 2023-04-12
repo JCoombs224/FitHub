@@ -1,13 +1,16 @@
 <div class="row min-vh-100 login-bg">
   <div class="col"></div>
   <div class="col-12 col-xl-10 col-xxl-8 p-0">
-    <div class="card min-vh-100">
-      <div class="card-body">
-        <div class="text-center">
-          <h1 class="display-4">My Workouts</h1>
+    <div class="card no-border min-vh-100">
+      <div class="text-center page-header-1">
+        <h1 class="display-4">My Workouts</h1>
+        <div *ngIf="loading" class="spinner-border text-success" role="status">
+          <span class="sr-only">Loading...</span>
         </div>
+      </div>
+      <div class="card-body">
         <!--TODO Create list of workouts here-->
-        <div class="row row-cols-1 row-cols-lg-2 row-cols-xxl-3 g-4 p-5">
+        <div class="row row-cols-1 row-cols-lg-2 row-cols-xxl-3 g-4 p-0 p-sm-1 p-md-2 p-lg-5">
           <div class="col card-new-workout" *ngFor="let workout of workouts">
             <div class="card h-100" (click)="openWorkout(workout)">
               <div class="card-body">

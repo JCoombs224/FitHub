@@ -1,53 +1,55 @@
 .home-bg {
-    background-image: url("https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8Z3ltfGVufDB8fDB8fA%3D%3D&w=1000&q=80");
-    background-repeat: no-repeat;
-    background-size: cover;
+  background-image: url("https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8Z3ltfGVufDB8fDB8fA%3D%3D&w=1000&q=80");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .login-bg {
-    background-image: url("https://st3.depositphotos.com/1777306/16407/v/600/depositphotos_164077706-stock-illustration-seamless-pattern-fitness-and-sport.jpg");
-    background-repeat: repeat;
-    background-size: auto;
+  background-color: #0d1117;
+  /* background-image: url("https://st3.depositphotos.com/1777306/16407/v/600/depositphotos_164077706-stock-illustration-seamless-pattern-fitness-and-sport.jpg"); */
+  background-image: url(/assets/workouts-tile-fh.png);
+  background-repeat: repeat;
+  background-size: auto;
 }
 
 .card-home {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    min-height: 85%;
-    border-color: #096a19;
-    padding: 2vw;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  min-height: 85%;
+  border-color: #096a19;
+  padding: 2vw;
 }
 
 .card-home-bg {
-    background-image: linear-gradient(white, white, #096A2E);
+  background-image: linear-gradient(white, white, #096a2e);
 }
 
 .home-section {
-    margin-top: 10vh;
+  margin-top: 10vh;
 }
 
 .logo-glow {
-    filter: drop-shadow(0 0 0.5rem #009137);
+  filter: drop-shadow(0 0 0.5rem #009137);
 }
 
 .glow-small {
-    filter: drop-shadow(0 0 1rem #00913867);
+  filter: drop-shadow(0 0 1rem #00913867);
 }
 
 .card-transition {
-    transition: 0.5s ease-in-out;
+  transition: 0.5s ease-in-out;
 }
 
 .nav-pills > li > a.active {
-    background-color: #096a19 !important;
+  background-color: #096a19 !important;
 }
 .nav-pills > li > a {
-    color: #3eb951;
-    transition: 0.5s;
+  color: #3eb951;
+  transition: 0.5s;
 }
 .nav-pills > li > a:hover {
-    color: #50fd6a;
-    background-color: rgb(23, 27, 31);
+  color: #50fd6a;
+  background-color: rgb(23, 27, 31);
 }
 
 .zoom-btn {
@@ -60,4 +62,45 @@
 
 .zoom-btn:hover {
   transform: scale(1.05);
+}
+
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+.page-header-1 {
+  background-color: #096a2e;
+  color: white;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 8px;
+}
+
+.no-border {
+  border: none !important;
 }
