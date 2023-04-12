@@ -9,7 +9,7 @@
               <img src="https://nwfblogs.wpenginepowered.com/wp-content/blogs.dir/11/files/2012/11/Turkey_strut-494x620.jpg"
                 alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
                 style="width: 150px; height: 150px; border-radius: 3%; z-index: 1;">
-              <button type="button" routerLink="/profile/{{profile.profileHandle}}/edit-profile" id="editProfile" class="btn zoom-btn  btn-outline-success" data-mdb-ripple-color="dark" style="z-index: 1; background-color: #b0dfba;" *ngIf="userProfile">Edit profile</button>
+              <button type="button" routerLink="/profile/{{profile.profileHandle}}/edit-profile" id="editProfile" class="btn zoom-btn btn-outline-success" data-mdb-ripple-color="dark" style="z-index: 1; background-color: #b0dfba;" *ngIf="userProfile">Edit profile</button>
               <ng-container *ngIf="!userProfile">
                 <button type="button" id="Follow" class="btn btn-outline-success" data-mdb-ripple-color="dark" style="z-index: 1; background-color: #b0dfba;" *ngIf="!checkFollowers()" (click)="addToFollowing()">Follow+</button>
                 <button type="button" id="Unfollow" class="btn btn-outline-success" data-mdb-ripple-color="dark" style="z-index: 1; background-color: #b0dfba;" *ngIf="checkFollowers()" (click)="removeFromFollowing()">Unfollow-</button>
@@ -33,7 +33,7 @@
               <section class="card-body" style=" margin: 0 auto; margin-top: 24px;">
                 <div class="mb-5"> <p class="lead fw-normal mb-1">About</p> <div class="p-4"> {{profile.about}} </div> </div>
                 <div style="align-items: center;">
-                  <div class="btn zoom-btn btn-outline-success" display="flex-row" style="margin: 5px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark">
+                  <div class="btn zoom-btn btn-outline-success" display="flex-row" style="margin: 5px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" (click)="showWorkouts()">
                     <p class="mb-1 h5" *ngIf="profile.workouts">{{profile.workouts.length - 1}}</p>
                     <p style="z-index: 1;">Workouts</p>
                   </div>
@@ -106,7 +106,7 @@
   </div>
   <div class="modal-body">
     <li *ngFor="let follower of profile.followers">
-      <button class="nav-item btn btn-outline-success" style="color:#096A2E; margin:5px;" href="#" routerLink="/profile/{{follower}}">{{follower}}</button>
+      <button class="btn zoom-btn btn-outline-success" style="margin: 3px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" href="#" routerLink="/profile/{{follower}}">@{{follower}}</button>
     </li>
   </div>
   <div class="modal-footer" style="width: 90%;">
@@ -120,10 +120,27 @@
   </div>
   <div class="modal-body">
     <li *ngFor="let followed of profile.following">
-      <button class="nav-item btn btn-outline-success" style="color:#096A2E; margin:5px;" href="#" routerLink="/profile/{{followed}}">{{followed}}</button>
+      <button class="btn zoom-btn btn-outline-success" style="margin: 3px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" href="#" routerLink="/profile/{{followed}}">@{{followed}}</button>
     </li>
   </div>
   <div class="modal-footer" style="width: 90%;">
     <button class="close btn btn-primary" (click)="closeFollowingModal()">Close</button>
+  </div>
+</div>
+
+<div #workoutsModal class="modal">
+  <div class="modal-header">
+    @{{profile.profileHandle}}'s Workouts
+  </div>
+  <div class="modal-body" *ngIf="checkWorkouts()">
+    <li *ngFor="let workout of profile.workouts">
+      <a class="nav-item btn btn-outline-success" style="color:#096A2E; margin:5px;" href="#" routerLink="/profile/{{workout}}">{{workout}}</a>
+    </li>
+  </div>
+  <div class="modal-body" *ngIf="!checkWorkouts()">
+    <a>This user doesn't have any workouts yet.</a>
+  </div>
+  <div class="modal-footer" style="width: 90%;">
+    <button class="close btn btn-primary" (click)="closeWorkoutsModal()">Close</button>
   </div>
 </div>

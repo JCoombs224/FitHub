@@ -31,6 +31,7 @@ export class ProfileComponent {
   modalRef: BsModalRef;
   @ViewChild('followersModal') followersModal: ElementRef;
   @ViewChild('followingModal') followingModal: ElementRef;
+  @ViewChild('workoutsModal') workoutsModal: ElementRef;
 
   constructor(
     private route: ActivatedRoute,
@@ -224,19 +225,34 @@ export class ProfileComponent {
     }
   }
 
-  showFollowers() {
-    this.followersModal.nativeElement.style.display = "block";
+  checkWorkouts(): boolean {
+    if(this.profile.workouts.length === 1) {
+      return false;
+    }
+    return true;
   }
 
-  showFollowing() {
-    this.followingModal.nativeElement.style.display = "block";
+  showFollowers() {
+    this.followersModal.nativeElement.style.display = "block";
   }
 
   closeFollowersModal() {
     this.followersModal.nativeElement.style.display = "none";
   }
 
+  showFollowing() {
+    this.followingModal.nativeElement.style.display = "block";
+  }
+
   closeFollowingModal() {
     this.followingModal.nativeElement.style.display = "none";
+  }
+
+  showWorkouts() {
+    this.workoutsModal.nativeElement.style.display = "block";
+  }
+
+  closeWorkoutsModal() {
+    this.workoutsModal.nativeElement.style.display = "none";
   }
 }
