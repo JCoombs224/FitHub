@@ -45,7 +45,6 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { EditProfileComponent } from './pages/edit-profile/edit-profile.component';
 import { AddExerciseModalComponent } from './modals/add-exercise-modal/add-exercise-modal.component';
 import { NgChartsModule } from 'ng2-charts';
-import { FollowersModalComponent } from './modals/followers-modal/followers-modal.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +63,6 @@ import { FollowersModalComponent } from './modals/followers-modal/followers-moda
     CreatePostComponent,
     EditProfileComponent,
     AddExerciseModalComponent,
-    FollowersModalComponent,
 
   ],
   imports: [

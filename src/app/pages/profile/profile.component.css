@@ -1,0 +1,43 @@
+.modal {
+  display: none;
+  position: fixed;
+  background-color: rgba(255,255,255,0.9);
+  left: 50%;
+  top: 50%;
+  width: 20%;
+  height: 30%;
+  overflow-y: auto;
+  transform: translate(-50%, -50%);
+  overflow: auto;
+  border-color: rgba(0,0,0,0.5);
+  border-radius: 2%;
+}
+
+.modal-header {
+  position: fixed;
+  top: 0;
+  height: 20%;
+  width: 90%;
+  text-align: center;
+}
+
+.modal-body {
+  margin-top: 80px;
+  width: 90%;
+  height: 50%;
+  overflow-y: auto;
+}
+
+.modal-footer {
+  height: 10%;
+  width: 90%;
+}
+
+.close {
+  background-color: rgba(50,50,50,0.8);
+  color: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
