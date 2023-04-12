@@ -31,7 +31,12 @@
           <div class="card p-4 text-black" style="background-color: #f8f9fa;">
             <div class="d-flex justify-content-end text-center py-1">
               <section class="card-body" style=" margin: 0 auto; margin-top: 24px;">
-                <div class="mb-5"> <p class="lead fw-normal mb-1">About</p> <div class="p-4"> {{profile.about}} </div> </div>
+                <div class="mb-5">
+                  <p class="lead fw-normal mb-1">About</p>
+                  <div class="p-4">
+                    {{profile.about}}
+                  </div>
+                </div>
                 <div style="align-items: center;">
                   <div class="btn zoom-btn btn-outline-success" display="flex-row" style="margin: 5px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" (click)="showWorkouts()">
                     <p class="mb-1 h5" *ngIf="profile.workouts">{{profile.workouts.length - 1}}</p>
@@ -100,6 +105,7 @@
   </div>
 </div>
 
+<!--Followers modal-->
 <div #followersModal class="modal">
   <div class="modal-header">
     @{{profile.profileHandle}}'s Followers
@@ -114,9 +120,10 @@
   </div>
 </div>
 
+<!--Following modal-->
 <div #followingModal class="modal">
   <div class="modal-header">
-    Profiles @{{profile.profileHandle}} Follows
+    Profiles @{{profile.profileHandle}} follows
   </div>
   <div class="modal-body">
     <li *ngFor="let followed of profile.following">
@@ -128,6 +135,7 @@
   </div>
 </div>
 
+<!--Workouts modal-->
 <div #workoutsModal class="modal">
   <div class="modal-header">
     @{{profile.profileHandle}}'s Workouts

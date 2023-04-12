@@ -1,19 +1,12 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { CurrentUserService } from 'src/app/services/current-user.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-
-// import { FormBuilder, Validators } from '@angular/forms';
-// import { AngularFireDatabase } from '@angular/fire/compat/database';
-// import { GeneralService } from 'src/app/services/general.service';
-// import { ToastrService } from 'ngx-toastr';
-// import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 @Component({
   selector: 'app-profile',
@@ -40,14 +33,9 @@ export class ProfileComponent {
     private profileService: ProfileService,
     public currentUser: CurrentUserService,
     private modalService: BsModalService,
-    // private fb: FormBuilder,
-    // private generalService: GeneralService
-    // private db: AngularFireDatabase,
-    // private router: Router,
-    // private toastr: ToastrService,
     ) {}
 
-
+  // When the page is loaded
   ngOnInit(): void {
     // Subscribe to the url param for the profile username and update the page based on that
     this.route.paramMap.subscribe(params => {
@@ -59,7 +47,7 @@ export class ProfileComponent {
     this.checkFollowers();
   }
 
-
+  // Load the profile data from the database
   private loadProfileData() {
     // Check if the profile handle is the current user
     if(this.urlProfileHandle == this.currentUser.user.profile.profileHandle) {
@@ -67,11 +55,13 @@ export class ProfileComponent {
       this.profile = this.currentUser.user.profile;
       this.userProfile = true;
     }
+    // If the profile handle is not the current user, load the profile data from the database
     else {
       this.userProfile = false;
       this.profileService.getProfile(this.urlProfileHandle).ref.get().then(data => {
         const profData = data.data();
 
+        // Set the profile data to the data from the database
         this.profile.uid = profData.uid;
         this.profile.profileHandle = profData.profileHandle;
         this.profile.profileName = profData.profileName;
@@ -90,6 +80,7 @@ export class ProfileComponent {
     }
   }
 
+  //  Function to add the current user to the target user's followers list and vice versa
   addToFollowing() {
     //  Reference the firebase database
     const db = firebase.firestore();
@@ -103,7 +94,7 @@ export class ProfileComponent {
       following: firebase.firestore.FieldValue.arrayUnion(this.urlProfileHandle)
     });
 
-    //  Update the other user's followers by calling arrayUnion and adding the value in the PostText element on the HTML doc.
+    //  Update the other user's followers array by calling arrayUnion and adding the value in the PostText element on the HTML doc.
     docRefTarget.update({
       followers: firebase.firestore.FieldValue.arrayUnion(this.currentUser.user.profile.profileHandle)
     }).then(() => {
@@ -111,16 +102,18 @@ export class ProfileComponent {
     });
   }
 
+  //  Function to remove the current user from the target user's followers list and vice versa
   removeFromFollowing() {
     const db = firebase.firestore();
     const docRefUser = db.collection('profiles').doc(this.currentUser.user.profile.profileHandle);
     const docRefTarget = db.collection('profiles').doc(this.urlProfileHandle);
 
+    //  Update the user's following array by calling arrayUnion and adding the value in the PostText element on the HTML doc.
     docRefUser.update({
       following: firebase.firestore.FieldValue.arrayRemove(this.profile.profileHandle)
     });
 
-    //  Update the other user's followers by calling arrayUnion and adding the value in the PostText element on the HTML doc.
+    //  Update the other user's followers array by calling arrayUnion and adding the value in the PostText element on the HTML doc.
     docRefTarget.update({
       followers: firebase.firestore.FieldValue.arrayRemove(this.currentUser.user.profile.profileHandle)
     }).then(() => {
@@ -129,13 +122,13 @@ export class ProfileComponent {
 
   }
 
+  //  Function to check if the current user is following the target user
   checkFollowers(): boolean {
     if(this.profile.followers.length === 0) {
       return false;
     }
     for (let i = 0; i < this.profile.followers.length; i++) {
       if(this.profile.followers[i] === this.currentUser.user.profile.profileHandle) {
-        console.log(this.profile.followers[i] + " and " + this.currentUser.user.profile.profileHandle);
         return true;
       }
     }
@@ -146,6 +139,7 @@ export class ProfileComponent {
     return this.profile.profilePicture;
   }
 
+  //  Function to open the modal
   showLatestPosts() {
     const postsDiv: HTMLElement | null = document.getElementById('posts');
 
@@ -155,6 +149,7 @@ export class ProfileComponent {
 
       let postsLength = 0;
 
+      // check how many posts there are
       switch (this.profile.posts.length) {
         case 0:
           postsLength = 0;
@@ -168,28 +163,35 @@ export class ProfileComponent {
         case 3:
           postsLength = 3;
           break;
+        // if there are more than 4 posts, only show the latest 4
         default:
           postsLength = 4;
           break;
       }
 
-      const latestPosts = this.profile.posts.slice(this.profile.posts.length - postsLength, this.profile.posts.length); // get the latest 4 posts or fewer
+      // get the latest posts (at most 4)
+      const latestPosts = this.profile.posts.slice(this.profile.posts.length - postsLength, this.profile.posts.length);
 
-      if(latestPosts.length > 0) {
+      // check if there are any posts
+      if(postsLength > 0) {
         // create a new card for each post
         latestPosts.forEach((post: string) => {
+          // create the card
           const cardDiv: HTMLDivElement = document.createElement('div');
           cardDiv.className = 'card';
           cardDiv.style.width = '25rem';
           cardDiv.style.marginBottom = '5px';
 
+          // create the card body
           const cardBodyDiv: HTMLDivElement = document.createElement('div');
           cardBodyDiv.className = 'card-body';
 
+          // create the card text
           const cardTextP: HTMLParagraphElement = document.createElement('p');
           cardTextP.className = 'card-text';
           cardTextP.textContent = post;
 
+          // create the like and comment buttons
           const likeBtn: HTMLAnchorElement = document.createElement('a');
           likeBtn.className = 'btn zoom-btn btn-success';
           likeBtn.textContent = 'Like';
@@ -201,23 +203,26 @@ export class ProfileComponent {
           commentBtn.textContent = 'Comment';
           commentBtn.href = '#';
 
+          // append the card text and buttons to the card body
           cardBodyDiv.appendChild(cardTextP);
           cardBodyDiv.appendChild(likeBtn);
           cardBodyDiv.appendChild(commentBtn);
 
+          // append the card body to the card
           cardDiv.appendChild(cardBodyDiv);
           postsDiv.appendChild(cardDiv);
         });
       }
 
-      if(this.profile.posts.length === 0 && this.userProfile) {
+      // show a message if the user hasn't made any posts yet
+      if(postsLength === 0 && this.userProfile) {
         const noPostsP: HTMLParagraphElement = document.createElement('p');
         noPostsP.textContent = 'You haven\'t made any posts yet.';
         postsDiv.appendChild(noPostsP)
       }
 
       // show a message if the user hasn't made any posts yet
-      if (this.profile.posts.length === 0 && !this.userProfile) {
+      if (postsLength === 0 && !this.userProfile) {
         const noPostsP: HTMLParagraphElement = document.createElement('p');
         noPostsP.textContent = 'This user hasn\'t made any posts yet.';
         postsDiv.appendChild(noPostsP);
@@ -225,6 +230,7 @@ export class ProfileComponent {
     }
   }
 
+  //  This function shecks if the user has any workouts.
   checkWorkouts(): boolean {
     if(this.profile.workouts.length === 1) {
       return false;
@@ -232,26 +238,35 @@ export class ProfileComponent {
     return true;
   }
 
+  //  This function will show the users that are following the user.
   showFollowers() {
+    this.profile.followers.sort((a, b) => a.localeCompare(b));
     this.followersModal.nativeElement.style.display = "block";
   }
 
+  //  This function will close the modal that shows the users that are following the user.
   closeFollowersModal() {
     this.followersModal.nativeElement.style.display = "none";
   }
 
+  //  This function will show the users that the user is following.
   showFollowing() {
+    this.profile.following.sort((a, b) => a.localeCompare(b));
     this.followingModal.nativeElement.style.display = "block";
   }
 
+  //  This function will close the modal that shows the users that the user is following.
   closeFollowingModal() {
     this.followingModal.nativeElement.style.display = "none";
   }
 
+  //  This function will show the workouts that the user has created.
   showWorkouts() {
+    this.profile.workouts.sort();
     this.workoutsModal.nativeElement.style.display = "block";
   }
 
+  //  This function will close the modal that shows the workouts that the user has created.
   closeWorkoutsModal() {
     this.workoutsModal.nativeElement.style.display = "none";
   }
