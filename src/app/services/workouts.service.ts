@@ -36,8 +36,8 @@ export class WorkoutsService {
   }
   
   // Get all workouts for the current user
-  getWorkouts() {
-    return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('workouts').valueChanges({idField: 'uid'});
+  getWorkouts(profile = this.currentUser.user.profile.profileHandle) {
+    return this.afs.collection('profiles').doc(profile).collection('workouts').valueChanges({idField: 'uid'});
   }
 
   // Get a specific workout for the current user
