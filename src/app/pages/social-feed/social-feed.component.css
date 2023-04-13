@@ -1,0 +1,42 @@
+.comments .btn-forest-green {
+  background-color: #1C7A1C !important; /* Darker green color */
+  color: #ffffff !important; /* White text color */
+}
+
+.comments .btn-forest-green:hover {
+  background-color: #145214 !important; /* Even darker green color on hover */
+}
+
+.card {
+  background-color: black;
+  color: white;
+  border: 1px solid grey;
+}
+
+.comments {
+  color: white;
+}
+
+.text-muted {
+  color: #6c757d;
+}
+
+.comment-box textarea {
+  background-color: #333;
+  color: white;
+}
+
+.form-control:focus {
+  border-color: #ffffff;
+  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
