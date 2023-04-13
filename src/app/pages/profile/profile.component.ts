@@ -7,6 +7,8 @@ import { ProfileService } from 'src/app/services/profile.service';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { WorkoutsService } from 'src/app/services/workouts.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Component({
   selector: 'app-profile',
@@ -22,6 +24,7 @@ export class ProfileComponent {
   isPrivate = false;
   showModal = false;
   modalRef: BsModalRef;
+  workouts;
   @ViewChild('followersModal') followersModal: ElementRef;
   @ViewChild('followingModal') followingModal: ElementRef;
   @ViewChild('workoutsModal') workoutsModal: ElementRef;
@@ -33,6 +36,8 @@ export class ProfileComponent {
     private profileService: ProfileService,
     public currentUser: CurrentUserService,
     private modalService: BsModalService,
+    private workoutService: WorkoutsService,
+    private afs: AngularFirestore,
     ) {}
 
   // When the page is loaded
@@ -45,6 +50,8 @@ export class ProfileComponent {
     });
     this.showLatestPosts();
     this.checkFollowers();
+
+    this.workouts = this.workoutService.getExercises(this.urlProfileHandle);
   }
 
   // Load the profile data from the database
@@ -139,6 +146,10 @@ export class ProfileComponent {
     return this.profile.profilePicture;
   }
 
+  getWorkouts(profile: string) {
+    return this.afs.collection('profiles').doc(profile).collection('workouts').valueChanges({idField: 'uid'});
+  }
+
   //  Function to open the modal
   showLatestPosts() {
     const postsDiv: HTMLElement | null = document.getElementById('posts');
@@ -169,8 +180,10 @@ export class ProfileComponent {
           break;
       }
 
+      console.log(postsLength);
+
       // get the latest posts (at most 4)
-      const latestPosts = this.profile.posts.slice(this.profile.posts.length - postsLength, this.profile.posts.length);
+      const latestPosts = this.profile.posts.slice(this.profile.posts.length - postsLength, postsLength + 1);
 
       // check if there are any posts
       if(postsLength > 0) {
@@ -229,6 +242,11 @@ export class ProfileComponent {
       }
     }
   }
+
+  showRecentWorkouts() {
+    const workoutsDiv: HTMLElement | null = document.getElementById('workouts');
+  }
+
 
   //  This function shecks if the user has any workouts.
   checkWorkouts(): boolean {

@@ -1,103 +1,117 @@
 <div class="row min-vh-100 login-bg">
-  <div class="container py-5">
-    <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col col-lg-9 col-xl-7">
-        <div class="card">
-          <div class="rounded-top text-white d-flex flex-row" style="background-color: #096A2E; height:200px;">
-            <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-              <!--TODO: reference user's profile pic and display here in img-->
-              <img src="https://nwfblogs.wpenginepowered.com/wp-content/blogs.dir/11/files/2012/11/Turkey_strut-494x620.jpg"
-                alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
-                style="width: 150px; height: 150px; border-radius: 3%; z-index: 1;">
-              <button type="button" routerLink="/profile/{{profile.profileHandle}}/edit-profile" id="editProfile" class="btn zoom-btn btn-outline-success" data-mdb-ripple-color="dark" style="z-index: 1; background-color: #b0dfba;" *ngIf="userProfile">Edit profile</button>
-              <ng-container *ngIf="!userProfile">
-                <button type="button" id="Follow" class="btn btn-outline-success" data-mdb-ripple-color="dark" style="z-index: 1; background-color: #b0dfba;" *ngIf="!checkFollowers()" (click)="addToFollowing()">Follow+</button>
-                <button type="button" id="Unfollow" class="btn btn-outline-success" data-mdb-ripple-color="dark" style="z-index: 1; background-color: #b0dfba;" *ngIf="checkFollowers()" (click)="removeFromFollowing()">Unfollow-</button>
-              </ng-container>
-            </div>
-            <div class="ms-3" style="margin-top: 130px;">
-              <h5>@{{profile.profileHandle}}</h5>
-              <div class="ms-3" *ngIf="profile.isPrivate">
-                <p>This profile is set to private.</p>
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-11 col-xl-11 min-vh-100 d-flex py-5" style="margin: 0 auto;">
+        <div class="card w-100 min-vh-100 d-flex flex-column mb-5 display-4" style="border-color: #096A2E;">
+          <div class="card-header" style="background-color: rgba(9, 106, 46, 1);">
+            <div>
+              <div class="row">
+                <div class="col-sm-3" style="padding-left: 10%; padding-top: 3%;">
+                  <button class="btn zoom-btn btn-outline-success" display="flex-row" style="margin: 5px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" (click)="showFollowers()">
+                    <h5 style="text-align: center;">{{profile.followers.length}}</h5>
+                    <p class="mb-1 h5">Followers</p>
+                  </button>
+                  <button class="btn zoom-btn btn-outline-success" display="flex-row" style="margin: 5px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" (click)="showFollowing()">
+                    <h5>{{profile.following.length}}</h5>
+                    <p class="mb-1 h5">Following</p>
+                  </button>
+                </div>
+                <div class="col-sm-2 mt-5 text-right" style="padding-left: 10%; padding-right: auto;">
+                  <h5 style="text-align: right;">@{{profile.profileHandle}}</h5>
+                  <p style="font-size: 24px; text-align: right;">{{profile.age}}</p>
+                  <p style="font-size: 24px; text-align: right;">{{profile.heightFeet}}' {{profile.heightInches}}"</p>
+                  <p style="font-size: 24px; text-align: right;">{{profile.weight}} lbs.</p>
+                </div>
+                <div class="col-sm-3">
+                  <img class="img-fluid" src="https://nwfblogs.wpenginepowered.com/wp-content/blogs.dir/11/files/2012/11/Turkey_strut-494x620.jpg"
+                  alt="Generic placeholder image" style="border: none; margin-left: 10px; max-width: 300px; max-height: 300px; overflow: hidden;">
+                </div>
+                <div class="col-sm-4 text-center">
+                  About
+                  <p style="font-size: 24px;">{{profile.about}}</p>
+                </div>
               </div>
             </div>
-            <div class="ms-5" style="margin-top: 108px;" *ngIf="!profile.isPrivate">
-              <p>{{profile.age}}<br>{{profile.heightFeet}}' {{profile.heightInches}}"<br>{{profile.weight}} lbs.</p>
-            </div>
-            <div class="ms-3" style="margin-top: 108px;" *ngIf="isPrivate">
-              <p>This profile is private.</p>
-            </div>
           </div>
-          <div class="card p-4 text-black" style="background-color: #f8f9fa;">
-            <div class="d-flex justify-content-end text-center py-1">
-              <section class="card-body" style=" margin: 0 auto; margin-top: 24px;">
-                <div class="mb-5">
-                  <p class="lead fw-normal mb-1">About</p>
-                  <div class="p-4">
-                    {{profile.about}}
+          <div *ngIf="userProfile">
+            <button type="button"  routerLink="/profile/{{profile.profileHandle}}/edit-profile" id="editProfile" class="btn zoom-btn btn-outline-success d-flex" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px;" >
+              Edit Profile
+            </button>
+          </div>
+          <div *ngIf="!userProfile">
+            <button type="button" id="Follow" class="btn zoom-btn btn-outline-success d-flex" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px;" *ngIf="!checkFollowers()" (click)="addToFollowing()">Follow+</button>
+            <button type="button" id="Unfollow" class="btn zoom-btn btn-outline-success d-flex" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px;" *ngIf="checkFollowers()" (click)="removeFromFollowing()">Unfollow-</button>
+          </div>
+          <div class="row" style="margin-top: 20px;">
+            <div class="card d-flex col-lg-5 mb-5" style="text-align: center; margin: 0 auto; background-color: rgba(32, 61, 28, 0.3)">
+              Posts
+              <div class="row">
+                <div class="card d-flex col-xl-5 mt-5 mb-5" style="text-align: center; font-size: 24px; margin: 0 auto; background-color: rgba(255, 255, 255, 0.8)">
+                  this is a new card that contains a user's most recent post
+                  <div class="mb-2 mt-2">
+                    <button class="btn zoom-btn btn-outline-success" style="margin-right: 5px;">like</button>
+                    <button class="btn zoom-btn btn-outline-secondary">comment</button>
                   </div>
                 </div>
-                <div style="align-items: center;">
-                  <div class="btn zoom-btn btn-outline-success" display="flex-row" style="margin: 5px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" (click)="showWorkouts()">
-                    <p class="mb-1 h5" *ngIf="profile.workouts">{{profile.workouts.length - 1}}</p>
-                    <p style="z-index: 1;">Workouts</p>
-                  </div>
-                  <div class="btn zoom-btn btn-outline-success" display="flex-row" style="margin: 5px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" (click)="showFollowers()">
-                    <p class="mb-1 h5">{{profile.followers.length}}</p>
-                    <p style="z-index: 1;">Followers</p>
-                  </div>
-                  <div class="btn zoom-btn btn-outline-success" display="flex-row" style="margin: 5px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" (click)="showFollowing()">
-                    <p class="mb-1 h5">{{profile.following.length}}</p>
-                    <p style="z-index: 1;">Following</p>
+                <div class="card d-flex col-xl-5 mt-5 mb-5" style="text-align: center; font-size: 24px; margin: 0 auto; background-color: rgba(255, 255, 255, 0.8)">
+                  this is a new card that contains a user's next most recent post with a bit more text in it for testing purposes
+                  <div class="mb-2 mt-2">
+                    <button class="btn zoom-btn btn-outline-success" style="margin-right: 5px;">like</button>
+                    <button class="btn zoom-btn btn-outline-secondary">comment</button>
                   </div>
                 </div>
-              </section>
-          </div>
-          <div class="card-body p-4 text-black" style="margin: 0 auto;">
-            <p class="lead fw-normal mb-0">Posts</p>
-            <div class="mb-5" id="posts" onload="showLatestPosts()">
-            </div>
-            <div class="ms-4 mt-5 d-flex flex-column" style="margin: 0;">
-              <div style="text-align:center">
-                <ul class="nav nav-pills nav-fill">
-                  <li class="nav-item">
-                    <button class="btn zoom-btn btn-outline-success" id="createPostModal" routerLink="/profile/{{profile.profileHandle}}/create-post" data-mdb-ripple-color="dark" style="background-color: #b0dfba;" href="#" *ngIf="userProfile">
-                      Create Post+
-                    </button>
-                  </li>
-                  <li class="nav-item">
-                    <button class="btn zoom-btn btn-outline-success" routerLink="/my-workouts/create" data-mdb-ripple-color="dark" style="background-color: #b0dfba;" href="#" *ngIf="userProfile">
-                      Create Workout+
-                    </button>
-                  </li>
-                </ul>
+              </div>
+              <div class="row">
+                <div class="card d-flex col-xl-5 mt-5 mb-5" style="text-align: center; font-size: 24px; margin: 0 auto; background-color: rgba(255, 255, 255, 0.8)">
+                  this is a new card that contains a user's most recent post
+                  <div class="mb-2 mt-2">
+                    <button class="btn zoom-btn btn-outline-success" style="margin-right: 5px;">like</button>
+                    <button class="btn zoom-btn btn-outline-secondary" >comment</button>
+                  </div>
+                </div>
+                <div class="card d-flex col-xl-5 mt-5 mb-5" style="text-align: center; font-size: 24px; margin: 0 auto; background-color: rgba(255, 255, 255, 0.8)">
+                  this is a new card that contains a user's most recent post
+                  <div class="mb-2 mt-2">
+                    <button class="btn zoom-btn btn-outline-success" style="margin-right: 5px;">like</button>
+                    <button class="btn zoom-btn btn-outline-secondary">comment</button>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="userProfile">
+                <button type="button" id="createPost" class="btn zoom-btn btn-outline-success d-flex" routerLink="/profile/{{profile.profileHandle}}/create-post" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px;">Create Post</button>
               </div>
             </div>
-            <div class="d-flex justify-content-between align-items-center mb-4"><p class="lead fw-normal mb-0">Recent workouts</p></div>
+            <div class="card d-flex col-lg-5 mb-5" style="text-align: center; margin: 0 auto; background-color: rgba(32, 61, 28, 0.3)">
+              Recent Workouts
+              <div class="d-flex justify-content-between align-items-center mb-4" id="workouts"></div>
               <div class="row g-2">
                 <div class="col mb-2">
                   <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(112).webp"
                     alt="image 1" class="w-100 rounded-3">
-                    <p>A picture</p>
+                    <p style="font-size: 24px;">A picture</p>
                 </div>
                 <div class="col mb-2">
                   <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(107).webp"
                     alt="image 1" class="w-100 rounded-3">
-                    <p>Another picture</p>
+                    <p style="font-size: 24px;">Another picture</p>
                 </div>
               </div>
               <div class="row g-2">
                 <div class="col">
                   <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(108).webp"
                     alt="image 1" class="w-100 rounded-3">
-                    <p>A third picture</p>
+                    <p style="font-size: 24px;">A third picture</p>
                 </div>
                 <div class="col">
                   <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(114).webp"
                     alt="image 1" class="w-100 rounded-3">
-                    <p>The final picture</p>
+                    <p style="font-size: 24px;">The final picture</p>
                 </div>
               </div>
+              <div *ngIf="userProfile">
+                <button type="button" id="createWorkout" class="btn zoom-btn btn-outline-success d-flex" routerLink="/my-workouts/create" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px;">Create Workout</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

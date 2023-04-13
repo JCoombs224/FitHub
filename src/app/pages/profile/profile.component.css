@@ -41,3 +41,58 @@
   font-size: 16px;
   cursor: pointer;
 }
+
+.row.h-50 {
+  min-height: 50vh;
+}
+
+.card.custom-height {
+  min-height: 50vh;
+}
+
+.custom-text-color {
+  color: #0b8200;
+}
+
+h1 {
+  font-weight: bold;
+}
+
+.card {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.01);
+  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
+}
+
+.card-title {
+  font-weight: bold;
+}
+
+.progress-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.progress-ring {
+  transform: rotate(-90deg);
+}
+
+.progress-ring__circle {
+  stroke-linecap: round;
+}
+
+.progress-ring__circle--value {
+  transition: stroke-dashoffset 0.35s;
+}
+
+.progress-value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
