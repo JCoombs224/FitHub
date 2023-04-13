@@ -221,7 +221,6 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
 
   // save workout to firebase under the current users profile
   saveWorkout() {
-
     // If we're editing a workout, update it
     if (this.editingWorkout) {
       this.workoutService.updateWorkout({ uid: this.uid, workout: this.workoutForm.getRawValue() }).then(() => {
