@@ -6,20 +6,19 @@
       </div>
       <div class="card-body">
         <div class="row">
-          <div class="col">
+          <div class="col" [formGroup]="workoutForm">
             <h5>Equipment Group <fa-icon class="text-primary" [icon]="faInfoCircle" title="New exercises that are added will be filtered by what equipment you have selected in your equipment group" (click)="showInfo = !showInfo" style="cursor: pointer;"></fa-icon></h5>
-            <select class="form-select mb-2" [formControl]="equipment" (click)="showInfo = false">
-              <option disabled>Select Equipment Group</option>
-              <option>All</option>
-              <option>Gym</option>
-              <option>Home</option>
+            <select class="form-select mb-2" formControlName="equipment" (click)="showInfo = false" (change)="updateEquipmentList()">
+              <option value="" disabled>Select Equipment Group</option>
+              <option selected value="*">All</option>
+              <option *ngFor="let group of equipmentGroups" [value]="group.equipment">{{group.name}}</option>
             </select>
             <div *ngIf="showInfo" class="card card-body bg-primary bg-gradient text-light rounded-5">
               <label>New exercises that are added will be filtered by what equipment you have selected in your equipment group</label>
             </div>
             <hr>
             <ul class="list-group">
-              <li class="list-group-item">All Equipment Selected</li>
+              <li class="list-group-item" *ngFor="let equip of equipment">{{equip|titlecase}}</li>
             </ul>
           </div>
         </div>
@@ -42,13 +41,15 @@
                 <button class="btn btn-outline-secondary" type="submit">Done</button>
               </div>
               <h1 class="display-4" *ngIf="!editingName">{{name.value}} <fa-icon [icon]="faEdit" (click)="editingName = true;" style="cursor: pointer; font-size: 2rem;"></fa-icon></h1>
-              <div *ngIf="loading" class="spinner-border text-success" role="status">
-                <span class="sr-only">Loading...</span>
-              </div>
             </div>
           </div>
         </form>
         <hr class="mb-5">
+        <span class="d-flex justify-content-center mb-3">
+          <div *ngIf="loading" class="spinner-border text-success" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </span>
         <div class="col d-block d-xl-none d-xl-block p-0 p-xl-1 mb-5">
           <div class="card">
             <div class="card-header text-center" style="cursor: pointer;" (click)="hideEquipment = !hideEquipment">
@@ -58,15 +59,14 @@
               <div class="row">
                 <div class="col">
                   <h5>Equipment Group <fa-icon class="text-primary" [icon]="faInfoCircle" title="New exercises that are added will be filtered by what equipment you have selected in your equipment group" (click)="showInfo = !showInfo" style="cursor: pointer;"></fa-icon></h5>
-                  <select class="form-select mb-2" [formControl]="equipment" (click)="showInfo = false">
-                    <option disabled>Select Equipment Group</option>
-                    <option>All</option>
-                    <option>Gym</option>
-                    <option>Home</option>
-                  </select>
-                  <div *ngIf="showInfo" class="card card-body bg-primary bg-gradient text-light rounded-5">
+                  <div *ngIf="showInfo" class="card card-body bg-primary bg-gradient text-light rounded-5 mb-2">
                     <label>New exercises that are added will be filtered by what equipment you have selected in your equipment group</label>
                   </div>
+                  <!-- <select class="form-select mb-2" [formControl]="equipment" (click)="showInfo = false" (change)="test()">
+                    <option disabled>Select Equipment Group</option>
+                    <option>All</option>
+                    <option *ngFor="let group of equipmentGroups" value="group.equipment">{{group.name}}</option>
+                  </select> -->
                   <hr>
                   <ul class="list-group">
                     <li class="list-group-item">All Equipment Selected</li>

@@ -45,6 +45,7 @@ import { faX, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 })
 export class CreateWorkoutComponent implements OnInit, OnDestroy {
 
+  // Instance variables
   faEdit = faEdit;
   faX = faX;
   faInfoCircle = faInfoCircle;
@@ -54,20 +55,22 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
   loading = true;
   showInfo = false;
   editingName = true;
-  exercises = [];
   editingWorkout = false;
   hideEquipment = false;
-  equipment = this.fb.control(['All']);
-
+  exercises = [];
+  equipmentGroups = [];
+  equipment = [];
+  
   workoutForm = this.fb.group({
     name: [''],
-    groups: new FormArray([])
+    equipment: ['*'],
+    groups: this.fb.array([])
   });
 
   get newGroup() {
     return this.fb.group({
       groupType: ['New Group'], // cardio, triceps, biceps, etc.
-      exercises: new FormArray([])
+      exercises: this.fb.array([])
     });
   }
 
@@ -117,6 +120,13 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
       left: 0, 
       behavior: 'smooth' 
     });
+
+    // Get equipment groups from user's profile
+    this.workoutService.getEquipmentGroups().subscribe(data => { 
+      this.equipmentGroups = data.equipmentGroups;
+    });
+
+
     // Get the workout UID from the URL
     this.uid = this.route.snapshot.paramMap.get('uid');
 
@@ -136,12 +146,27 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
         this.workoutForm.patchValue(data);
         this.editingWorkout = true;
         this.loading = false;
+        this.editingName = false;
+        this.equipment = data.equipment;
+        if(this.equipment[0] == '*') {
+          this.equipment[0] = "All Equipment Selected";
+        }
       });
     }
     else {
       this.title.setTitle("Create Workout | FitHub");
       this.loading = false;
       this.addGroup();
+      this.updateEquipmentList();
+    }
+  }
+
+  updateEquipmentList() {
+    if (this.workoutForm.get('equipment').value != '*') {
+      this.equipment = this.workoutForm.get('equipment').value.split(',');
+    }
+    else {
+      this.equipment = ['All Equipment Selected'];
     }
   }
 
@@ -219,6 +244,7 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
   get groups() {
     return this.workoutForm.get('groups') as FormArray;
   }
+
   getGroupAt(i) {
     return this.groups.at(i);
   }
