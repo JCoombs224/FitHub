@@ -12,19 +12,19 @@
                 </div>
                 <div class="col-md-3 mt-5 no-wrap" style="padding-right: auto; background: none; border:none;">
                   <h5 class="no-wrap text-truncate">@{{profile.profileHandle}}</h5>
-                  <p class="no-wrap" style="font-size: 24px;">{{profile.age}}</p>
-                  <p class="no-wrap" style="font-size: 24px;">{{profile.heightFeet}}' {{profile.heightInches}}"</p>
-                  <p class="no-wrap" style="font-size: 24px;">{{profile.weight}} lbs.</p>
+                  <p class="no-wrap" style="font-size: 18px;">{{profile.age}}</p>
+                  <p class="no-wrap" style="font-size: 18px;">{{profile.heightFeet}}' {{profile.heightInches}}"</p>
+                  <p class="no-wrap" style="font-size: 18px;">{{profile.weight}} lbs.</p>
                   <div *ngIf="userProfile">
-                    <p style="font-size: 24px;" *ngIf="profile.isPrivate">Private</p>
-                    <p style="font-size: 24px;" *ngIf="!profile.isPrivate">Public</p>
+                    <p style="font-size: 18px;" *ngIf="profile.isPrivate">Private</p>
+                    <p style="font-size: 18px;" *ngIf="!profile.isPrivate">Public</p>
                   </div>
                 </div>
                 <div class="card no-wrap col-md-5 text-center mt-1" style=" background-color: rgba(255, 255, 255, 0.1); border: none;">
                   <div class="card-header display-6 no-wrap" display="flex-row" style="padding: 5%; background: none;">
                     About
                   </div>
-                  <p style="font-size: 24px;">{{profile.about}}</p>
+                  <p style="font-size: 20px;">{{profile.about}}</p>
                 </div>
                 <div class="card col-md-2" style="padding-left: 1%; background:none; border:none;">
                   <button class="btn zoom-btn btn-outline-success w-100" display="flex-row" style="margin: 5px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" (click)="showFollowersModal()">
