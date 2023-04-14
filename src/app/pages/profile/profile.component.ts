@@ -9,6 +9,7 @@ import 'firebase/compat/firestore';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { WorkoutsService } from 'src/app/services/workouts.service';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
@@ -37,9 +38,9 @@ export class ProfileComponent {
     public authService: AuthService,
     private profileService: ProfileService,
     public currentUser: CurrentUserService,
-    private modalService: BsModalService,
     private workoutService: WorkoutsService,
     private afs: AngularFirestore,
+    public location: Location,
     ) {}
 
   // When the page is loaded
@@ -297,6 +298,113 @@ export class ProfileComponent {
     }
   }
 
+  updateProfile() {
+    this.updateProfileName();
+    this.updateAge();
+    this.updateWeight();
+    this.updateAbout();
+    this.updateVisibility();
+  }
+
+  updateProfileName() {
+    const profileRef = this.afs.collection('profiles').doc(this.profile.profileHandle);
+    let input = (<HTMLInputElement>document.getElementById('editProfileName'));
+
+    //  Update the user's profileName in firebase
+    if ((<HTMLInputElement>document.getElementById('editProfileName')).value !== '') {
+      const updateProfileName = {
+        profileName: (<HTMLInputElement>document.getElementById('editProfileName')).value,
+      }
+      profileRef.update(updateProfileName);
+      input.placeholder = (<HTMLInputElement>document.getElementById('editProfileName')).value;
+    }
+    (<HTMLInputElement>document.getElementById('editProfileName')).value = '';
+  }
+
+  updateAge () {
+    const profileRef = this.afs.collection('profiles').doc(this.profile.profileHandle);
+    let input = (<HTMLInputElement>document.getElementById('editAge'));
+
+    //  Update the user's age field in firebase
+    if ((<HTMLInputElement>document.getElementById('editAge')).value !== '') {
+      const updateAge = {
+        age: (<HTMLInputElement>document.getElementById('editAge')).value
+      }
+      profileRef.update(updateAge);
+      input.placeholder = (<HTMLInputElement>document.getElementById('editAge')).value;
+    }
+    (<HTMLInputElement>document.getElementById('editAge')).value = '';
+  }
+
+  updateWeight () {
+    const profileRef = this.afs.collection('profiles').doc(this.profile.profileHandle);
+    let input = (<HTMLInputElement>document.getElementById('editWeight'));
+
+    //  Update the user's weight field in firebase
+    if ((<HTMLInputElement>document.getElementById('editWeight')).value !== '') {
+      const updateWeight = {
+        weight: (<HTMLInputElement>document.getElementById('editWeight')).value
+      }
+      profileRef.update(updateWeight);
+      input.placeholder = (<HTMLInputElement>document.getElementById('editWeight')).value;
+    }
+    (<HTMLInputElement>document.getElementById('editWeight')).value = '';
+  }
+
+  updateAbout () {
+    const profileRef = this.afs.collection('profiles').doc(this.profile.profileHandle);
+    let input = (<HTMLInputElement>document.getElementById('editAbout'));
+
+    //  Update the user's about field in firebase
+    if ((<HTMLInputElement>document.getElementById('editAbout')).value !== '') {
+      const updateAbout = {
+        about: (<HTMLInputElement>document.getElementById('editAbout')).value
+      }
+      profileRef.update(updateAbout);
+      input.placeholder = (<HTMLInputElement>document.getElementById('editAbout')).value;
+    }
+    (<HTMLInputElement>document.getElementById('editAbout')).value = '';
+  }
+
+  updateVisibility () {
+    const profileRef = this.afs.collection('profiles').doc(this.profile.profileHandle);
+
+    //  Create a reference to the form element Visibility
+    const form = document.querySelector('form');
+    const visibility = form.elements['editVisibility'];
+
+    //  Visibility to be changed through this variable
+    let visibilitySelected;
+
+    //  Determine which radio button is checked
+    for (let i = 0; i < visibility.length; i++) {
+      if(visibility[i].checked) {
+        visibilitySelected = visibility[i].value;
+      }
+    }
+
+    //  Only update if the other two radio buttons are selected
+    if (visibilitySelected !== 'NoChange') {
+      //  Update isPrivate to true and set the profile to private
+      if (visibilitySelected === 'Private') {
+        const updateIsPrivate = {
+          isPrivate: true
+        }
+        profileRef.update(updateIsPrivate);
+      }
+
+      //  Update isPrivate to false and set the profile to public
+      else {
+        const updateIsPrivate = {
+          isPrivate: false
+        }
+        profileRef.update(updateIsPrivate);
+      }
+    }
+
+    visibility[0].checked = true;
+  }
+
   /**
    * Functions that open the modal popups
    */
@@ -333,22 +441,13 @@ export class ProfileComponent {
     this.postsModal.nativeElement.style.display = "none";
   }
 
+  //  This function will show the users that are following the user.
   showEditProfileModal() {
     this.editProfileModal.nativeElement.style.display = "block";
   }
 
+  //  This function will close the modal that shows the users that are following the user.
   closeEditProfileModal() {
     this.editProfileModal.nativeElement.style.display = "none";
-  }
-
-  //  This function will show the workouts that the user has created.
-  showWorkouts() {
-    this.profile.workouts.sort();
-    this.workoutsModal.nativeElement.style.display = "block";
-  }
-
-  //  This function will close the modal that shows the workouts that the user has created.
-  closeWorkoutsModal() {
-    this.workoutsModal.nativeElement.style.display = "none";
   }
 }

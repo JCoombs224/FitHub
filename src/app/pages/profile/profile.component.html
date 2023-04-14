@@ -6,7 +6,27 @@
           <div class="card-header" style="background-color: rgba(9, 106, 46, 1);">
             <div>
               <div class="row flex-row">
-                <div class="card col-md-3" style="padding-left: 1%; background:none; border:none;">
+                <div class="col-md-2 d-flex align-items-center justify-content-start min-vw-25">
+                  <img class="img-fluid" src="https://nwfblogs.wpenginepowered.com/wp-content/blogs.dir/11/files/2012/11/Turkey_strut-494x620.jpg"
+                  alt="Generic placeholder image" display="flex-row" style="margin: 0; align-content: center; max-width: 350px; max-height: 350px; overflow: hidden; z-index: 1;">
+                </div>
+                <div class="col-md-2  mt-5 no-wrap" style="padding-right: auto; background: none; border:none;">
+                  <h5 class="no-wrap text-truncate">@{{profile.profileHandle}}</h5>
+                  <p class="no-wrap" style="font-size: 24px;">{{profile.age}}</p>
+                  <p class="no-wrap" style="font-size: 24px;">{{profile.heightFeet}}' {{profile.heightInches}}"</p>
+                  <p class="no-wrap" style="font-size: 24px;">{{profile.weight}} lbs.</p>
+                  <div *ngIf="userProfile">
+                    <p style="font-size: 24px;" *ngIf="profile.isPrivate">Private</p>
+                    <p style="font-size: 24px;" *ngIf="!profile.isPrivate">Public</p>
+                  </div>
+                </div>
+                <div class="card no-wrap col-md-4 text-center mt-1" style=" background-color: rgba(255, 255, 255, 0.1); border: none;">
+                  <div class="card-header display-6 no-wrap" display="flex-row" style="padding: 5%; background: none;">
+                    About
+                  </div>
+                  <p style="font-size: 24px;">{{profile.about}}</p>
+                </div>
+                <div class="card col-md-4" style="padding-left: 1%; background:none; border:none;">
                   <button class="btn zoom-btn btn-outline-success w-100" display="flex-row" style="margin: 5px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" (click)="showFollowersModal()">
                     <h5 style="text-align: center;">{{profile.followers.length}}</h5>
                     <p class="mb-1 h5 no-wrap">Followers</p>
@@ -30,26 +50,12 @@
                     </button>
                   </div>
                 </div>
-                <div class="col-md-2  mt-5 no-wrap" style="padding-right: auto; background: none; border:none;">
-                  <h5 class="no-wrap text-truncate" style="text-align: right;">@{{profile.profileHandle}}</h5>
-                  <p class="no-wrap" style="font-size: 24px; text-align: right;">{{profile.age}}</p>
-                  <p class="no-wrap" style="font-size: 24px; text-align: right;">{{profile.heightFeet}}' {{profile.heightInches}}"</p>
-                  <p class="no-wrap" style="font-size: 24px; text-align: right;">{{profile.weight}} lbs.</p>
-                </div>
-                <div class="col-md-2 d-flex align-items-center justify-content-start min-vw-25">
-                  <img class="img-fluid" src="https://nwfblogs.wpenginepowered.com/wp-content/blogs.dir/11/files/2012/11/Turkey_strut-494x620.jpg"
-                  alt="Generic placeholder image" display="flex-row" style="margin: 0; align-content: center; max-width: 350px; max-height: 350px; overflow: hidden; z-index: 1;">
-                </div>
-                <div class="card no-wrap col-md-5 text-center mt-1" style=" background-color: rgba(255, 255, 255, 0.1); border: none;">
-                  <div class="card-header display-4 no-wrap" display="flex-row" style="padding: 5%; background: none;">About</div>
-                  <p style="font-size: 24px;">{{profile.about}}</p>
-                </div>
               </div>
             </div>
           </div>
           <div class="row mt-5">
             <div class="card d-flex col-lg-5 mb-5" style="text-align: center; margin: 0 auto; background-color: rgba(32, 61, 28, 0.1); border: none;">
-              <div class="card-header display-4 mb-2" style="background: none;">
+              <div class="card-header display-6 mb-2" style="background: none;">
                 Posts
               </div>
               <div *ngIf="!profile.posts">
@@ -80,7 +86,7 @@
               </div>
             </div>
             <div class="card d-flex col-lg-5 mb-5" style="text-align: center; margin: 0 auto; background-color: rgba(32, 61, 28, 0.1); border: none;">
-              <div class="card-header display-4 mb-2" style="background: none;">
+              <div class="card-header display-6 mb-2" style="background: none;">
                 Recent Workouts
               </div>
               <div class="card-body mt-2">
@@ -123,7 +129,7 @@
 </div>
 
 <!--Followers modal-->
-<div #followersModal class="modal">
+<div #followersModal class="modal" style="width: 30%; min-width: 450px; min-height: 300px;">
   <div class="modal-header">
       @{{profile.profileHandle}}'s Followers
   </div>
@@ -138,7 +144,7 @@
 </div>
 
 <!--Following modal-->
-<div #followingModal class="modal">
+<div #followingModal class="modal" style="width: 30%; min-width: 450px; min-height: 300px;">
   <div class="modal-header">
       Profiles @{{profile.profileHandle}} follows
   </div>
@@ -152,8 +158,8 @@
   </div>
 </div>
 
-<!--Following modal-->
-<div #postsModal class="modal" style="width: 30%">
+<!--Posts modal-->
+<div #postsModal class="modal" style="width: 30%; min-width: 450px; min-height: 300px;">
   <div class="modal-header">
     <h3>
       Create Post+
@@ -171,7 +177,7 @@
 </div>
 
 <!--Edit Profile Modal-->
-<div #editProfileModal class="modal" style="width: 30%;">
+<div #editProfileModal class="modal" style="width: 30%; height: 40%; min-width: 450px; min-height: 300px;">
   <div class="modal-header">
     <h3>
       Edit Profile
@@ -184,41 +190,40 @@
     </div>
     <div class="form-group">
       <label for="editAge">Age</label>
-      <input type="text" class="form-control" id="editAge" placeholder="{{profile.age}}">
+      <input type="number" value="{{profile.age}}" class="form-control" value="{{profile.age}}" id="editAge" placeholder="{{profile.age}}">
     </div>
     <div class="form-group">
-      <label for="profileWeight">Weight</label>
-      <input type="text" class="form-control" id="profileWeight" placeholder="{{profile.weight}}">
+      <label for="editWeight">Weight</label>
+      <input type="number" class="form-control" id="editWeight" step="5" value="{{profile.weight}}" placeholder="{{profile.weight}}">
     </div>
     <div class="form-group">
-      <label for="profileAbout">About</label>
-      <textarea class="form-control" id="profileAbout" rows="3" placeholder="{{profile.about}}"></textarea>
+      <label for="editAbout">About</label>
+      <textarea class="form-control" id="editAbout" rows="3" placeholder="{{profile.about}}"></textarea>
     </div>
-    <div class="form-group">
-      <label for="profileImage">Profile Visibility</label>
-      <input type="text" class="form-control" id="profileImage" placeholder="Profile Image">
-    </div>
+    <form class="form-group">
+      <label for="editVisibility">Profile Visibility</label>
+      <div class="row">
+        <div class="btn-group btn-group-toggle" id="editVisibility" data-toggle="buttons">
+          <div>
+            <label class="btn btn-secondary">
+              <input type="radio" name="editVisibility" id="NoChangeRadio" autocomplete="off" value="NoChange" checked>
+              No change
+            </label>
+            <label class="btn btn-secondary">
+              <input type="radio" name="editVisibility" id="PrivateRadio" autocomplete="off" value="Private">
+              Private
+              </label>
+            <label class="btn btn-secondary">
+              <input type="radio" name="editVisibility" id="PublicRadio" autocomplete="off" value="Public">
+              Public
+            </label>
+          </div>
+        </div>
+      </div>
+    </form>
   </div>
   <div class="modal-footer">
-    <button class="btn zoom-btn btn-outline-success" style="margin: 3px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" (click)="getPost()">Save</button>
-    <button class="btn zoom-btn btn-outline-secondary" style="background-color: rgba(255, 255, 255, 0.8);" (click)="closeEditProfileModal()">Cancel</button>
-  </div>
-</div>
-
-<!--Workouts modal-->
-<div #workoutsModal class="modal">
-  <div class="modal-header">
-    @{{profile.profileHandle}}'s Workouts
-  </div>
-  <div class="modal-body" *ngIf="checkWorkouts()">
-    <li *ngFor="let workout of profile.workouts">
-      <a class="nav-item btn btn-outline-success" style="color:#096A2E; margin:5px;" href="#" routerLink="/profile/{{workout}}">{{workout}}</a>
-    </li>
-  </div>
-  <div class="modal-body" *ngIf="!checkWorkouts()">
-    <a>This user doesn't have any workouts yet.</a>
-  </div>
-  <div class="modal-footer" style="width: 90%;">
-    <button class="close btn btn-primary" (click)="closeWorkoutsModal()">Close</button>
+    <button class="btn zoom-btn btn-outline-success" style="margin: 3px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" (click)="updateProfile(); closeEditProfileModal();">Save</button>
+    <button class="btn zoom-btn btn-outline-secondary" style="background-color: rgba(255, 255, 255, 0.8);" (click)="closeEditProfileModal()">Close</button>
   </div>
 </div>
