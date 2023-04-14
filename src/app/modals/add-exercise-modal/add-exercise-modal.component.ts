@@ -36,16 +36,27 @@ export class AddExerciseModalComponent implements OnInit {
   group = '';
   openExerciseIndex = -1;
   exercises = [];
+  equipment;
+  filters = [];
 
   constructor(public bsModalRef: BsModalRef,
               private workoutService: WorkoutsService) {}
 
   ngOnInit(): void {
+    if(this.equipment.includes(',')) {
+      this.equipment = this.equipment.split(',');
+    }
+    if(this.equipment instanceof Array) {
+      this.filters = this.equipment;
+    } 
+    else {
+      this.filters.push(this.equipment);
+    }
     this.getExercises();
   }
 
   getExercises() {
-    this.workoutService.getExercises(this.group).get().subscribe(data=>data.forEach(el=>{
+    this.workoutService.getExercises(this.group, this.filters).get().subscribe(data=>data.forEach(el=>{
       this.exercises.push(el.data());
       }));
   }

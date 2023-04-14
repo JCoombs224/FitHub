@@ -35,7 +35,10 @@
   <div class="col-12 col-xl-8 col-xxl-6 p-0">
     <div class="card min-vh-100">
       <div class="card-body">
-        <div class="row justify-content-end">
+        <div class="row justify-content-between">
+          <div class="col-auto">
+            <button class="btn btn-danger" (click)="deleteWorkout()">Delete</button>
+          </div>
           <div class="col-auto">
             <button class="btn btn-success" (click)="saveWorkout()">Save</button>
           </div>

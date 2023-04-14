@@ -46,6 +46,7 @@ import { EditProfileComponent } from './pages/edit-profile/edit-profile.componen
 import { AddExerciseModalComponent } from './modals/add-exercise-modal/add-exercise-modal.component';
 import { NgChartsModule } from 'ng2-charts';
 import { EquipmentModalComponent } from './modals/equipment-modal/equipment-modal.component';
+import { ConfirmDeleteModalComponent } from './modals/confirm-delete-modal/confirm-delete-modal.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { EquipmentModalComponent } from './modals/equipment-modal/equipment-moda
     EditProfileComponent,
     AddExerciseModalComponent,
     EquipmentModalComponent,
+    ConfirmDeleteModalComponent,
 
   ],
   imports: [

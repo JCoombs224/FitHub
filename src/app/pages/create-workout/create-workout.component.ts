@@ -12,6 +12,7 @@ import { AddExerciseModalComponent } from 'src/app/modals/add-exercise-modal/add
 import { animate, style, transition, trigger } from "@angular/animations";
 import { faX, faInfoCircle, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { EquipmentModalComponent } from 'src/app/modals/equipment-modal/equipment-modal.component';
+import { ConfirmDeleteModalComponent } from 'src/app/modals/confirm-delete-modal/confirm-delete-modal.component';
 
 
 @Component({
@@ -241,6 +242,7 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
     const initialState = {
       initialState: {
         group: this.getGroupAt(i).get('groupType').value,
+        equipment: this.workoutForm.get('equipment').value,
         callback: (exercise) => {
           console.log(exercise)
           if (exercise) {
@@ -287,6 +289,26 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
       this.toastr.success("Workout saved!");
       this.router.navigate(['/my-workouts']);
     });
+  }
+
+  deleteWorkout() {
+    const initialState = {
+      initialState: {
+        object: 'workout',
+        callback: (value) => {
+          if (value) {
+            this.workoutService.deleteWorkout(this.uid).then(() => {
+              this.toastr.success("Workout deleted!");
+              this.router.navigate(['/my-workouts']);
+            });
+          }
+        },
+      },
+      title: 'modal',
+      backdrop: 'static',
+      class: 'modal-lg'
+    };
+    this.modalRef = this.modalService.show(ConfirmDeleteModalComponent, initialState as ModalOptions);
   }
 
   get name() {
