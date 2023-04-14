@@ -64,6 +64,7 @@ h1 {
 }
 
 .card:hover {
+  border: none;
   transform: scale(1.01);
 }
 
