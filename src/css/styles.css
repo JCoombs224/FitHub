@@ -101,6 +101,24 @@
   padding-bottom: 8px;
 }
 
+.btn-close {
+  position:absolute;
+  top: 8px;
+  right: 8px;
+  color: white;
+  outline: 1px solid black;
+}
+
+.modal-header-1 {
+  background-color: #096a2e;
+  color: white;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-bottom: 1px solid black;
+}
+
 .no-border {
   border: none !important;
 }
