@@ -5,30 +5,32 @@
         <h3>Equipment</h3>
       </div>
       <div class="card-body">
+
         <div class="row">
           <div class="col" [formGroup]="workoutForm">
             <h5>Equipment Group <fa-icon class="text-primary" [icon]="faInfoCircle" title="New exercises that are added will be filtered by what equipment you have selected in your equipment group" (click)="showInfo = !showInfo" style="cursor: pointer;"></fa-icon></h5>
+            <div *ngIf="showInfo" class="card card-body bg-primary bg-gradient text-light rounded-5">
+              <label>New exercises that are added will be filtered by what equipment you have selected in your equipment group</label>
+            </div>
             <div class="d-flex align-bottom">
               <select class="form-select mb-2" formControlName="equipment" (click)="showInfo = false" (change)="updateEquipmentList()">
                 <option value="" disabled>Select Equipment Group</option>
                 <option selected value="*">All</option>
                 <option *ngFor="let group of equipmentGroups" [value]="group.equipment">{{group.name}}</option>
               </select>
-              <fa-icon class="text-success ps-1 m-auto" [icon]="faPlusCircle" (click)="addEquipmentGroup()" style="cursor: pointer;"></fa-icon>
+              <fa-icon class="text-success ps-1 m-auto" [icon]="faPlusCircle" title="Add Equipment Group" (click)="addEquipmentGroup()" style="cursor: pointer; font-size: 1.2rem"></fa-icon>
             </div>
-           
-            <div *ngIf="showInfo" class="card card-body bg-primary bg-gradient text-light rounded-5">
-              <label>New exercises that are added will be filtered by what equipment you have selected in your equipment group</label>
-            </div>
+            
             <hr>
             <div class="d-flex justify-content-end">
-              <fa-icon [icon]="faEdit" (click)="editEquipmentGroup()" style="cursor: pointer;"></fa-icon>
+              <fa-icon [icon]="faEdit" (click)="editEquipmentGroup()" title="Edit Equipment Group" style="cursor: pointer; font-size: 1.2rem"></fa-icon>
             </div>
             <ul class="list-group">
               <li class="list-group-item" *ngFor="let equip of equipment">{{equip|titlecase}}</li>
             </ul>
           </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -37,7 +39,7 @@
       <div class="card-body">
         <div class="row justify-content-between">
           <div class="col-auto">
-            <button class="btn btn-danger" (click)="deleteWorkout()">Delete</button>
+            <button *ngIf="editingWorkout" class="btn btn-danger" (click)="deleteWorkout()">Delete</button>
           </div>
           <div class="col-auto">
             <button class="btn btn-success" (click)="saveWorkout()">Save</button>
@@ -67,19 +69,26 @@
             </div>
             <div *ngIf="!hideEquipment" class="card-body" [@slideOutAnimation]>
               <div class="row">
-                <div class="col">
+                <div class="col" [formGroup]="workoutForm">
                   <h5>Equipment Group <fa-icon class="text-primary" [icon]="faInfoCircle" title="New exercises that are added will be filtered by what equipment you have selected in your equipment group" (click)="showInfo = !showInfo" style="cursor: pointer;"></fa-icon></h5>
                   <div *ngIf="showInfo" class="card card-body bg-primary bg-gradient text-light rounded-5 mb-2">
                     <label>New exercises that are added will be filtered by what equipment you have selected in your equipment group</label>
                   </div>
-                  <!-- <select class="form-select mb-2" [formControl]="equipment" (click)="showInfo = false" (change)="test()">
-                    <option disabled>Select Equipment Group</option>
-                    <option>All</option>
-                    <option *ngFor="let group of equipmentGroups" value="group.equipment">{{group.name}}</option>
-                  </select> -->
+                  <div class="d-flex align-bottom">
+                    <select class="form-select mb-2" formControlName="equipment" (click)="showInfo = false" (change)="updateEquipmentList()">
+                      <option value="" disabled>Select Equipment Group</option>
+                      <option selected value="*">All</option>
+                      <option *ngFor="let group of equipmentGroups" [value]="group.equipment">{{group.name}}</option>
+                    </select>
+                    <fa-icon class="text-success ps-1 m-auto" title="Add Equipment Group" [icon]="faPlusCircle" (click)="addEquipmentGroup()" style="cursor: pointer; font-size: 1.2rem"></fa-icon>
+                  </div>
+                  
                   <hr>
+                  <div class="d-flex justify-content-end">
+                    <fa-icon [icon]="faEdit" (click)="editEquipmentGroup()" title="Edit Equipment Group"  style="cursor: pointer; font-size: 1.2rem"></fa-icon>
+                  </div>
                   <ul class="list-group">
-                    <li class="list-group-item">All Equipment Selected</li>
+                    <li class="list-group-item" *ngFor="let equip of equipment">{{equip|titlecase}}</li>
                   </ul>
                 </div>
               </div>

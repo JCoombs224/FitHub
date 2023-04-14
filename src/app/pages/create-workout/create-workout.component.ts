@@ -244,12 +244,12 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
         group: this.getGroupAt(i).get('groupType').value,
         equipment: this.workoutForm.get('equipment').value,
         callback: (exercise) => {
-          console.log(exercise)
           if (exercise) {
             this.toastr.success("Added exercise to workout!");
             this.getExercisesAt(i).push(this.newMuscleExercise(exercise.name, exercise.instructions.join(" "), exercise.secondaryMuscles.join(", ")));
             // this.getExercisesAt(i).get('exerciseId').setValue(exercise.id);
           }
+          this.equipment.splice(this.equipment.indexOf('Body Only'), 1);
         },
       },
       title: 'modal',
