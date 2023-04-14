@@ -27,7 +27,9 @@ export class ProfileComponent {
   workouts;
   @ViewChild('followersModal') followersModal: ElementRef;
   @ViewChild('followingModal') followingModal: ElementRef;
+  @ViewChild('postsModal') postsModal: ElementRef;
   @ViewChild('workoutsModal') workoutsModal: ElementRef;
+  @ViewChild('editProfileModal') editProfileModal: ElementRef;
 
   constructor(
     private route: ActivatedRoute,
@@ -256,8 +258,51 @@ export class ProfileComponent {
     return true;
   }
 
+  getPost() {
+    //  Check if the textarea is empty, so the user doesn't add an empty post
+    if ((<HTMLInputElement>document.getElementById("PostText")).value != '') {
+      //  Reference the firebase database
+      const db = firebase.firestore();
+
+      //  Reference the profiles document associated with the current user's profilehandle
+      const docRef = db.collection('profiles').doc(this.profile.profileHandle);
+
+      //  Update the posts by calling arrayUnion and adding the value in the PostText element on the HTML doc.
+      docRef.update({
+        posts: firebase.firestore.FieldValue.arrayUnion((<HTMLInputElement>document.getElementById("PostText")).value)
+      });
+    }
+    else {
+      alert("You didn't enter any text. Don't worry, no post was created!");
+    }
+
+    //  Clear the text inside the PostText element on the HTML doc
+    (<HTMLInputElement>document.getElementById("PostText")).value = '';
+  }
+
+  cancelPost() {
+    //  Check that the PostText element on the HTML doc isn't empty
+    if ((<HTMLInputElement>document.getElementById("PostText")).value != '') {
+      //  Ask the user to confirm that they want to discard their post
+      if (confirm("Would you like to discard this post?")) {
+        //  Empty the PostText element on the HTML doc.
+        this.closePostsModal();
+      }
+    }
+    else {
+      //  Ask if the user would like to go back to the profile page
+      if (confirm("Go back to your profile?")) {
+        this.closePostsModal();
+      }
+    }
+  }
+
+  /**
+   * Functions that open the modal popups
+   */
+
   //  This function will show the users that are following the user.
-  showFollowers() {
+  showFollowersModal() {
     this.profile.followers.sort((a, b) => a.localeCompare(b));
     this.followersModal.nativeElement.style.display = "block";
   }
@@ -268,7 +313,7 @@ export class ProfileComponent {
   }
 
   //  This function will show the users that the user is following.
-  showFollowing() {
+  showFollowingModal() {
     this.profile.following.sort((a, b) => a.localeCompare(b));
     this.followingModal.nativeElement.style.display = "block";
   }
@@ -276,6 +321,24 @@ export class ProfileComponent {
   //  This function will close the modal that shows the users that the user is following.
   closeFollowingModal() {
     this.followingModal.nativeElement.style.display = "none";
+  }
+
+  //  This function will show the users that are following the user.
+  showPostsModal() {
+    this.postsModal.nativeElement.style.display = "block";
+  }
+
+  //  This function will close the modal that shows the users that are following the user.
+  closePostsModal() {
+    this.postsModal.nativeElement.style.display = "none";
+  }
+
+  showEditProfileModal() {
+    this.editProfileModal.nativeElement.style.display = "block";
+  }
+
+  closeEditProfileModal() {
+    this.editProfileModal.nativeElement.style.display = "none";
   }
 
   //  This function will show the workouts that the user has created.
