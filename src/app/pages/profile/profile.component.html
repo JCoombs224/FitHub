@@ -80,8 +80,13 @@
                 </div>
               </div>
               <div class="card-footer" style="background: none;">
-                <div *ngIf="userProfile">
-                  <button type="button" id="createPost" class="btn zoom-btn btn-outline-success" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0;" (click)="showPostsModal()">Create Post+</button>
+                <div class="row">
+                  <button *ngIf="userProfile" type="button" id="createPost" class="btn zoom-btn btn-outline-success" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0;" (click)="showPostsModal()">
+                    Create Post+
+                  </button>
+                  <button type="button" id="createPost" class="btn zoom-btn btn-outline-success" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0;">
+                    View All Posts
+                  </button>
                 </div>
               </div>
             </div>
@@ -116,8 +121,15 @@
                 </div>
               </div>
               <div class="card-footer" style="background: none;">
-                <div *ngIf="userProfile">
-                  <button type="button" id="createWorkout" class="btn zoom-btn btn-outline-success" routerLink="/my-workouts/create" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px;">Create Workout+</button>
+                <div class="row">
+                  <div>
+                    <button *ngIf="userProfile" type="button" id="createWorkout" class="btn zoom-btn btn-outline-success" routerLink="/my-workouts/create" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0; width: 100%;">
+                      Create Workout+
+                    </button>
+                    <button type="button" id="viewAllWorkouts" class="btn zoom-btn btn-outline-success" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto;position: 0; width: 100%;">
+                      View All Workouts
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
