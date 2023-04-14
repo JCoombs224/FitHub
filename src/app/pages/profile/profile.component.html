@@ -63,18 +63,18 @@
               </div>
               <div class="card-body mt-2">
                 <div class="row g-2 mb-2">
-                  <div class="card d-flex col-lg-5 mb-2 min-vw-50 min-vh-50" style="padding: 5%; text-align: center; font-size: 24px; margin: 0 auto; background-color: rgba(255, 255, 255, 0.8)" *ngIf="profile.posts[profile.posts.length - 1]">
+                  <div class="card d-flex col-lg-5 mb-2 w-50" style="padding-top: 5%; padding-bottom: 5%; text-align: center; font-size: 18px; margin: 0 auto; background-color: rgba(255, 255, 255, 0.8)" *ngIf="profile.posts[profile.posts.length - 1]">
                     {{profile.posts[profile.posts.length - 1]}}
                   </div>
-                  <div class="card d-flex col-lg-5 mb-2 min-vw-50 min-vh-50" style="padding: 5%; text-align: center; font-size: 24px; margin: 0 auto; background-color: rgba(255, 255, 255, 0.8)" *ngIf="profile.posts[profile.posts.length - 2]">
+                  <div class="card d-flex col-lg-5 mb-2 w-50" style="padding-top: 5%; padding-bottom: 5%; text-align: center; font-size: 18px; margin: 0 auto; background-color: rgba(255, 255, 255, 0.8)" *ngIf="profile.posts[profile.posts.length - 2]">
                     {{profile.posts[profile.posts.length - 2]}}
                   </div>
                 </div>
-                <div class="row g-2 mg-2">
-                  <div class="card d-flex col-lg-5 mb-2 min-vw-50 min-vh-50" style="padding: 5%; text-align: center; font-size: 24px; margin: 0 auto; background-color: rgba(255, 255, 255, 0.8)" *ngIf="profile.posts[profile.posts.length - 3]">
+                <div class="row g-2 mb-2">
+                  <div class="card d-flex col-lg-5 mb-2 w-50" style="padding-top: 5%; padding-bottom: 5%; text-align: center; font-size: 18px; margin: 0 auto; background-color: rgba(255, 255, 255, 0.8)" *ngIf="profile.posts[profile.posts.length - 3]">
                     {{profile.posts[profile.posts.length - 3]}}
                   </div>
-                  <div class="card d-flex col-lg-5 mb-2 min-vw-50 min-vh-50" style="padding: 5%; text-align: center; font-size: 24px; margin: 0 auto; background-color: rgba(255, 255, 255, 0.8)" *ngIf="profile.posts[profile.posts.length - 4]">
+                  <div class="card d-flex col-lg-5 mb-2 w-50" style="padding-top: 5%; padding-bottom: 5%; text-align: center; font-size: 18px; margin: 0 auto; background-color: rgba(255, 255, 255, 0.8)" *ngIf="profile.posts[profile.posts.length - 4]">
                     {{profile.posts[profile.posts.length - 4]}}
                   </div>
                 </div>
@@ -84,7 +84,7 @@
                   <button *ngIf="userProfile" type="button" id="createPost" class="btn zoom-btn btn-outline-success" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0;" (click)="showPostsModal()">
                     Create Post+
                   </button>
-                  <button type="button" id="createPost" class="btn zoom-btn btn-outline-success" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0;">
+                  <button type="button" id="createPost" class="btn zoom-btn btn-outline-success" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0;" (click)="showAllPostsModal()">
                     View All Posts
                   </button>
                 </div>
@@ -99,24 +99,24 @@
                   <div class="card d-flex col-lg-5 mb-2 w-50">
                     <img src="https://th.bing.com/th/id/OIP.8XLECwYGdt3DBa45yi83RAHaE8?pid=ImgDet&rs=1"
                       alt="image 1" class="w-100 rounded-3 mt-1">
-                      <p style="font-size: 24px;">Bies and Tries Day</p>
+                      <p style="font-size: 18px;">Bies and Tries Day</p>
                   </div>
                   <div class="card d-flex col-lg-5 mb-2 w-50">
                     <img src="https://boxlifemagazine.com/wp-content/uploads/2019/08/Dumbbell-Workouts.jpg"
                       alt="image 1" class="w-100 rounded-3 mt-1">
-                      <p style="font-size: 24px;">Back and Core Day</p>
+                      <p style="font-size: 18px;">Back and Core Day</p>
                   </div>
                 </div>
                 <div class="row g-2">
                   <div class="card d-flex col-lg-5 mb-2 w-50">
                     <img src="https://astr.tv/wp-content/uploads/2020/03/workouts-routines.jpg"
                       alt="image 1" class="w-100 rounded-3 mt-1">
-                      <p style="font-size: 24px;">Leg Day</p>
+                      <p style="font-size: 18px;">Leg Day</p>
                   </div>
                   <div class="card d-flex col-lg-5 mb-2 w-50">
                     <img src="https://th.bing.com/th/id/R.e3aed13bfaf0fc34a85a2cd2782d769c?rik=5O8gO%2fHcbPfDKA&riu=http%3a%2f%2fi.huffpost.com%2fgen%2f1319881%2fimages%2fo-GYM-facebook.jpg&ehk=2lQVG9Kib9F4TpgQEoPqDYTxh2UANAMiGGxiaQSkx7w%3d&risl=&pid=ImgRaw&r=0"
                       alt="image 1" class="w-100 rounded-3 mt-1">
-                      <p style="font-size: 24px;">Cardio Day</p>
+                      <p style="font-size: 18px;">Cardio Day</p>
                   </div>
                 </div>
               </div>
@@ -143,7 +143,7 @@
 <!--Followers modal-->
 <div #followersModal class="modal" style="width: 30%; min-width: 450px; min-height: 300px;">
   <div class="modal-header">
-      @{{profile.profileHandle}}'s Followers
+      @{{urlProfileHandle}}'s Followers
   </div>
   <div class="modal-body">
     <li *ngFor="let follower of profile.followers">
@@ -158,7 +158,7 @@
 <!--Following modal-->
 <div #followingModal class="modal" style="width: 30%; min-width: 450px; min-height: 300px;">
   <div class="modal-header">
-      Profiles @{{profile.profileHandle}} follows
+      Profiles @{{urlProfileHandle}} follows
   </div>
   <div class="modal-body">
     <li *ngFor="let followed of profile.following">
@@ -237,5 +237,22 @@
   <div class="modal-footer">
     <button class="btn zoom-btn btn-outline-success" style="margin: 3px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" (click)="updateProfile(); closeEditProfileModal();">Save</button>
     <button class="btn zoom-btn btn-outline-secondary" style="background-color: rgba(255, 255, 255, 0.8);" (click)="closeEditProfileModal()">Close</button>
+  </div>
+</div>
+
+<!--View All Workouts Modal-->
+
+<!--View All Posts Modal-->
+<div #allPostsModal class="modal" style="width: 30%; min-width: 450px; min-height: 300px;">
+  <div class="modal-header">
+      All of @{{urlProfileHandle}} posts
+  </div>
+  <div class="modal-body">
+      <div *ngFor="let post of profile.posts" class="card" style="margin: 3px; z-index: 1; background-color: #b0dfba;">
+        @{{post}}
+      </div>
+  </div>
+  <div class="modal-footer" style="width: 90%;">
+    <button class="close btn btn-primary" (click)="closeAllPostsModal()">Close</button>
   </div>
 </div>

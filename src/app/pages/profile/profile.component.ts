@@ -19,7 +19,7 @@ import { Location } from '@angular/common';
 
 export class ProfileComponent {
 
-  private urlProfileHandle;
+  public urlProfileHandle;
   profile = this.profileService.initProfile;
   userProfile = false;
   isPrivate = false;
@@ -31,6 +31,7 @@ export class ProfileComponent {
   @ViewChild('postsModal') postsModal: ElementRef;
   @ViewChild('workoutsModal') workoutsModal: ElementRef;
   @ViewChild('editProfileModal') editProfileModal: ElementRef;
+  @ViewChild('allPostsModal') allPostsModal: ElementRef;
 
   constructor(
     private route: ActivatedRoute,
@@ -449,5 +450,13 @@ export class ProfileComponent {
   //  This function will close the modal that shows the users that are following the user.
   closeEditProfileModal() {
     this.editProfileModal.nativeElement.style.display = "none";
+  }
+
+  showAllPostsModal() {
+    this.allPostsModal.nativeElement.style.display = "block";
+  }
+
+  closeAllPostsModal() {
+    this.allPostsModal.nativeElement.style.display = "none";
   }
 }
