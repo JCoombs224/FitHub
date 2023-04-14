@@ -2,11 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { CurrentUserService } from 'src/app/services/current-user.service';
-import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { WorkoutsService } from 'src/app/services/workouts.service';
 import { BsModalService, ModalOptions } from "ngx-bootstrap/modal";
@@ -64,6 +62,7 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
   workoutForm = this.fb.group({
     name: [''],
     equipment: ['*'],
+    description: [''],
     groups: this.fb.array([])
   });
 
@@ -148,6 +147,7 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
         this.loading = false;
         this.editingName = false;
         this.equipment = data.equipment;
+        console.log(data);
         if(this.equipment[0] == '*') {
           this.equipment[0] = "All Equipment Selected";
         }
