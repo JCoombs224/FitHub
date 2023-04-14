@@ -59,13 +59,12 @@ h1 {
 }
 
 .card {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
   transition: all 0.3s ease;
 }
 
 .card:hover {
   transform: scale(1.01);
-  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
 }
 
 .card-title {
@@ -96,3 +95,12 @@ h1 {
   transform: translate(-50%, -50%);
 }
 
+.button-wrapper-1,
+.button-wrapper-2 {
+  display: inline-block;
+}
+
+.button-wrapper-1 button,
+.button-wrapper-2 button {
+  display: inline-block;
+}
