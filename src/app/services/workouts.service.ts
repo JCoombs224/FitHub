@@ -4,6 +4,7 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument 
 import { CurrentUserService } from './current-user.service';
 import { debounceTime } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import firebase from 'firebase/compat/app';
 
 @Injectable({
   providedIn: 'root'
@@ -20,9 +21,11 @@ export class WorkoutsService {
   }
 
   addEquipmentGroup(group) {
-    return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('equipmentGroups').add({
-      name: group.name,
+    return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).update({
+      equipmentGroups: firebase.firestore.FieldValue.arrayUnion({
+        name: group.name,
       equipment: group.equipment
+      })
     });
   }
 
@@ -34,7 +37,12 @@ export class WorkoutsService {
   }
 
   deleteEquipmentGroup(group) {
-    return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('equipmentGroups').doc(group.uid).delete();
+    return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).update({
+      equipmentGroups: firebase.firestore.FieldValue.arrayRemove({
+        name: group.name,
+        equipment: group.equipment
+      })
+    });
   }
 
   getExercises(group, filters?): AngularFirestoreCollection {

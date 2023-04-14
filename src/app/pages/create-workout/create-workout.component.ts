@@ -10,7 +10,8 @@ import { WorkoutsService } from 'src/app/services/workouts.service';
 import { BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { AddExerciseModalComponent } from 'src/app/modals/add-exercise-modal/add-exercise-modal.component';
 import { animate, style, transition, trigger } from "@angular/animations";
-import { faX, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faX, faInfoCircle, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { EquipmentModalComponent } from 'src/app/modals/equipment-modal/equipment-modal.component';
 
 
 @Component({
@@ -47,6 +48,7 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
   faEdit = faEdit;
   faX = faX;
   faInfoCircle = faInfoCircle;
+  faPlusCircle = faPlusCircle;
   modalRef;
   private uid; // The workout UID if we're editing a workout
   private subscription; // The subscription to the workout data if we're editing a workout
@@ -61,6 +63,7 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
   
   workoutForm = this.fb.group({
     name: [''],
+    equipment_group_name: [''],
     equipment: ['*'],
     description: [''],
     groups: this.fb.array([])
@@ -113,6 +116,13 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
     }
   }
 
+  arrayEquals(a, b) {
+    return Array.isArray(a) &&
+        Array.isArray(b) &&
+        a.length === b.length &&
+        a.every((val, index) => val === b[index]);
+  }
+
   ngOnInit(): void {
     window.scroll({ 
       top: 0, 
@@ -147,7 +157,6 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
         this.loading = false;
         this.editingName = false;
         this.equipment = data.equipment;
-        console.log(data);
         if(this.equipment[0] == '*') {
           this.equipment[0] = "All Equipment Selected";
         }
@@ -161,9 +170,52 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
     }
   }
 
+  addEquipmentGroup() {
+    const initialState = {
+      initialState: {
+        callback: (group) => {
+          if (group) {
+            this.equipmentGroups.push(group);
+            this.workoutForm.get('equipment').setValue(group.equipment.join(','));
+            this.updateEquipmentList();
+          }
+        },
+      },
+      title: 'modal',
+      backdrop: 'static',
+      class: 'modal-lg'
+    };
+    this.modalRef = this.modalService.show(EquipmentModalComponent, initialState as ModalOptions);
+  }
+
+  editEquipmentGroup() {
+    const initialState = {
+      initialState: {
+        equipment: this.equipmentGroups.find(e => this.arrayEquals(e.equipment, this.equipment)),
+        callback: (group) => {
+          if (group) {
+            this.equipmentGroups.push(group);
+            this.workoutForm.get('equipment').setValue(group.equipment.join(','));
+            this.updateEquipmentList();
+          }
+        },
+      },
+      title: 'modal',
+      backdrop: 'static',
+      class: 'modal-lg'
+    };
+    this.modalRef = this.modalService.show(EquipmentModalComponent, initialState as ModalOptions);
+  }
+
   updateEquipmentList() {
+    console.log(this.workoutForm.get('equipment').value);
     if (this.workoutForm.get('equipment').value != '*') {
-      this.equipment = this.workoutForm.get('equipment').value.split(',');
+      if(this.workoutForm.get('equipment').value.includes(',')) {
+        this.equipment = this.workoutForm.get('equipment').value.split(',');
+      }
+      else {
+        this.equipment = [this.workoutForm.get('equipment').value];
+      }
     }
     else {
       this.equipment = ['All Equipment Selected'];

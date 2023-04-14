@@ -1,0 +1,38 @@
+<div class="modal-header-1 text-center">
+  <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="cancel()">
+    <span aria-hidden="true" class="visually-hidden">&times;</span>
+  </button>
+  <h4 *ngIf="!editing">New Equipment Group</h4>
+  <h4 *ngIf="editing">Editing Equipment Group</h4>
+</div>
+<div class="modal-body">
+  <form [formGroup]="equipmentChecklist">
+    <div class="row">
+      <div class="col">
+        <label class="required">Equipment Group Name </label>
+        <input type="text" class="form-control" placeholder="Name" formControlName="name" [class.is-invalid]="name.invalid && name.touched">
+        <small class="text-danger" *ngIf="name.invalid && name.touched">Name is required</small>
+      </div>
+    </div>
+    <div class="form-check" *ngFor="let equipment of equipmentNames">
+      <input type="checkbox" class="form-check-input" [id]="equipment.name" [formControlName]="equipment.control">
+      <label class="form-check-label" [for]="equipment.name">{{equipment.name|titlecase}}</label>
+    </div>
+  </form>
+</div>
+<div class="modal-footer justify-content-between">
+
+  <div>
+    <button type="button" class="btn btn-danger" (click)="delete()" *ngIf="editing">
+      Delete
+    </button>
+  </div>
+  <div>
+    <button type="button" class="btn btn-secondary" (click)="cancel()">
+      Cancel
+    </button>
+    <button type="button" class="btn btn-success" (click)="submit()">
+      Submit
+    </button>
+  </div>
+</div>
