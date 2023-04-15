@@ -48,6 +48,7 @@ import { NgChartsModule } from 'ng2-charts';
 import { EquipmentModalComponent } from './modals/equipment-modal/equipment-modal.component';
 import { ConfirmDeleteModalComponent } from './modals/confirm-delete-modal/confirm-delete-modal.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { ProgressComponent } from './progress/progress.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     AddExerciseModalComponent,
     EquipmentModalComponent,
     ConfirmDeleteModalComponent,
+    ProgressComponent,
 
   ],
 
