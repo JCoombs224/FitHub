@@ -26,6 +26,7 @@ export class MyWorkoutsComponent implements OnInit, OnDestroy {
     private toastr: ToastrService,
     public currentUser: CurrentUserService,
     private workoutService: WorkoutsService) {}
+
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }

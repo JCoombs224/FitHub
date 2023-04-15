@@ -64,15 +64,22 @@ export class WorkoutsService {
   newWorkout(workout) {
     return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('workouts').add({
       name: workout.name,
+      description: workout.description,
+      equipment: workout.equipment.split(','),
       groups: workout.groups
     });
   }
 
   // Update an existing workout in the firestore database under the current user's profile workouts collection
   updateWorkout(data) {
+    const equipment = data.workout.equipment;
+    if(typeof equipment == 'string') {
+      data.workout.equipment = equipment.split(',');
+    }
     return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('workouts').doc(data.uid).update({
       name: data.workout.name,
-      equipment: data.workout.equipment.split(','),
+      description: data.workout.description,
+      equipment: equipment,
       groups: data.workout.groups
     });
   }

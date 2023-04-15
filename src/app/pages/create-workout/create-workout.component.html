@@ -62,7 +62,7 @@
             <span class="sr-only">Loading...</span>
           </div>
         </span>
-        <div class="col d-block d-xl-none d-xl-block p-0 p-xl-1 mb-5">
+        <div class="col d-block d-xl-none d-xl-block p-0 p-xl-1 mb-3">
           <div class="card">
             <div class="card-header text-center" style="cursor: pointer;" (click)="hideEquipment = !hideEquipment">
               <h3>Equipment <span style="float: right"><span *ngIf="!hideEquipment">▲</span><span *ngIf="hideEquipment">▼</span></span></h3>
@@ -96,6 +96,12 @@
           </div>
         </div>
         <form [formGroup]="workoutForm" *ngIf="this.name.value && !editingName" [@slideOutAnimation]>
+          <div class="row mb-4 justify-content-center">
+            <div class="col-auto">
+              <label>Workout Description</label>
+              <textarea rows="2" cols="100" class="form-control" placeholder="Enter description here..." formControlName="description"></textarea>
+            </div>
+          </div>
           <div class="row">
             <div class="col">
               <accordion [isAnimated]="true" formArrayName="groups">
