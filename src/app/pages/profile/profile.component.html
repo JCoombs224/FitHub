@@ -7,8 +7,11 @@
             <div>
               <div class="row flex-row">
                 <div class="col-md-2 d-flex align-items-center justify-content-start min-vw-25" style="position: relative" (mouseenter)="showUploadButton = true" (mouseleave)="showUploadButton = false">
+                  <div *ngIf="loadingImage" class="spinner-border text-center text-light" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
                   <img [src]="profilePictureUrl" display="flex-row" style="margin: 0; align-content: center; max-width: 350px; max-height: 350px; overflow: hidden; z-index: 1;">
-                  <button *ngIf="showUploadButton" class="btn btn-light btn-image-upload" (click)="onUploadButtonClick()"><fa-icon [icon]="faEdit"></fa-icon></button>
+                  <button *ngIf="showUploadButton && userProfile" class="btn btn-light btn-image-upload" (click)="onUploadButtonClick()"><fa-icon [icon]="faEdit"></fa-icon></button>
                 </div>
 
                 <div *ngIf="showCropper" class="crop-container">

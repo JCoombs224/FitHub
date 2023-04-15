@@ -11,7 +11,7 @@ import { WorkoutsService } from 'src/app/services/workouts.service';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Location } from '@angular/common';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
-import{finalize} from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
@@ -30,7 +30,8 @@ export class ProfileComponent {
   userProfile = false;
   isPrivate = false;
   showModal = false;
-  profilePictureUrl = "https://nwfblogs.wpenginepowered.com/wp-content/blogs.dir/11/files/2012/11/Turkey_strut-494x620.jpg"; // default profile picture
+  loadingImage = true;
+  profilePictureUrl = ""; // default profile picture
   modalRef: BsModalRef;
   workouts;
   showUploadButton = false;
@@ -54,7 +55,7 @@ export class ProfileComponent {
     public location: Location,
     private storage: AngularFireStorage,
     private toastr: ToastrService
-    ) {}
+  ) { }
 
   // When the page is loaded
   ngOnInit(): void {
@@ -65,16 +66,7 @@ export class ProfileComponent {
       this.title.setTitle(`@${this.urlProfileHandle} | FitHub`);
       this.showLatestPosts();
       this.checkFollowers();
-      // Get profile picture from database
-      const filePath = `profile-pictures/${this.profile.profileHandle}`;
-      const fileRef = this.storage.ref(filePath);
-      fileRef.getDownloadURL().subscribe(url => {
-        this.profilePictureUrl = url;
-      });
     });
-    
-
-    
 
     this.workouts = this.workoutService.getExercises(this.urlProfileHandle);
   }
@@ -82,10 +74,20 @@ export class ProfileComponent {
   // Load the profile data from the database
   private loadProfileData() {
     // Check if the profile handle is the current user
-    if(this.urlProfileHandle == this.currentUser.user.profile.profileHandle) {
+    if (this.urlProfileHandle == this.currentUser.user.profile.profileHandle) {
       // Set the profile to the current user information
       this.profile = this.currentUser.user.profile;
       this.userProfile = true;
+      // Get profile picture from database
+      const filePath = `profile-pictures/${this.profile.profileHandle}`;
+      const fileRef = this.storage.ref(filePath);
+      fileRef.getDownloadURL().subscribe(url => {
+        this.profilePictureUrl = url;
+        this.loadingImage = false;
+      },()=>{
+        this.profilePictureUrl = "https://nwfblogs.wpenginepowered.com/wp-content/blogs.dir/11/files/2012/11/Turkey_strut-494x620.jpg"; // default profile picture
+        this.loadingImage = false;
+      });
     }
     // If the profile handle is not the current user, load the profile data from the database
     else {
@@ -108,6 +110,17 @@ export class ProfileComponent {
         this.profile.posts = profData.posts;
         this.profile.isPrivate = profData.isPrivate;
         this.profile.profilePicture = profData.profilePicture;
+
+        // Get profile picture from database
+        const filePath = `profile-pictures/${this.profile.profileHandle}`;
+        const fileRef = this.storage.ref(filePath);
+        fileRef.getDownloadURL().subscribe(url => {
+          this.profilePictureUrl = url;
+          this.loadingImage = false;
+        },()=>{
+          this.profilePictureUrl = "https://nwfblogs.wpenginepowered.com/wp-content/blogs.dir/11/files/2012/11/Turkey_strut-494x620.jpg"; // default profile picture
+          this.loadingImage = false;
+        });
       });
     }
   }
@@ -127,10 +140,10 @@ export class ProfileComponent {
   croppedImage: any = '';
 
   fileChangeEvent(event: any): void {
-      this.imageChangedEvent = event;
+    this.imageChangedEvent = event;
   }
   imageCropped(event: ImageCroppedEvent) {
-      this.croppedImage = event.base64;
+    this.croppedImage = event.base64;
   }
   uploadImage() {
     this.showCropper = false;
@@ -142,7 +155,7 @@ export class ProfileComponent {
     for (let i = 0; i < byteString.length; i += 1) {
       ia[i] = byteString.charCodeAt(i);
     }
-    const fileBlob = new Blob([arrayBuffer], {type}); // upload this to firebase.
+    const fileBlob = new Blob([arrayBuffer], { type }); // upload this to firebase.
     const filePath = `profile-pictures/${this.profile.profileHandle}`;
     const fileRef = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, fileBlob);
@@ -202,11 +215,11 @@ export class ProfileComponent {
 
   //  Function to check if the current user is following the target user
   checkFollowers(): boolean {
-    if(this.profile.followers.length === 0) {
+    if (this.profile.followers.length === 0) {
       return false;
     }
     for (let i = 0; i < this.profile.followers.length; i++) {
-      if(this.profile.followers[i] === this.currentUser.user.profile.profileHandle) {
+      if (this.profile.followers[i] === this.currentUser.user.profile.profileHandle) {
         return true;
       }
     }
@@ -218,7 +231,7 @@ export class ProfileComponent {
   }
 
   getWorkouts(profile: string) {
-    return this.afs.collection('profiles').doc(profile).collection('workouts').valueChanges({idField: 'uid'});
+    return this.afs.collection('profiles').doc(profile).collection('workouts').valueChanges({ idField: 'uid' });
   }
 
   //  Function to open the modal
@@ -257,7 +270,7 @@ export class ProfileComponent {
       const latestPosts = this.profile.posts.slice(this.profile.posts.length - postsLength, postsLength + 1);
 
       // check if there are any posts
-      if(postsLength > 0) {
+      if (postsLength > 0) {
         // create a new card for each post
         latestPosts.forEach((post: string) => {
           // create the card
@@ -299,7 +312,7 @@ export class ProfileComponent {
       }
 
       // show a message if the user hasn't made any posts yet
-      if(postsLength === 0 && this.userProfile) {
+      if (postsLength === 0 && this.userProfile) {
         const noPostsP: HTMLParagraphElement = document.createElement('p');
         noPostsP.textContent = 'You haven\'t made any posts yet.';
         postsDiv.appendChild(noPostsP)
@@ -321,7 +334,7 @@ export class ProfileComponent {
 
   //  This function shecks if the user has any workouts.
   checkWorkouts(): boolean {
-    if(this.profile.workouts.length === 1) {
+    if (this.profile.workouts.length === 1) {
       return false;
     }
     return true;
@@ -389,7 +402,7 @@ export class ProfileComponent {
     (<HTMLInputElement>document.getElementById('editProfileName')).value = '';
   }
 
-  updateAge () {
+  updateAge() {
     const profileRef = this.afs.collection('profiles').doc(this.profile.profileHandle);
     let input = (<HTMLInputElement>document.getElementById('editAge'));
 
@@ -404,7 +417,7 @@ export class ProfileComponent {
     (<HTMLInputElement>document.getElementById('editAge')).value = '';
   }
 
-  updateWeight () {
+  updateWeight() {
     const profileRef = this.afs.collection('profiles').doc(this.profile.profileHandle);
     let input = (<HTMLInputElement>document.getElementById('editWeight'));
 
@@ -419,7 +432,7 @@ export class ProfileComponent {
     (<HTMLInputElement>document.getElementById('editWeight')).value = '';
   }
 
-  updateAbout () {
+  updateAbout() {
     const profileRef = this.afs.collection('profiles').doc(this.profile.profileHandle);
     let input = (<HTMLInputElement>document.getElementById('editAbout'));
 
@@ -434,7 +447,7 @@ export class ProfileComponent {
     (<HTMLInputElement>document.getElementById('editAbout')).value = '';
   }
 
-  updateVisibility () {
+  updateVisibility() {
     const profileRef = this.afs.collection('profiles').doc(this.profile.profileHandle);
 
     //  Create a reference to the form element Visibility
@@ -446,7 +459,7 @@ export class ProfileComponent {
 
     //  Determine which radio button is checked
     for (let i = 0; i < visibility.length; i++) {
-      if(visibility[i].checked) {
+      if (visibility[i].checked) {
         visibilitySelected = visibility[i].value;
       }
     }
