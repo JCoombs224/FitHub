@@ -15,6 +15,23 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 import { PostsService } from 'src/app/services/posts.service';
+import { map } from 'rxjs/operators';
+import { Timestamp } from 'firebase/firestore';
+
+interface Post {
+  uid: string;
+  postText: string;
+  postTimeStamp: Timestamp;
+  postLikeOwners: any[];
+  postLikeCount: number;
+  postComments: {
+    commentLikeCount: number;
+    commentLikeOwners: any[];
+    commentOwner: string;
+    commentText: string;
+    commentTimeStamp: Timestamp;
+  }[];
+}
 
 @Component({
   selector: 'app-profile',
@@ -35,6 +52,7 @@ export class ProfileComponent {
   workouts;
   showUploadButton = false;
   showCropper = false;
+  posts: Post[] = [];
 
   @ViewChild('followersModal') followersModal: ElementRef;
   @ViewChild('followingModal') followingModal: ElementRef;
@@ -54,7 +72,7 @@ export class ProfileComponent {
     public location: Location,
     private storage: AngularFireStorage,
     private postsService: PostsService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
   ) { }
 
   // When the page is loaded
@@ -64,8 +82,11 @@ export class ProfileComponent {
       this.urlProfileHandle = params.get('name');
       this.loadProfileData();
       this.title.setTitle(`@${this.urlProfileHandle} | FitHub`);
-      this.showLatestPosts();
+      this.loadProfilePostsData(this.profile.profileHandle).then(() => {
+        this.displayPosts();
+      });
       this.checkFollowers();
+
     });
 
     this.workouts = this.workoutService.getExercises(this.urlProfileHandle);
@@ -107,7 +128,6 @@ export class ProfileComponent {
         this.profile.about = profData.about;
         this.profile.followers = profData.followers;
         this.profile.following = profData.following;
-        this.profile.posts = profData.posts;
         this.profile.isPrivate = profData.isPrivate;
         this.profile.profilePicture = profData.profilePicture;
 
@@ -117,12 +137,40 @@ export class ProfileComponent {
         fileRef.getDownloadURL().subscribe(url => {
           this.profilePictureUrl = url;
           this.loadingImage = false;
-        },()=>{
-          this.profilePictureUrl = "https://nwfblogs.wpenginepowered.com/wp-content/blogs.dir/11/files/2012/11/Turkey_strut-494x620.jpg"; // default profile picture
+        }
+        ,()=>{
+          this.profilePictureUrl = "https://wilcity.com/wp-content/uploads/2020/06/115-1150152_default-profile-picture-avatar-png-green.jpg"; // default profile picture
           this.loadingImage = false;
         });
       });
     }
+  }
+
+  //  Get this profile's posts
+  loadProfilePostsData(profile = this.profile.profileHandle) {
+    return new Promise<void>((resolve, reject) => {
+      this.postsService.getPosts(this.profile.profileHandle).pipe(
+        map(actions => actions.map(a => {
+          const data = a.payload.doc.data();
+          const uid = a.payload.doc.id;
+          const postText = data.postText;
+          const postTimeStamp = data.postTimeStamp;
+          const postLikeOwners = data.postLikeOwners;
+          const postLikeCount = data.postLikeCount;
+          const postComments = data.postComments.map(comment => ({
+            commentLikeCount: comment.commentLikeCount,
+            commentLikeOwners: comment.commentLikeOwners,
+            commentOwner: comment.commentOwner,
+            commentText: comment.commentText,
+            commentTimeStamp: comment.commentTimeStamp,
+          }));
+          return { uid, postText, postTimeStamp, postLikeOwners, postLikeCount, postComments };
+        }))
+      ).subscribe(data => {
+        this.posts = data;
+        resolve();
+      });
+    });
   }
 
   onUploadButtonClick() {
@@ -142,9 +190,11 @@ export class ProfileComponent {
   fileChangeEvent(event: any): void {
     this.imageChangedEvent = event;
   }
+
   imageCropped(event: ImageCroppedEvent) {
     this.croppedImage = event.base64;
   }
+
   uploadImage() {
     this.showCropper = false;
 
@@ -171,8 +221,6 @@ export class ProfileComponent {
       })
     ).subscribe();
   }
-
-
 
   //  Function to add the current user to the target user's followers list and vice versa
   addToFollowing() {
@@ -213,7 +261,6 @@ export class ProfileComponent {
     }).then(() => {
       this.profile.followers.splice(this.profile.followers.indexOf(this.currentUser.user.profile.profileHandle));
     });
-
   }
 
   //  Function to check if the current user is following the target user
@@ -237,103 +284,293 @@ export class ProfileComponent {
     return this.afs.collection('profiles').doc(profile).collection('workouts').valueChanges({ idField: 'uid' });
   }
 
-  //  Function to open the modal
-  showLatestPosts() {
-    const postsDiv: HTMLElement | null = document.getElementById('posts');
-
-    if (postsDiv) {
-      // clear any existing posts
-      postsDiv.innerHTML = '';
-
-      let postsLength = 0;
-
-      // check how many posts there are
-      switch (this.profile.posts.length) {
-        case 0:
-          postsLength = 0;
-          break;
-        case 1:
-          postsLength = 1;
-          break;
-        case 2:
-          postsLength = 2;
-          break;
-        case 3:
-          postsLength = 3;
-          break;
-        // if there are more than 4 posts, only show the latest 4
-        default:
-          postsLength = 4;
-          break;
+  //  Function to create a new post
+  newPost(post: string) {
+    return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('posts').add({
+      postText: post,
+      postLikeCount: 0,
+      postTimeStamp: new Timestamp(new Date().getTime(), 0),
+      postComments: {
+        commentLikeCount: 0,
+        commentLikeOwners: [],
+        commentOwner: '',
+        commentText: '',
+        commentTimeStamp: new Timestamp(new Date().getTime(), 0),
       }
+    });
+  }
 
-      console.log(postsLength);
+  //  Convert the timestamp numbers to a readable format
+  convertTime(time: number) {
 
-      // get the latest posts (at most 4)
-      const latestPosts = this.profile.posts.slice(this.profile.posts.length - postsLength, postsLength + 1);
+  }
 
-      // check if there are any posts
-      if (postsLength > 0) {
-        // create a new card for each post
-        latestPosts.forEach((post: string) => {
-          // create the card
-          const cardDiv: HTMLDivElement = document.createElement('div');
-          cardDiv.className = 'card';
-          cardDiv.style.width = '25rem';
-          cardDiv.style.marginBottom = '5px';
 
-          // create the card body
-          const cardBodyDiv: HTMLDivElement = document.createElement('div');
-          cardBodyDiv.className = 'card-body';
+  //  Function to display this porfile's posts in a modal
+  displayPosts() {
+    //  Get the element by id: posts
+    const modal = document.getElementById('posts');
 
-          // create the card text
-          const cardTextP: HTMLParagraphElement = document.createElement('p');
-          cardTextP.className = 'card-text';
-          cardTextP.textContent = post;
+    //  Loop through the posts and create a card for each of them with a like
+    //  and comment button and also display the comments for each post within the post card
+    for (let i = 0; i < this.posts.length; i++) {
+      const postCard = document.createElement('div');
+      postCard.className = 'card w-100 mb-2';
+      postCard.style.width = '18rem';
 
-          // create the like and comment buttons
-          const likeBtn: HTMLAnchorElement = document.createElement('a');
-          likeBtn.className = 'btn zoom-btn btn-success';
-          likeBtn.textContent = 'Like';
-          likeBtn.href = '#';
-          likeBtn.style.marginRight = '5px';
+      //  Create a card header with no background to show the timestamp of the post
+      const postCardHeader = document.createElement('div');
+      postCardHeader.className = 'card-header';
+      postCardHeader.style.backgroundColor = 'white';
+      postCardHeader.style.textAlign = 'left';
+      postCardHeader.style.fontSize = '15px';
+      postCardHeader.innerHTML = this.posts[i].postTimeStamp.toDate().toDateString();
 
-          const commentBtn: HTMLAnchorElement = document.createElement('a');
-          commentBtn.className = 'btn zoom-btn btn-secondary';
-          commentBtn.textContent = 'Comment';
-          commentBtn.href = '#';
+      //  Create a card body to hold the post text and the like and comment buttons
+      const postCardBody = document.createElement('div');
+      postCardBody.className = 'card-body';
 
-          // append the card text and buttons to the card body
-          cardBodyDiv.appendChild(cardTextP);
-          cardBodyDiv.appendChild(likeBtn);
-          cardBodyDiv.appendChild(commentBtn);
+      const postCardText = document.createElement('p');
+      postCardText.className = 'card-text';
+      postCardText.style.fontSize = '20px';
+      postCardText.style.textAlign = 'left';
+      postCardText.innerHTML = this.posts[i].postText;
 
-          // append the card body to the card
-          cardDiv.appendChild(cardBodyDiv);
-          postsDiv.appendChild(cardDiv);
+      const postCardLike = document.createElement('button');
+      postCardLike.className = 'btn btn-outline-secondary';
+
+      //  Check if the current user has liked the post
+      if (this.posts[i].postLikeOwners.includes(this.currentUser.user.profile.profileHandle)) {
+        postCardLike.innerHTML = this.posts[i].postLikeCount + ' Unlike';
+        postCardLike.addEventListener('click', () => {
+          this.unlikePost(this.posts[i]);
+        });
+      } else {
+        postCardLike.innerHTML = this.posts[i].postLikeCount + ' Like';
+        postCardLike.addEventListener('click', () => {
+          this.likePost(this.posts[i]);
         });
       }
 
-      // show a message if the user hasn't made any posts yet
-      if (postsLength === 0 && this.userProfile) {
-        const noPostsP: HTMLParagraphElement = document.createElement('p');
-        noPostsP.textContent = 'You haven\'t made any posts yet.';
-        postsDiv.appendChild(noPostsP)
-      }
+      //  Create a comment button under the textarea for the user to submit a comment
+      const commentButton = document.createElement('button');
+      commentButton.className = 'btn btn-outline-success';
+      commentButton.innerHTML = 'Comment';
+      commentButton.addEventListener('click', () => {
+        this.commentPost(this.posts[i]);
+      });
 
-      // show a message if the user hasn't made any posts yet
-      if (postsLength === 0 && !this.userProfile) {
-        const noPostsP: HTMLParagraphElement = document.createElement('p');
-        noPostsP.textContent = 'This user hasn\'t made any posts yet.';
-        postsDiv.appendChild(noPostsP);
+      //  Create a text area for the user to enter a comment underneath the postText
+      const commentTextArea = document.createElement('textarea');
+      commentTextArea.className = 'form-control';
+      commentTextArea.id = 'commentTextArea';
+      commentTextArea.rows = 3;
+      commentTextArea.placeholder = 'Reply to @' + this.profile.profileHandle + '\'s post...';
+
+      modal.appendChild(postCard);
+      postCard.appendChild(postCardHeader);
+      postCard.appendChild(postCardBody);
+      postCardBody.appendChild(postCardText);
+      postCardBody.appendChild(commentTextArea);
+      postCardBody.appendChild(postCardLike);
+      postCardBody.appendChild(commentButton);
+
+      //  Loop through this posts comments and create a paragraph for each of them with a like button for each comment
+      for (let j = 0; j < this.posts[i].postComments.length; j++) {
+        const commentCard = document.createElement('div');
+        commentCard.className = 'card w-75';
+        commentCard.style.width = '18rem';
+        commentCard.style.marginLeft = '50px';
+
+        const commentCardHeader = document.createElement('div');
+        commentCardHeader.className = 'card-header';
+        commentCardHeader.style.backgroundColor = 'white';
+        commentCardHeader.style.textAlign = 'left';
+        commentCardHeader.style.fontSize = '15px';
+        commentCardHeader.innerHTML = this.posts[i].postComments[j].commentTimeStamp.toDate().toDateString();
+
+        const commentCardBody = document.createElement('div');
+        commentCardBody.className = 'card-body';
+
+        const commentCardText = document.createElement('p');
+        commentCardText.className = 'card-text';
+        commentCardText.style.fontSize = '20px';
+        commentCardText.innerHTML = this.posts[i].postComments[j].commentText;
+
+        const commentCardLike = document.createElement('button');
+        commentCardLike.className = 'btn btn-outline-secondary';
+
+        //  Check if the current user has liked the comment
+        if (this.posts[i].postComments[j].commentLikeOwners.includes(this.currentUser.user.profile.profileHandle)) {
+          commentCardLike.innerHTML = this.posts[i].postComments[j].commentLikeCount + ' Unlike';
+          commentCardLike.addEventListener('click', () => {
+            this.unlikeComment(this.posts[i].postComments[j]);
+          });
+        } else {
+          commentCardLike.innerHTML = this.posts[i].postComments[j].commentLikeCount + ' Like';
+          commentCardLike.addEventListener('click', () => {
+            this.likeComment(this.posts[i].postComments[j]);
+          });
+        }
+
+        commentCardBody.append(commentCardHeader);
+        commentCardBody.appendChild(commentCardText);
+        commentCardBody.appendChild(commentCardLike);
+        commentCard.appendChild(commentCardBody);
+        postCardBody.appendChild(commentCard);
       }
     }
   }
 
-  showRecentWorkouts() {
-    const workoutsDiv: HTMLElement | null = document.getElementById('workouts');
+  displayComments(post: any) {
+    const modal = document.getElementById('posts');
+    const commentCard = document.createElement('div');
+    commentCard.className = 'card';
+    commentCard.style.width = '18rem';
+    commentCard.style.margin = '10px';
+
+    const commentCardBody = document.createElement('div');
+    commentCardBody.className = 'card-body';
+
+    const commentCardText = document.createElement('p');
+    commentCardText.className = 'card-text';
+    commentCardText.innerHTML = post.postComments.commentText;
+
+    const commentCardLike = document.createElement('button');
+    commentCardLike.className = 'btn btn-primary';
+    commentCardLike.innerHTML = 'Like';
+    commentCardLike.addEventListener('click', () => {
+      this.likeComment(post);
+    });
+
+    commentCardBody.appendChild(commentCardText);
+    commentCardBody.appendChild(commentCardLike);
+    commentCard.appendChild(commentCardBody);
+    modal.appendChild(commentCard);
+
+    return commentCard;
   }
 
+  commentPost(post) {
+    const modal = document.getElementById('posts');
+    const commentCard = document.createElement('div');
+    commentCard.className = 'card';
+    commentCard.style.width = '18rem';
+    commentCard.style.margin = '10px';
+
+    const commentCardBody = document.createElement('div');
+    commentCardBody.className = 'card-body';
+
+    const commentCardText = document.createElement('p');
+    commentCardText.className = 'card-text';
+    commentCardText.innerHTML = post.postComments.commentText;
+
+    const commentCardLike = document.createElement('button');
+    commentCardLike.className = 'btn btn-primary';
+    commentCardLike.innerHTML = 'Like';
+    commentCardLike.addEventListener('click', () => {
+      this.likeComment(post);
+    });
+
+    commentCardBody.appendChild(commentCardText);
+    commentCardBody.appendChild(commentCardLike);
+    commentCard.appendChild(commentCardBody);
+    modal.appendChild(commentCard);
+  }
+
+  //  Function to like a post
+  likePost(post) {
+    //  Check if the current user has already liked the post
+    let alreadyLiked = false;
+    for (let i = 0; i < post.postLikeOwners.length; i++) {
+      if (post.postLikeOwners[i] === this.currentUser.user.profile.profileHandle) {
+        alreadyLiked = true;
+      }
+    }
+
+    // If the current user hasn't already liked the post, like it
+    if (!alreadyLiked) {
+      //  Returns a promise that resolves when the post is liked
+      return this.afs.collection('profiles').doc(this.profile.profileHandle).collection('posts').doc(post.uid).update({
+        //  Increment the post's like count and add the current user's profile handle to the post's like owners
+        postLikeCount: firebase.firestore.FieldValue.increment(1),
+        postLikeOwners: firebase.firestore.FieldValue.arrayUnion(this.currentUser.user.profile.profileHandle)
+      });
+    }
+  }
+
+  //  Function to unlike a post
+  unlikePost(post) {
+    //  Check if the current user has already liked the post
+    let alreadyLiked = false;
+    for (let i = 0; i < post.postLikeOwners.length; i++) {
+      if (post.postLikeOwners[i] === this.currentUser.user.profile.profileHandle) {
+        alreadyLiked = true;
+      }
+    }
+
+    //  If the current user has already liked the post, unlike it
+    if (alreadyLiked) {
+      //  Returns a promise that resolves when the post is unliked
+      return this.afs.collection('profiles').doc(this.profile.profileHandle).collection('posts').doc(post.uid).update({
+        //  Decrement the post's like count by 1 and remove the current user's profile handle from the post's like owners array
+        postLikeCount: firebase.firestore.FieldValue.increment(-1),
+        postLikeOwners: firebase.firestore.FieldValue.arrayRemove(this.currentUser.user.profile.profileHandle)
+      });
+    }
+  }
+
+  //  Function to create a new comment on an existing post
+  newComment(post, newComment: string) {
+    //  Returns a promise that resolves when the comment is added to the database
+    return this.afs.collection('profiles').doc(this.profile.profileHandle).collection('posts').doc(post.uid).update({
+      //  Add the new comment to the post's comments array
+      postComments: firebase.firestore.FieldValue.arrayUnion({
+        commentLikeCount: 0,
+        commentOwner: this.currentUser.user.profile.profileHandle,
+        commentText: newComment,
+        commentTimeStamp: new Date().getTime(),
+      })
+    });
+  }
+
+  //  Function to like a comment
+  likeComment(comment) {
+    //  Returns a promise that resolves when the comment's like count is incremented and the user is added to the 'commentLikeOwners' array
+    return this.afs.collection('profiles').doc(this.profile.profileHandle).collection('posts').doc(comment).update({
+      //  Increment the comment's like count and add the current user to the 'commentLikeOwners' array
+      postComments: firebase.firestore.FieldValue.arrayUnion({
+        commentLikeCount: comment.postComments.firebase.firestore.FieldValue.increment(1),
+        commentLikeOwners: comment.postComments.firebase.firestore.FieldValue.arrayUnion(this.currentUser.user.profile.profileHandle),
+      })
+    });
+  }
+
+  //  Function to unlike a comment
+  unlikeComment(comment) {
+    //  Returns a promise that resolves when the comment's like count is decremented and the user is removed from the 'commentLikeOwners' array
+    return this.afs.collection('profiles').doc(this.profile.profileHandle).collection('posts').doc(comment).update({
+      //  Decrement the comment's like count and remove the current user from the 'commentLikeOwners' array
+      postComments: firebase.firestore.FieldValue.arrayUnion({
+        commentLikeCount: comment.firebase.firestore.FieldValue.increment(-1),
+        commentLikeOwners: comment.firebase.firestore.FieldValue.arrayRemove(this.currentUser.user.profile.profileHandle),
+      })
+    });
+  }
+
+  //  Function to delete a post
+  deletePost(post) {
+    //  Returns a promise that resolves when the post is deleted from the database
+    return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('posts').doc(post.uid).delete();
+  }
+
+  //  Function to delete a comment
+  deleteComment(post, comment) {
+    //  Returns a promise that resolves when the comment is deleted from the database
+    return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('posts').doc(post.uid).update({
+      postComments: firebase.firestore.FieldValue.arrayRemove(comment)
+    });
+  }
 
   //  This function shecks if the user has any workouts.
   checkWorkouts(): boolean {
