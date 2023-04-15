@@ -6,7 +6,6 @@ import { CurrentUserService } from 'src/app/services/current-user.service';
 import { ProfileService } from 'src/app/services/profile.service';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { WorkoutsService } from 'src/app/services/workouts.service';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Location } from '@angular/common';
@@ -15,6 +14,7 @@ import { finalize } from 'rxjs/operators';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
+import { PostsService } from 'src/app/services/posts.service';
 
 @Component({
   selector: 'app-profile',
@@ -32,7 +32,6 @@ export class ProfileComponent {
   showModal = false;
   loadingImage = true;
   profilePictureUrl = ""; // default profile picture
-  modalRef: BsModalRef;
   workouts;
   showUploadButton = false;
   showCropper = false;
@@ -54,6 +53,7 @@ export class ProfileComponent {
     private afs: AngularFirestore,
     public location: Location,
     private storage: AngularFireStorage,
+    private postsService: PostsService,
     private toastr: ToastrService
   ) { }
 
