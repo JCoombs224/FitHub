@@ -5,12 +5,31 @@
         <div class="card w-100 min-vh-100 d-flex flex-column mb-4">
           <div class="card-body text-center">
             <h5 class="card-title custom-text-color">Feed</h5>
-            <div class="bg-light p-3 rounded">
+            <!-- Favorite Workouts -->
+            <div class="bg-light p-3 rounded mb-3">
               <h6 class="custom-text-color mb-3 pb-2 border-bottom border-dark">Favorite Workouts</h6>
               <div *ngFor="let workout of favoriteWorkouts" class="bg-white p-3 mb-2 rounded shadow-sm d-flex justify-content-between align-items-center">
-                <a [routerLink]="['/workout', workout.id]" class="text-decoration-none text-dark">{{ workout.name }}</a>
+                <a [routerLink]="['/workout', workout.id]" class="text-decoration-none text-dark ">{{ workout.name }}</a>
                 <i class="fas fa-heart text-danger"></i>
               </div>
+            </div>
+            <!-- Goals and Achievements -->
+            <div class="bg-light p-3 rounded mb-3">
+              <h6 class="custom-text-color mb-3 pb-2 border-bottom border-dark">Recent Achievements</h6>
+              <ul class="list-unstyled">
+                <li *ngFor="let achievement of recentAchievements" class="text-dark mb-2">
+                  <i class="fas fa-trophy text-warning"></i> {{ achievement.description }}
+                </li>
+              </ul>
+            </div>
+            <!-- Personalized Tips -->
+            <div class="bg-light p-3 rounded">
+              <h6 class="custom-text-color mb-3 pb-2 border-bottom border-dark">Personalized Tips</h6>
+              <ul class="list-unstyled">
+                <li *ngFor="let tip of personalizedTips" class="text-dark mb-2">
+                  <i class="fas fa-info-circle text-primary"></i> {{ tip.description }}
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -37,8 +56,16 @@
             <div class="card mb-4 w-100 align-self-stretch custom-height">
               <div class="card-body text-center">
                 <h5 class="card-title custom-text-color">Workout History</h5>
-                <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"></canvas>
-                <!-- <a href="/workout-history" class="btn btn-outline-success" data-mdb-ripple-color="dark">View Workout History</a> -->
+                <div class="d-flex justify-content-center mb-3">
+                  <div class="btn-group mt-2 mb-4" role="group" aria-label="Time range buttons">
+                  <button (click)="changeTimeRange('week')" class="btn btn-outline-success mx-1">Week</button>
+                  <button (click)="changeTimeRange('month')" class="btn btn-outline-success mx-1">Month</button>
+                  <button (click)="changeTimeRange('year')" class="btn btn-outline-success mx-1">Year</button>
+                  </div>
+                </div>
+                <div class="chart-container" style="position: relative;">
+                  <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"></canvas>
+                </div>
               </div>
             </div>
           </div>

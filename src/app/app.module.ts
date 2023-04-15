@@ -70,6 +70,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     ConfirmDeleteModalComponent,
 
   ],
+
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -106,7 +107,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     InfiniteScrollModule,
     FormsModule,
     NgChartsModule,
-    ImageCropperModule
+    ImageCropperModule,
   ],
   providers: [AuthService, BsModalService, BsDatepickerConfig, BsDropdownConfig, { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy }],
   bootstrap: [AppComponent]

@@ -20,7 +20,7 @@ h1 {
 }
 
 .card:hover {
-  transform: scale(1.03);
+  transform: scale(1.02);
   box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
 }
 
