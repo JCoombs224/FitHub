@@ -47,6 +47,7 @@ import { AddExerciseModalComponent } from './modals/add-exercise-modal/add-exerc
 import { NgChartsModule } from 'ng2-charts';
 import { EquipmentModalComponent } from './modals/equipment-modal/equipment-modal.component';
 import { ConfirmDeleteModalComponent } from './modals/confirm-delete-modal/confirm-delete-modal.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 @NgModule({
   declarations: [
@@ -105,6 +106,7 @@ import { ConfirmDeleteModalComponent } from './modals/confirm-delete-modal/confi
     InfiniteScrollModule,
     FormsModule,
     NgChartsModule,
+    ImageCropperModule
   ],
   providers: [AuthService, BsModalService, BsDatepickerConfig, BsDropdownConfig, { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy }],
   bootstrap: [AppComponent]

@@ -46,7 +46,6 @@ export class WorkoutsService {
   }
 
   getExercises(group, filters?): AngularFirestoreCollection {
-    console.log(filters);
     if (!filters || filters[0] == '*') {
       return this.afs.collection('exercises', ref => ref.where('primaryMuscles', 'array-contains', group));
     }

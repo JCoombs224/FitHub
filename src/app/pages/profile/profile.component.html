@@ -6,10 +6,20 @@
           <div class="card-header text-white" style="background-color: rgba(9, 106, 46, 1);">
             <div>
               <div class="row flex-row">
-                <div class="col-md-2 d-flex align-items-center justify-content-start min-vw-25">
-                  <img class="img-fluid" src="https://nwfblogs.wpenginepowered.com/wp-content/blogs.dir/11/files/2012/11/Turkey_strut-494x620.jpg"
-                  alt="Generic placeholder image" display="flex-row" style="margin: 0; align-content: center; max-width: 350px; max-height: 350px; overflow: hidden; z-index: 1;">
+                <div class="col-md-2 d-flex align-items-center justify-content-start min-vw-25" style="position: relative" (mouseenter)="showUploadButton = true" (mouseleave)="showUploadButton = false">
+                  <img [src]="profilePictureUrl" display="flex-row" style="margin: 0; align-content: center; max-width: 350px; max-height: 350px; overflow: hidden; z-index: 1;">
+                  <button *ngIf="showUploadButton" class="btn btn-light btn-image-upload" (click)="onUploadButtonClick()"><fa-icon [icon]="faEdit"></fa-icon></button>
                 </div>
+
+                <div *ngIf="showCropper" class="crop-container">
+                  <image-cropper [imageChangedEvent]="imageChangedEvent" (imageCropped)="imageCropped($event)" [maintainAspectRatio]="true" [aspectRatio]="1" [resizeToWidth]="256"></image-cropper>
+                  <div class="d-flex justify-content-end bg-dark">
+                    <button class="btn btn-danger" (click)="showCropper = false;">Cancel</button>
+                    <button class="btn btn-success" (click)="uploadImage()">Crop</button>
+                  </div>
+                  
+                </div>
+
                 <div class="col-md-3 mt-5 no-wrap" style="padding-right: auto; background: none; border:none;">
                   <h5 class="no-wrap text-truncate">@{{profile.profileHandle}}</h5>
                   <p class="no-wrap" style="font-size: 18px;">{{profile.age}}</p>

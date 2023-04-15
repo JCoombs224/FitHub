@@ -10,6 +10,11 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { WorkoutsService } from 'src/app/services/workouts.service';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Location } from '@angular/common';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import{finalize} from 'rxjs/operators';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { ToastrService } from 'ngx-toastr';
+import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 
 @Component({
   selector: 'app-profile',
@@ -19,13 +24,18 @@ import { Location } from '@angular/common';
 
 export class ProfileComponent {
 
+  faEdit = faEdit;
   public urlProfileHandle;
   profile = this.profileService.initProfile;
   userProfile = false;
   isPrivate = false;
   showModal = false;
+  profilePictureUrl = "https://nwfblogs.wpenginepowered.com/wp-content/blogs.dir/11/files/2012/11/Turkey_strut-494x620.jpg"; // default profile picture
   modalRef: BsModalRef;
   workouts;
+  showUploadButton = false;
+  showCropper = false;
+
   @ViewChild('followersModal') followersModal: ElementRef;
   @ViewChild('followingModal') followingModal: ElementRef;
   @ViewChild('postsModal') postsModal: ElementRef;
@@ -42,6 +52,8 @@ export class ProfileComponent {
     private workoutService: WorkoutsService,
     private afs: AngularFirestore,
     public location: Location,
+    private storage: AngularFireStorage,
+    private toastr: ToastrService
     ) {}
 
   // When the page is loaded
@@ -51,9 +63,18 @@ export class ProfileComponent {
       this.urlProfileHandle = params.get('name');
       this.loadProfileData();
       this.title.setTitle(`@${this.urlProfileHandle} | FitHub`);
+      this.showLatestPosts();
+      this.checkFollowers();
+      // Get profile picture from database
+      const filePath = `profile-pictures/${this.profile.profileHandle}`;
+      const fileRef = this.storage.ref(filePath);
+      fileRef.getDownloadURL().subscribe(url => {
+        this.profilePictureUrl = url;
+      });
     });
-    this.showLatestPosts();
-    this.checkFollowers();
+    
+
+    
 
     this.workouts = this.workoutService.getExercises(this.urlProfileHandle);
   }
@@ -90,6 +111,52 @@ export class ProfileComponent {
       });
     }
   }
+
+  onUploadButtonClick() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = (event: any) => {
+      this.fileChangeEvent(event);
+      this.showCropper = true;
+    };
+    input.click();
+  }
+
+  imageChangedEvent: any = '';
+  croppedImage: any = '';
+
+  fileChangeEvent(event: any): void {
+      this.imageChangedEvent = event;
+  }
+  imageCropped(event: ImageCroppedEvent) {
+      this.croppedImage = event.base64;
+  }
+  uploadImage() {
+    this.showCropper = false;
+    const split = this.croppedImage.split(',');
+    const type = split[0].replace('data:', '').replace(';base64', '');
+    const byteString = atob(split[1]);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i += 1) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    const fileBlob = new Blob([arrayBuffer], {type}); // upload this to firebase.
+    const filePath = `profile-pictures/${this.profile.profileHandle}`;
+    const fileRef = this.storage.ref(filePath);
+    const task = this.storage.upload(filePath, fileBlob);
+    task.snapshotChanges().pipe(
+      finalize(() => {
+        fileRef.getDownloadURL().subscribe(url => {
+          this.profilePictureUrl = url;
+          this.showCropper = false;
+        });
+      })
+    ).subscribe();
+  }
+
+
 
   //  Function to add the current user to the target user's followers list and vice versa
   addToFollowing() {

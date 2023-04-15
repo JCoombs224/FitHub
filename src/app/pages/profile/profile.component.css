@@ -80,6 +80,28 @@ h1 {
   transform: rotate(-90deg);
 }
 
+.btn-image-upload {
+  position: absolute;
+  bottom: 10%;
+  right: 5%;
+  z-index: 5;
+  border-radius: 100%;
+  width: 40px;
+  height: 40px;
+}
+
+.crop-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  max-height: 60vh;
+  width: auto;
+  z-index: 10;
+  background-color: #212529;
+}
+
 .progress-ring__circle {
   stroke-linecap: round;
 }
