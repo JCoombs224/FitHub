@@ -161,6 +161,7 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
         if(this.equipment[0] == '*') {
           this.equipment[0] = "All Equipment Selected";
         }
+        this.subscription.unsubscribe();
       });
     }
     else {
@@ -209,7 +210,6 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
   }
 
   updateEquipmentList() {
-    console.log(this.workoutForm.get('equipment').value);
     if (this.workoutForm.get('equipment').value != '*') {
       if(this.workoutForm.get('equipment').value.includes(',')) {
         this.equipment = this.workoutForm.get('equipment').value.split(',');
