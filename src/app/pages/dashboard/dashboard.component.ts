@@ -92,7 +92,11 @@ export class DashboardComponent implements OnInit {
     { date: '2023-04-09', value: 28 },
   ];
 
+  // Sets the default time range
+  selectedTimeRange: string = 'week';
+
   changeTimeRange(range: string) {
+    this.selectedTimeRange = range;
     let startDate: Date;
     const currentDate = new Date();
 
