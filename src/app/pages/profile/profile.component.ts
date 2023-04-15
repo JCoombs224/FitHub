@@ -147,6 +147,9 @@ export class ProfileComponent {
   }
   uploadImage() {
     this.showCropper = false;
+
+    // This nasty code is only for the image cropper and is to convert the base64 image to a blob so it can be uploaded to firebase
+    // Normally you would just upload the image from the input directly to firebase
     const split = this.croppedImage.split(',');
     const type = split[0].replace('data:', '').replace(';base64', '');
     const byteString = atob(split[1]);
