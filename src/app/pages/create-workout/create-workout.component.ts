@@ -144,7 +144,7 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
     if (this.uid) {
       this.workoutForm.reset();
       this.title.setTitle("Edit Workout | FitHub");
-      this.subscription = this.workoutService.openWorkout(this.route.snapshot.paramMap.get('uid')).subscribe(data => {
+      this.subscription = this.workoutService.getWorkout(this.route.snapshot.paramMap.get('uid')).subscribe(data => {
         // Add the groups and exercises to the form to be filled from data
         for (let group of data.groups) {
           this.groups.push(this.newGroup);
@@ -249,7 +249,10 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
             this.getExercisesAt(i).push(this.newMuscleExercise(exercise.name, exercise.instructions.join(" "), exercise.secondaryMuscles.join(", ")));
             // this.getExercisesAt(i).get('exerciseId').setValue(exercise.id);
           }
-          this.equipment.splice(this.equipment.indexOf('Body Only'), 1);
+          if (this.equipment.includes('Body Only')) {
+            this.equipment.splice(this.equipment.indexOf('Body Only'), 1);
+          }
+          
         },
       },
       title: 'modal',

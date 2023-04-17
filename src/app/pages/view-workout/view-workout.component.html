@@ -1,0 +1,82 @@
+<div class="row main-bg">
+  <div class="col d-none d-xl-block p-0 p-xl-1">
+    <div class="card">
+      <div class="card-header text-center">
+        <h3>Equipment</h3>
+      </div>
+      <div class="card-body">
+
+        <div class="row">
+          <div class="col">
+            <ul class="list-group" *ngIf="!loading">
+              <li class="list-group-item" *ngFor="let equip of workout.equipment">{{equip|titlecase}}</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-xl-8 col-xxl-6 p-0">
+    <div class="card no-border min-vh-100">
+      <div class="page-header-1 text-center">
+        <h1 *ngIf="!loading" class="display-4">{{workout.name}}</h1>
+      </div>
+      <div class="card-body">
+        <div class="text-end">
+          <button class="btn btn-warning" *ngIf="userWorkout" [routerLink]="'/edit-workout/'+uid">Edit Workout</button>
+        </div>
+        <div *ngIf="loading" class="row justify-content-center p-5">
+          <div class="spinner-border text-success" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+
+        <!-------------- Main Content -------------->
+        <div *ngIf="!loading">
+          <div class="row mb-4" *ngIf="workout.description">
+            <div class="col">
+              <h3 class="text-center">Description</h3>
+              <p class="text-center">{{workout.description}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <h4 class="text-center display-6">
+                Exercises
+              </h4>
+            </div>
+          </div>
+          
+          <div *ngFor="let group of workout.groups" class="card mb-3">
+            <div class="card-header bg-success text-center text-light">
+              <h3 class="card-title">
+                {{group.groupType|titlecase}}
+              </h3>
+            </div>
+            <div class="card-body">
+              <ol class="list-group list-group-flush list-group-numbered">
+                <li class="list-group-item" *ngFor="let item of group.exercises">
+                  <h4 class="d-inline">{{item.name}}</h4>
+                  <div class="row mb-3 mt-3">
+                    <div class="col-auto border-end" *ngIf="item.sets && item.reps">
+                      <h6 class="ms-3">{{item.sets}} sets of {{item.reps}} reps</h6>
+                    </div>
+                    <div class="col">
+                      <h5>Instructions:</h5>
+                      <p>{{item.instructions}}</p>
+                      <h6 *ngIf="item.secondaryMuscles" class="d-inline">Secondary Muscles: </h6>{{item.secondaryMuscles|titlecase}}
+                    </div>
+                  </div>
+                </li>
+              </ol>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="col"></div>
+</div>

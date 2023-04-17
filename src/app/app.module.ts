@@ -49,6 +49,8 @@ import { EquipmentModalComponent } from './modals/equipment-modal/equipment-moda
 import { ConfirmDeleteModalComponent } from './modals/confirm-delete-modal/confirm-delete-modal.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { ProgressComponent } from './progress/progress.component';
+import { ViewWorkoutComponent } from './pages/view-workout/view-workout.component';
+import { ActiveWorkoutComponent } from './pages/active-workout/active-workout.component';
 
 @NgModule({
   declarations: [
@@ -70,6 +72,8 @@ import { ProgressComponent } from './progress/progress.component';
     EquipmentModalComponent,
     ConfirmDeleteModalComponent,
     ProgressComponent,
+    ViewWorkoutComponent,
+    ActiveWorkoutComponent,
 
   ],
 

@@ -24,7 +24,7 @@ export class WorkoutsService {
     return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).update({
       equipmentGroups: firebase.firestore.FieldValue.arrayUnion({
         name: group.name,
-      equipment: group.equipment
+        equipment: group.equipment
       })
     });
   }
@@ -50,7 +50,7 @@ export class WorkoutsService {
       return this.afs.collection('exercises', ref => ref.where('primaryMuscles', 'array-contains', group));
     }
     else {
-      filters.push('body only')
+      filters.push('body only');
       return this.afs.collection('exercises', ref => ref.where('primaryMuscles', 'array-contains', group).where('equipment', 'in', filters));
     }
   }
@@ -89,9 +89,9 @@ export class WorkoutsService {
   }
 
   // Get a specific workout for the current user
-  openWorkout(uid) {
+  getWorkout(uid, profile = this.currentUser.user.profile.profileHandle) {
     return this.afs.collection('profiles')
-      .doc(this.currentUser.user.profile.profileHandle)
+      .doc(profile)
       .collection('workouts')
       .doc(uid)
       .valueChanges()

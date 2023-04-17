@@ -13,6 +13,8 @@ import { CreateWorkoutComponent } from './pages/create-workout/create-workout.co
 import { CreatePostComponent } from './pages/create-post/create-post.component';
 import { EditProfileComponent } from './pages/edit-profile/edit-profile.component';
 import { ProgressComponent } from './progress/progress.component';
+import { ViewWorkoutComponent } from './pages/view-workout/view-workout.component';
+import { ActiveWorkoutComponent } from './pages/active-workout/active-workout.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -23,8 +25,10 @@ const routes: Routes = [
   { path: 'social-feed', component: SocialFeedComponent, canActivate: [AuthGuard]},
   { path: 'my-workouts', component: MyWorkoutsComponent, canActivate: [AuthGuard]},
   { path: 'profile/:name', component: ProfileComponent, canActivate: [AuthGuard]},
-  { path: 'my-workouts/create', component: CreateWorkoutComponent, canActivate: [AuthGuard]},
-  { path: 'workout/:uid', component: CreateWorkoutComponent, canActivate: [AuthGuard]},
+  { path: 'my-workouts/create', component: CreateWorkoutComponent, canActivate: [AuthGuard]}, // Route to create a new workout
+  { path: 'edit-workout/:uid', component: CreateWorkoutComponent, canActivate: [AuthGuard]}, // Route to edit a workout
+  { path: 'workout/:uid', component: ViewWorkoutComponent, canActivate: [AuthGuard]}, // Route to view a workout that is not currently in progress
+  { path: 'active-workout/:uid', component: ActiveWorkoutComponent, canActivate: [AuthGuard]}, // Route for a workout that is currently in progress
   { path: 'profile/:name/create-post', component: CreatePostComponent, canActivate: [AuthGuard]},
   { path: 'profile/:name/edit-profile', component: EditProfileComponent, canActivate: [AuthGuard]},
   { path: 'progress', component: ProgressComponent, canActivate: [AuthGuard]},
