@@ -32,6 +32,4 @@ export class ProfileService {
   getProfile(username): AngularFirestoreDocument<any> {
     return this.afs.doc(`/profiles/${username}`);
   }
-
-
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { ProfileService } from './profile.service';
+import { Timestamp } from 'firebase/firestore'
 import firebase from 'firebase/compat/app';
 
 @Injectable({
@@ -26,7 +27,7 @@ export class PostsService {
                       commentLikeOwners: [],
                       commentOwner: '',
                       commentText: '',
-                      commentTimeStamp: new Date().getTime(),
+                      commentTimeStamp: new Timestamp(new Date().getTime(), 0),
                     }],
       //  Number of likes for the post
       postLikeCount: 0,
@@ -35,7 +36,7 @@ export class PostsService {
       //  The post text
       postText: '',
       //  The post timestamp
-      postTimeStamp: new Date().getTime(),
+      postTimeStamp: new Timestamp(new Date().getTime(), 0),
     };
   }
 
@@ -44,4 +45,3 @@ export class PostsService {
     return this.afs.collection('profiles').doc(profile).collection('posts', ref => ref.orderBy('postTimeStamp', 'desc')).snapshotChanges();
   }
 }
-

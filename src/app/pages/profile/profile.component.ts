@@ -106,7 +106,7 @@ export class ProfileComponent {
         this.profilePictureUrl = url;
         this.loadingImage = false;
       },()=>{
-        this.profilePictureUrl = "https://nwfblogs.wpenginepowered.com/wp-content/blogs.dir/11/files/2012/11/Turkey_strut-494x620.jpg"; // default profile picture
+        this.profilePictureUrl = "ttps://wilcity.com/wp-content/uploads/2020/06/115-1150152_default-profile-picture-avatar-png-green.jpg"; // default profile picture
         this.loadingImage = false;
       });
     }
@@ -300,12 +300,6 @@ export class ProfileComponent {
     });
   }
 
-  //  Convert the timestamp numbers to a readable format
-  convertTime(time: number) {
-
-  }
-
-
   //  Function to display this porfile's posts in a modal
   displayPosts() {
     //  Get the element by id: posts
@@ -387,7 +381,7 @@ export class ProfileComponent {
         commentCardHeader.style.backgroundColor = 'white';
         commentCardHeader.style.textAlign = 'left';
         commentCardHeader.style.fontSize = '15px';
-        commentCardHeader.innerHTML = this.posts[i].postComments[j].commentTimeStamp.toDate().toDateString();
+        commentCardHeader.innerHTML = this.posts[i].postComments[j].commentTimeStamp.toDate().toDateString() + ' by @' + this.posts[i].postComments[j].commentOwner + ':';
 
         const commentCardBody = document.createElement('div');
         commentCardBody.className = 'card-body';
@@ -536,14 +530,26 @@ export class ProfileComponent {
 
   //  Function to like a comment
   likeComment(comment) {
-    //  Returns a promise that resolves when the comment's like count is incremented and the user is added to the 'commentLikeOwners' array
-    return this.afs.collection('profiles').doc(this.profile.profileHandle).collection('posts').doc(comment).update({
-      //  Increment the comment's like count and add the current user to the 'commentLikeOwners' array
-      postComments: firebase.firestore.FieldValue.arrayUnion({
-        commentLikeCount: comment.postComments.firebase.firestore.FieldValue.increment(1),
-        commentLikeOwners: comment.postComments.firebase.firestore.FieldValue.arrayUnion(this.currentUser.user.profile.profileHandle),
-      })
-    });
+    // Check if the current user has already liked the comment
+    let alreadyLiked = false;
+    for (let i = 0; i < comment.postComments.commentLikeOwners.length; i++) {
+      if (comment.postComments.commentLikeOwners[i] === this.currentUser.user.profile.profileHandle) {
+        alreadyLiked = true;
+        break;
+      }
+    }
+
+    //  If the current user hasn't already liked the comment, like it
+    if (!alreadyLiked) {
+      //  Returns a promise that resolves when the comment's like count is incremented and the user is added to the 'commentLikeOwners' array
+      return this.afs.collection('profiles').doc(this.profile.profileHandle).collection('posts').doc(comment).update({
+        //  Increment the comment's like count and add the current user to the 'commentLikeOwners' array
+        postComments: firebase.firestore.FieldValue.arrayUnion({
+          commentLikeCount: comment.postComments.firebase.firestore.FieldValue.increment(1),
+          commentLikeOwners: comment.postComments.firebase.firestore.FieldValue.arrayUnion(this.currentUser.user.profile.profileHandle),
+        })
+      });
+    }
   }
 
   //  Function to unlike a comment

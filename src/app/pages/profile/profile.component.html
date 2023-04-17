@@ -72,12 +72,12 @@
                 Posts
               </div><div class="card-body" style="background: none;">
                 <div class="row">
-                  <button *ngIf="userProfile" type="button" id="createPost" class="btn zoom-btn btn-outline-success" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0;" (click)="showPostsModal()">
+                  <button *ngIf="userProfile" type="button" id="createPost" class="btn btn-outline-success" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0;" (click)="showPostsModal()">
                     Create Post+
                   </button>
-                  <button type="button" id="createPost" class="btn zoom-btn btn-outline-success" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0;" (click)="showAllPostsModal()">
+                  <!-- <button type="button" id="createPost" class="btn zoom-btn btn-outline-success" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0;" (click)="showAllPostsModal()">
                     View All Posts
-                  </button>
+                  </button> -->
                 </div>
               </div>
               <div id="posts"></div>
@@ -136,13 +136,13 @@
                   </div>
                 </div>
               </div>
-              <div class="card-footer" style="background: none;">
+              <div class="card-footer w-100" style="background: none;">
                 <div class="row">
                   <div>
-                    <button *ngIf="userProfile" type="button" id="createWorkout" class="btn zoom-btn btn-outline-success" routerLink="/my-workouts/create" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0; width: 100%;">
+                    <button *ngIf="userProfile" type="button" id="createWorkout" class="btn btn-outline-success" routerLink="/my-workouts/create" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0; width: 100%;">
                       Create Workout+
                     </button>
-                    <button type="button" id="viewAllWorkouts" class="btn zoom-btn btn-outline-success" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto;position: 0; width: 100%;">
+                    <button type="button" id="viewAllWorkouts" class="btn btn-outline-success" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto;position: 0; width: 100%;">
                       View All Workouts
                     </button>
                   </div>
@@ -158,9 +158,9 @@
 
 <!--Followers modal-->
 <div #followersModal class="modal" style="width: 30%; min-width: 450px; min-height: 300px;">
-  <div class="modal-header">
+  <h5 class="modal-header">
       @{{urlProfileHandle}}'s Followers
-  </div>
+  </h5>
   <div class="modal-body">
     <li *ngFor="let follower of profile.followers">
       <button class="btn zoom-btn btn-outline-success" style="margin: 3px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" href="#" routerLink="/profile/{{follower}}">@{{follower}}</button>
@@ -173,9 +173,9 @@
 
 <!--Following modal-->
 <div #followingModal class="modal" style="width: 30%; min-width: 450px; min-height: 300px;">
-  <div class="modal-header">
+  <h5 class="modal-header">
       Profiles @{{urlProfileHandle}} follows
-  </div>
+  </h5>
   <div class="modal-body">
     <li *ngFor="let followed of profile.following">
       <button class="btn zoom-btn btn-outline-success" style="margin: 3px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" href="#" routerLink="/profile/{{followed}}">@{{followed}}</button>
@@ -188,17 +188,17 @@
 
 <!--Posts modal-->
 <div #postsModal class="modal" style="width: 30%; min-width: 450px; min-height: 300px;">
-  <div class="modal-header">
-    <h3>
+  <div class="modal-header w-100">
+    <h5>
       Create Post+
-    </h3>
+    </h5>
   </div>
   <div class="modal-body">
     <div class="form-group">
       <textarea class="form-control" id="PostText" rows="3" placeholder="What's on your mind?"></textarea>
     </div>
   </div>
-  <div class="modal-footer">
+  <div class="modal-footer w-100">
     <button class="btn zoom-btn btn-outline-success" style="margin: 3px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" (click)="getPost()">Post+</button>
     <button class="btn zoom-btn btn-outline-secondary" style="background-color: rgba(255, 255, 255, 0.8);" (click)="closePostsModal()">Cancel</button>
   </div>
