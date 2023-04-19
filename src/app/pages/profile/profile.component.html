@@ -70,7 +70,8 @@
             <div class="card d-flex col-lg-10" style="text-align: left; margin: 0 auto; background-color: rgba(32, 61, 28, 0.1); border: none;">
               <div class="card-header display-6" style="background: none;">
                 Posts
-              </div><div class="card-body" style="background: none;">
+              </div>
+              <div class="card-body" style="background: none;">
                 <div class="row">
                   <button *ngIf="userProfile" type="button" id="createPost" class="btn btn-outline-success" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0;" (click)="showPostsModal()">
                     Create Post+
@@ -81,6 +82,7 @@
                 </div>
               </div>
               <div id="posts"></div>
+              <div id="noPosts"></div>
               <!-- <div *ngIf="!profile.posts">
                 <p class="display-6" style="margin: auto;">This user hasn't made any posts yet!</p>
               </div>

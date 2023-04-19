@@ -313,124 +313,134 @@ export class ProfileComponent implements OnInit {
     const posts = document.getElementById('posts');
     posts.innerHTML = '';
 
-    //  Loop through the posts and create a card for each of them with a like
-    //  and comment button and also display the comments for each post within the post card
-    for (let i = 0; i < this.posts.length; i++) {
-      console.log("This is for post " + (i + 1));
-      const postCard = document.createElement('div');
-      postCard.className = 'card w-100 mb-2';
-      postCard.style.width = '18rem';
+    if (this.posts.length === 0) {
+      const noPosts = document.createElement('div');
+      noPosts.className = 'card w-100 mb-2';
+      noPosts.style.width = '18rem';
+      noPosts.innerHTML = 'No posts to display';
+      posts.appendChild(noPosts);
+    }
 
-      //  Create a card header with no background to show the timestamp of the post
-      const postCardHeader = document.createElement('div');
-      postCardHeader.className = 'card-header';
-      postCardHeader.style.backgroundColor = 'white';
-      postCardHeader.style.textAlign = 'left';
-      postCardHeader.style.fontSize = '15px';
-      postCardHeader.innerHTML = this.posts[i].postTimeStamp.toDate().toDateString();
+    else {
+      //  Loop through the posts and create a card for each of them with a like
+      //  and comment button and also display the comments for each post within the post card
+      for (let i = 0; i < this.posts.length; i++) {
+        console.log("This is for post " + (i + 1));
+        const postCard = document.createElement('div');
+        postCard.className = 'card w-100 mb-2';
+        postCard.style.width = '18rem';
 
-      //  Create a card body to hold the post text and the like and comment buttons
-      const postCardBody = document.createElement('div');
-      postCardBody.className = 'card-body';
+        //  Create a card header with no background to show the timestamp of the post
+        const postCardHeader = document.createElement('div');
+        postCardHeader.className = 'card-header';
+        postCardHeader.style.backgroundColor = 'white';
+        postCardHeader.style.textAlign = 'left';
+        postCardHeader.style.fontSize = '15px';
+        postCardHeader.innerHTML = this.posts[i].postTimeStamp.toDate().toDateString();
 
-      const postCardText = document.createElement('p');
-      postCardText.className = 'card-text';
-      postCardText.style.fontSize = '20px';
-      postCardText.style.textAlign = 'left';
-      postCardText.innerHTML = this.posts[i].postText;
+        //  Create a card body to hold the post text and the like and comment buttons
+        const postCardBody = document.createElement('div');
+        postCardBody.className = 'card-body';
 
-      const postCardLike = document.createElement('button');
-      postCardLike.className = 'btn btn-outline-secondary';
+        const postCardText = document.createElement('p');
+        postCardText.className = 'card-text';
+        postCardText.style.fontSize = '20px';
+        postCardText.style.textAlign = 'left';
+        postCardText.innerHTML = this.posts[i].postText;
 
-      //  Check if the current user has liked the post
-      if (this.posts[i].postLikeOwners.includes(this.currentUser.user.profile.profileHandle)) {
-        postCardLike.innerHTML = this.posts[i].postLikeCount + ' Unlike';
-        postCardLike.addEventListener('click', () => {
-          this.unlikePost(this.posts[i]);
+        const postCardLike = document.createElement('button');
+        postCardLike.className = 'btn btn-outline-secondary';
+
+        //  Check if the current user has liked the post
+        if (this.posts[i].postLikeOwners.includes(this.currentUser.user.profile.profileHandle)) {
+          postCardLike.innerHTML = this.posts[i].postLikeCount + ' Unlike';
+          postCardLike.addEventListener('click', () => {
+            this.unlikePost(this.posts[i]);
+          });
+        } else {
+          postCardLike.innerHTML = this.posts[i].postLikeCount + ' Like';
+          postCardLike.addEventListener('click', () => {
+            this.likePost(this.posts[i]);
+          });
+        }
+
+        //  Create a comment button under the textarea for the user to submit a comment
+        const commentButton = document.createElement('button');
+        commentButton.className = 'btn btn-outline-success';
+        commentButton.innerHTML = 'Comment';
+        commentButton.addEventListener('click', () => {
+          this.commentPost(this.posts[i], i);
         });
-      } else {
-        postCardLike.innerHTML = this.posts[i].postLikeCount + ' Like';
-        postCardLike.addEventListener('click', () => {
-          this.likePost(this.posts[i]);
-        });
-      }
 
-      //  Create a comment button under the textarea for the user to submit a comment
-      const commentButton = document.createElement('button');
-      commentButton.className = 'btn btn-outline-success';
-      commentButton.innerHTML = 'Comment';
-      commentButton.addEventListener('click', () => {
-        this.commentPost(this.posts[i], i);
-      });
+        //  Create a text area for the user to enter a comment underneath the postText
+        const commentTextArea = document.createElement('textarea');
+        commentTextArea.className = 'form-control';
+        commentTextArea.id = 'commentTextArea' + i;
+        commentTextArea.rows = 3;
+        commentTextArea.placeholder = 'Reply to @' + this.profile.profileHandle + '\'s post...';
 
-      //  Create a text area for the user to enter a comment underneath the postText
-      const commentTextArea = document.createElement('textarea');
-      commentTextArea.className = 'form-control';
-      commentTextArea.id = 'commentTextArea' + i;
-      commentTextArea.rows = 3;
-      commentTextArea.placeholder = 'Reply to @' + this.profile.profileHandle + '\'s post...';
+        posts.appendChild(postCard);
+        postCard.appendChild(postCardHeader);
+        postCard.appendChild(postCardBody);
+        postCardBody.appendChild(postCardText);
+        postCardBody.appendChild(commentTextArea);
+        postCardBody.appendChild(postCardLike);
+        postCardBody.appendChild(commentButton);
 
-      posts.appendChild(postCard);
-      postCard.appendChild(postCardHeader);
-      postCard.appendChild(postCardBody);
-      postCardBody.appendChild(postCardText);
-      postCardBody.appendChild(commentTextArea);
-      postCardBody.appendChild(postCardLike);
-      postCardBody.appendChild(commentButton);
-
-      if (this.posts[i].postComments.length > 0)
-      {
-        //  Loop through this posts comments and create a paragraph for each of them with a like button for each comment
-        for (let j = 0; j < this.posts[i].postComments.length; j++)
+        if (this.posts[i].postComments.length > 0)
         {
-          //  Only display comments that contain text. This is to prevent empty comments from being displayed.
-          if (this.posts[i].postComments[j].commentText !== '')
+          //  Loop through this posts comments and create a paragraph for each of them with a like button for each comment
+          for (let j = 0; j < this.posts[i].postComments.length; j++)
           {
-            const commentCard = document.createElement('div');
-            commentCard.className = 'card w-75';
-            commentCard.style.width = '18rem';
-            commentCard.style.marginLeft = '50px';
-
-            const commentCardHeader = document.createElement('div');
-            commentCardHeader.className = 'card-header w-100';
-            commentCardHeader.style.backgroundColor = 'white';
-            commentCardHeader.style.textAlign = 'left';
-            commentCardHeader.style.fontSize = '15px';
-            commentCardHeader.innerHTML = this.posts[i].postComments[j].commentTimeStamp.toDate().toDateString() + ' by @' + this.posts[i].postComments[j].commentOwner + ':';
-
-            const commentCardBody = document.createElement('div');
-            commentCardBody.className = 'card-body';
-
-            const commentCardText = document.createElement('p');
-            commentCardText.className = 'card-text';
-            commentCardText.style.fontSize = '20px';
-            commentCardText.innerHTML = this.posts[i].postComments[j].commentText;
-
-            const commentCardLike = document.createElement('button');
-            commentCardLike.className = 'btn btn-outline-secondary';
-
-            //  Check if the current user has liked the comment
-            if (this.posts[i].postComments[j].commentLikeOwners.includes(this.currentUser.user.profile.profileHandle))
+            //  Only display comments that contain text. This is to prevent empty comments from being displayed.
+            if (this.posts[i].postComments[j].commentText !== '')
             {
-              commentCardLike.innerHTML = this.posts[i].postComments[j].commentLikeCount + ' Unlike';
-              commentCardLike.addEventListener('click', () => {
-                this.unlikeComment(this.posts[i], i, this.posts[i].postComments[j], j);
-              });
-            }
+              const commentCard = document.createElement('div');
+              commentCard.className = 'card w-75';
+              commentCard.style.width = '18rem';
+              commentCard.style.marginLeft = '50px';
 
-            else
-            {
-              commentCardLike.innerHTML = this.posts[i].postComments[j].commentLikeCount + ' Like';
-              commentCardLike.addEventListener('click', () => {
-                this.likeComment(this.posts[i], i, this.posts[i].postComments[j], j);
-              });
-            }
+              const commentCardHeader = document.createElement('div');
+              commentCardHeader.className = 'card-header w-100';
+              commentCardHeader.style.backgroundColor = 'white';
+              commentCardHeader.style.textAlign = 'left';
+              commentCardHeader.style.fontSize = '15px';
+              commentCardHeader.innerHTML = this.posts[i].postComments[j].commentTimeStamp.toDate().toDateString() + ' by @' + this.posts[i].postComments[j].commentOwner + ':';
 
-            commentCardBody.append(commentCardHeader);
-            commentCardBody.appendChild(commentCardText);
-            commentCardBody.appendChild(commentCardLike);
-            commentCard.appendChild(commentCardBody);
-            postCardBody.appendChild(commentCard);
+              const commentCardBody = document.createElement('div');
+              commentCardBody.className = 'card-body';
+
+              const commentCardText = document.createElement('p');
+              commentCardText.className = 'card-text';
+              commentCardText.style.fontSize = '20px';
+              commentCardText.innerHTML = this.posts[i].postComments[j].commentText;
+
+              const commentCardLike = document.createElement('button');
+              commentCardLike.className = 'btn btn-outline-secondary';
+
+              //  Check if the current user has liked the comment
+              if (this.posts[i].postComments[j].commentLikeOwners.includes(this.currentUser.user.profile.profileHandle))
+              {
+                commentCardLike.innerHTML = this.posts[i].postComments[j].commentLikeCount + ' Unlike';
+                commentCardLike.addEventListener('click', () => {
+                  this.unlikeComment(this.posts[i], i, this.posts[i].postComments[j], j);
+                });
+              }
+
+              else
+              {
+                commentCardLike.innerHTML = this.posts[i].postComments[j].commentLikeCount + ' Like';
+                commentCardLike.addEventListener('click', () => {
+                  this.likeComment(this.posts[i], i, this.posts[i].postComments[j], j);
+                });
+              }
+
+              commentCardBody.append(commentCardHeader);
+              commentCardBody.appendChild(commentCardText);
+              commentCardBody.appendChild(commentCardLike);
+              commentCard.appendChild(commentCardBody);
+              postCardBody.appendChild(commentCard);
+            }
           }
         }
       }
