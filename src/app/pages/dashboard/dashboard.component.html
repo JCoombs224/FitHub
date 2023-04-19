@@ -18,7 +18,7 @@
               <h6 class="custom-text-color mb-3 pb-2 border-bottom border-dark">Recent Achievements</h6>
               <ul class="list-unstyled">
                 <li *ngFor="let achievement of recentAchievements" class="text-dark mb-2">
-                  <i class="fas fa-trophy text-warning"></i> {{ achievement.description }}
+                  <i class="faAward text-warning"><fa-icon [icon]="faAward" ></fa-icon></i> {{ achievement.description }}
                 </li>
               </ul>
             </div>
@@ -27,7 +27,7 @@
               <h6 class="custom-text-color mb-3 pb-2 border-bottom border-dark">Personalized Tips</h6>
               <ul class="list-unstyled">
                 <li *ngFor="let tip of personalizedTips" class="text-dark mb-2">
-                  <i class="fas fa-info-circle text-primary"></i> {{ tip.description }}
+                  <i class="faLightbulb text-warning"><fa-icon [icon]="faLightbulb" ></fa-icon></i> {{ tip.description }}
                 </li>
               </ul>
             </div>

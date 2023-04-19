@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { CurrentUserService } from 'src/app/services/current-user.service';
 import { ChartOptions, ChartType, ChartDataset } from 'chart.js';
+import { faAward, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,6 +16,9 @@ import { ChartOptions, ChartType, ChartDataset } from 'chart.js';
 
 export class DashboardComponent implements OnInit {
   progressSummary = 'Track your progress and reach your fitness goals!';
+
+  faAward = faAward;
+  faLightbulb = faLightbulb;
 
   recentAchievements = [
     { description: 'Completed a 30-day workout challenge' },
@@ -81,6 +85,35 @@ export class DashboardComponent implements OnInit {
 
   // Replace data with actual input data from the user.
   allWorkoutData = [
+    { date: '2023-02-01', value: 10 },
+    { date: '2023-02-02', value: 12 },
+    { date: '2023-02-03', value: 15 },
+    { date: '2023-02-04', value: 17 },
+    { date: '2023-02-05', value: 22 },
+    { date: '2023-02-06', value: 20 },
+    { date: '2023-02-07', value: 25 },
+    { date: '2023-02-08', value: 30 },
+    { date: '2023-02-09', value: 28 },
+    { date: '2023-02-12', value: 10 },
+    { date: '2023-02-13', value: 12 },
+    { date: '2023-02-14', value: 15 },
+    { date: '2023-02-16', value: 17 },
+    { date: '2023-02-17', value: 22 },
+    { date: '2023-02-20', value: 14 },
+    { date: '2023-02-21', value: 25 },
+    { date: '2023-02-22', value: 20 },
+    { date: '2023-02-23', value: 10 },
+
+    { date: '2023-03-01', value: 10 },
+    { date: '2023-03-01', value: 10 },
+    { date: '2023-03-02', value: 12 },
+    { date: '2023-03-03', value: 15 },
+    { date: '2023-03-04', value: 17 },
+    { date: '2023-03-05', value: 22 },
+    { date: '2023-03-06', value: 20 },
+    { date: '2023-03-07', value: 25 },
+    { date: '2023-03-08', value: 30 },
+
     { date: '2023-04-01', value: 10 },
     { date: '2023-04-02', value: 12 },
     { date: '2023-04-03', value: 15 },
@@ -90,6 +123,44 @@ export class DashboardComponent implements OnInit {
     { date: '2023-04-07', value: 25 },
     { date: '2023-04-08', value: 30 },
     { date: '2023-04-09', value: 28 },
+    { date: '2023-04-12', value: 10 },
+    { date: '2023-04-13', value: 12 },
+    { date: '2023-04-14', value: 15 },
+    { date: '2023-04-16', value: 17 },
+    { date: '2023-04-17', value: 10 },
+    { date: '2023-04-18', value: 22 },
+    { date: '2023-04-19', value: 18 },
+    { date: '2023-04-20', value: 14 },
+    { date: '2023-04-21', value: 25 },
+    { date: '2023-04-22', value: 20 },
+    { date: '2023-04-23', value: 10 },
+
+    { date: '2023-06-01', value: 10 },
+    { date: '2023-06-01', value: 10 },
+    { date: '2023-06-02', value: 12 },
+    { date: '2023-06-03', value: 15 },
+    { date: '2023-06-04', value: 17 },
+    { date: '2023-06-05', value: 22 },
+    { date: '2023-06-06', value: 20 },
+    { date: '2023-06-07', value: 25 },
+    { date: '2023-06-08', value: 30 },
+
+    { date: '2023-08-01', value: 10 },
+    { date: '2023-08-01', value: 10 },
+    { date: '2023-08-02', value: 12 },
+    { date: '2023-08-03', value: 15 },
+    { date: '2023-08-04', value: 17 },
+    { date: '2023-08-05', value: 22 },
+    { date: '2023-08-06', value: 20 },
+    { date: '2023-08-07', value: 25 },
+    { date: '2023-08-08', value: 30 },
+    { date: '2023-08-09', value: 20 },
+    { date: '2023-08-10', value: 25 },
+    { date: '2023-08-11', value: 30 },
+
+    { date: '2023-10-03', value: 15 },
+    { date: '2023-10-04', value: 17 },
+    { date: '2023-10-05', value: 22 },
   ];
 
   // Sets the default time range

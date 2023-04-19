@@ -30,7 +30,7 @@
                 <button class="btn btn-sm btn-forest-green" (click)="onLike(post)">
                   <span *ngIf="!post.liked">Like ({{ post.likes }})</span>
                   <span *ngIf="post.liked">Unlike ({{ post.likes }})</span>
-                </button>                                               
+                </button>
                 &nbsp;
                 <button class="btn btn-sm btn-secondary" (click)="onComment(post)">
                   Comment
@@ -48,10 +48,10 @@
                         <button class="btn btn-sm btn-forest-green" (click)="onCommentLike(comment)">
                           <span *ngIf="!comment.liked">Like</span>
                           <span *ngIf="comment.liked">Unlike</span>
-                        </button>                                                                                           
+                        </button>
                       </div>
                     </div>
-                  </div>                  
+                  </div>
                   <div class="comment-box mt-3">
                     <textarea [(ngModel)]="post.newComment" class="form-control" rows="2" placeholder="Write a comment..."></textarea>
                     <button class="btn btn-sm btn-secondary mt-2" (click)="postComment(post)">Post Comment</button>
@@ -70,13 +70,13 @@
                         <button class="btn btn-sm btn-forest-green" (click)="onCommentLike(comment)">
                           <span *ngIf="!comment.liked">Like</span>
                           <span *ngIf="comment.liked">Unlike</span>
-                        </button>                                                                                           
+                        </button>
                       </div>
                     </div>
                   </div>
                   <!-- Button for viewing all comments -->
                   <div class="text-muted mt-2" (click)="onComment(post)" *ngIf="post.comments.length >= 4">View all comments ({{ post.commentsCount }})</div>
-                </div>                
+                </div>
               </div>
             </div>
             <!-- Post footer (can be used for additional content) -->
