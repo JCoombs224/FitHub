@@ -42,6 +42,6 @@ export class PostsService {
 
   // Get all workouts for the current user
   getPosts(profile = this.profile.profileHandle) {
-    return this.afs.collection('profiles').doc(profile).collection('posts', ref => ref.orderBy('postTimeStamp', 'desc')).snapshotChanges();
+    return this.afs.collection('profiles').doc(profile).collection('posts', ref => ref.orderBy('postTimeStamp', 'desc')).snapshotChanges().subscribe(posts => console.log(posts));
   }
 }

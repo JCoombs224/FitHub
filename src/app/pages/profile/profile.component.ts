@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -22,11 +22,11 @@ interface Post {
   uid: string;
   postText: string;
   postTimeStamp: Timestamp;
-  postLikeOwners: any[];
+  postLikeOwners: string[];
   postLikeCount: number;
   postComments: {
     commentLikeCount: number;
-    commentLikeOwners: any[];
+    commentLikeOwners: string[];
     commentOwner: string;
     commentText: string;
     commentTimeStamp: Timestamp;
@@ -39,7 +39,7 @@ interface Post {
   styleUrls: ['./profile.component.css']
 })
 
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
 
   faEdit = faEdit;
   public urlProfileHandle;
@@ -52,7 +52,7 @@ export class ProfileComponent {
   workouts;
   showUploadButton = false;
   showCropper = false;
-  posts: Post[] = [];
+  posts: Post[];
 
   @ViewChild('followersModal') followersModal: ElementRef;
   @ViewChild('followingModal') followingModal: ElementRef;
@@ -71,6 +71,8 @@ export class ProfileComponent {
     private afs: AngularFirestore,
     public location: Location,
     private storage: AngularFireStorage,
+    private ngZone: NgZone,
+    private cdr: ChangeDetectorRef,
     private postsService: PostsService,
     private toastr: ToastrService,
   ) { }
@@ -83,10 +85,10 @@ export class ProfileComponent {
       this.loadProfileData();
       this.title.setTitle(`@${this.urlProfileHandle} | FitHub`);
       this.loadProfilePostsData(this.profile.profileHandle).then(() => {
+        console.log(this.posts);
         this.displayPosts();
       });
       this.checkFollowers();
-
     });
 
     this.workouts = this.workoutService.getExercises(this.urlProfileHandle);
@@ -146,32 +148,34 @@ export class ProfileComponent {
     }
   }
 
-  //  Get this profile's posts
   loadProfilePostsData(profile = this.profile.profileHandle) {
     return new Promise<void>((resolve, reject) => {
-      this.postsService.getPosts(this.profile.profileHandle).pipe(
-        map(actions => actions.map(a => {
-          const data = a.payload.doc.data();
-          const uid = a.payload.doc.id;
-          const postText = data.postText;
-          const postTimeStamp = data.postTimeStamp;
-          const postLikeOwners = data.postLikeOwners;
-          const postLikeCount = data.postLikeCount;
-          const postComments = data.postComments.map(comment => ({
-            commentLikeCount: comment.commentLikeCount,
-            commentLikeOwners: comment.commentLikeOwners,
-            commentOwner: comment.commentOwner,
-            commentText: comment.commentText,
-            commentTimeStamp: comment.commentTimeStamp,
-          }));
-          return { uid, postText, postTimeStamp, postLikeOwners, postLikeCount, postComments };
-        }))
-      ).subscribe(data => {
-        this.posts = data;
+      this.afs.collection('profiles').doc(profile).collection('posts', ref => ref.orderBy('postTimeStamp', 'desc')).snapshotChanges().pipe(
+        map((posts: any[]) => {
+          return posts.map(post => {
+            const data = post.payload.doc.data();
+            const uid = post.payload.doc.id;
+            const postText = data.postText;
+            const postTimeStamp = data.postTimeStamp;
+            const postLikeOwners = data.postLikeOwners;
+            const postLikeCount = data.postLikeCount;
+            const postComments = data.postComments.map(comment => ({
+              commentLikeCount: comment.commentLikeCount,
+              commentLikeOwners: comment.commentLikeOwners,
+              commentOwner: comment.commentOwner,
+              commentText: comment.commentText,
+              commentTimeStamp: comment.commentTimeStamp,
+            }));
+            return { uid, postText, postTimeStamp, postLikeOwners, postLikeCount, postComments };
+          });
+        })
+      ).subscribe(posts => {
+        this.posts = posts;
         resolve();
       });
     });
   }
+
 
   onUploadButtonClick() {
     const input = document.createElement('input');
@@ -265,9 +269,11 @@ export class ProfileComponent {
 
   //  Function to check if the current user is following the target user
   checkFollowers(): boolean {
+    //  If the target user has no followers, return false
     if (this.profile.followers.length === 0) {
       return false;
     }
+    //  Loop through the target user's followers array and check if the current user is in it
     for (let i = 0; i < this.profile.followers.length; i++) {
       if (this.profile.followers[i] === this.currentUser.user.profile.profileHandle) {
         return true;
@@ -276,38 +282,41 @@ export class ProfileComponent {
     return false;
   }
 
-  loadProfilePic() {
-    return this.profile.profilePicture;
-  }
-
   getWorkouts(profile: string) {
     return this.afs.collection('profiles').doc(profile).collection('workouts').valueChanges({ idField: 'uid' });
   }
 
-  //  Function to create a new post
-  newPost(post: string) {
-    return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('posts').add({
-      postText: post,
-      postLikeCount: 0,
-      postTimeStamp: new Timestamp(new Date().getTime(), 0),
-      postComments: {
-        commentLikeCount: 0,
-        commentLikeOwners: [],
-        commentOwner: '',
-        commentText: '',
-        commentTimeStamp: new Timestamp(new Date().getTime(), 0),
-      }
-    });
-  }
+  // //  Function to create a new post
+  // newPost() {
+  //   //  Get the post text from the postText element on the HTML doc
+  //   const post = (<HTMLInputElement>document.getElementById("PostText")).value;
+
+  //   //  Add the post to the current user's posts collection
+  //   return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('posts').add({
+  //     postText: post,
+  //     postLikeCount: 0,
+  //     postTimeStamp: Timestamp,
+  //     postComments: {
+  //       commentLikeCount: 0,
+  //       commentLikeOwners: [],
+  //       commentOwner: '',
+  //       commentText: '',
+  //       commentTimeStamp: Timestamp,
+  //     }
+  //   });
+  // }
 
   //  Function to display this porfile's posts in a modal
   displayPosts() {
+
     //  Get the element by id: posts
-    const modal = document.getElementById('posts');
+    const posts = document.getElementById('posts');
+    posts.innerHTML = '';
 
     //  Loop through the posts and create a card for each of them with a like
     //  and comment button and also display the comments for each post within the post card
     for (let i = 0; i < this.posts.length; i++) {
+      console.log("This is for post " + (i + 1));
       const postCard = document.createElement('div');
       postCard.className = 'card w-100 mb-2';
       postCard.style.width = '18rem';
@@ -351,17 +360,17 @@ export class ProfileComponent {
       commentButton.className = 'btn btn-outline-success';
       commentButton.innerHTML = 'Comment';
       commentButton.addEventListener('click', () => {
-        this.commentPost(this.posts[i]);
+        this.commentPost(this.posts[i], i);
       });
 
       //  Create a text area for the user to enter a comment underneath the postText
       const commentTextArea = document.createElement('textarea');
       commentTextArea.className = 'form-control';
-      commentTextArea.id = 'commentTextArea';
+      commentTextArea.id = 'commentTextArea' + i;
       commentTextArea.rows = 3;
       commentTextArea.placeholder = 'Reply to @' + this.profile.profileHandle + '\'s post...';
 
-      modal.appendChild(postCard);
+      posts.appendChild(postCard);
       postCard.appendChild(postCardHeader);
       postCard.appendChild(postCardBody);
       postCardBody.appendChild(postCardText);
@@ -369,107 +378,101 @@ export class ProfileComponent {
       postCardBody.appendChild(postCardLike);
       postCardBody.appendChild(commentButton);
 
-      //  Loop through this posts comments and create a paragraph for each of them with a like button for each comment
-      for (let j = 0; j < this.posts[i].postComments.length; j++) {
-        const commentCard = document.createElement('div');
-        commentCard.className = 'card w-75';
-        commentCard.style.width = '18rem';
-        commentCard.style.marginLeft = '50px';
+      if (this.posts[i].postComments.length > 0)
+      {
+        //  Loop through this posts comments and create a paragraph for each of them with a like button for each comment
+        for (let j = 0; j < this.posts[i].postComments.length; j++)
+        {
+          //  Only display comments that contain text. This is to prevent empty comments from being displayed.
+          if (this.posts[i].postComments[j].commentText !== '')
+          {
+            const commentCard = document.createElement('div');
+            commentCard.className = 'card w-75';
+            commentCard.style.width = '18rem';
+            commentCard.style.marginLeft = '50px';
 
-        const commentCardHeader = document.createElement('div');
-        commentCardHeader.className = 'card-header';
-        commentCardHeader.style.backgroundColor = 'white';
-        commentCardHeader.style.textAlign = 'left';
-        commentCardHeader.style.fontSize = '15px';
-        commentCardHeader.innerHTML = this.posts[i].postComments[j].commentTimeStamp.toDate().toDateString() + ' by @' + this.posts[i].postComments[j].commentOwner + ':';
+            const commentCardHeader = document.createElement('div');
+            commentCardHeader.className = 'card-header w-100';
+            commentCardHeader.style.backgroundColor = 'white';
+            commentCardHeader.style.textAlign = 'left';
+            commentCardHeader.style.fontSize = '15px';
+            commentCardHeader.innerHTML = this.posts[i].postComments[j].commentTimeStamp.toDate().toDateString() + ' by @' + this.posts[i].postComments[j].commentOwner + ':';
 
-        const commentCardBody = document.createElement('div');
-        commentCardBody.className = 'card-body';
+            const commentCardBody = document.createElement('div');
+            commentCardBody.className = 'card-body';
 
-        const commentCardText = document.createElement('p');
-        commentCardText.className = 'card-text';
-        commentCardText.style.fontSize = '20px';
-        commentCardText.innerHTML = this.posts[i].postComments[j].commentText;
+            const commentCardText = document.createElement('p');
+            commentCardText.className = 'card-text';
+            commentCardText.style.fontSize = '20px';
+            commentCardText.innerHTML = this.posts[i].postComments[j].commentText;
 
-        const commentCardLike = document.createElement('button');
-        commentCardLike.className = 'btn btn-outline-secondary';
+            const commentCardLike = document.createElement('button');
+            commentCardLike.className = 'btn btn-outline-secondary';
 
-        //  Check if the current user has liked the comment
-        if (this.posts[i].postComments[j].commentLikeOwners.includes(this.currentUser.user.profile.profileHandle)) {
-          commentCardLike.innerHTML = this.posts[i].postComments[j].commentLikeCount + ' Unlike';
-          commentCardLike.addEventListener('click', () => {
-            this.unlikeComment(this.posts[i].postComments[j]);
-          });
-        } else {
-          commentCardLike.innerHTML = this.posts[i].postComments[j].commentLikeCount + ' Like';
-          commentCardLike.addEventListener('click', () => {
-            this.likeComment(this.posts[i].postComments[j]);
-          });
+            //  Check if the current user has liked the comment
+            if (this.posts[i].postComments[j].commentLikeOwners.includes(this.currentUser.user.profile.profileHandle))
+            {
+              commentCardLike.innerHTML = this.posts[i].postComments[j].commentLikeCount + ' Unlike';
+              commentCardLike.addEventListener('click', () => {
+                this.unlikeComment(this.posts[i], i, this.posts[i].postComments[j], j);
+              });
+            }
+
+            else
+            {
+              commentCardLike.innerHTML = this.posts[i].postComments[j].commentLikeCount + ' Like';
+              commentCardLike.addEventListener('click', () => {
+                this.likeComment(this.posts[i], i, this.posts[i].postComments[j], j);
+              });
+            }
+
+            commentCardBody.append(commentCardHeader);
+            commentCardBody.appendChild(commentCardText);
+            commentCardBody.appendChild(commentCardLike);
+            commentCard.appendChild(commentCardBody);
+            postCardBody.appendChild(commentCard);
+          }
         }
-
-        commentCardBody.append(commentCardHeader);
-        commentCardBody.appendChild(commentCardText);
-        commentCardBody.appendChild(commentCardLike);
-        commentCard.appendChild(commentCardBody);
-        postCardBody.appendChild(commentCard);
       }
     }
   }
 
-  displayComments(post: any) {
-    const modal = document.getElementById('posts');
-    const commentCard = document.createElement('div');
-    commentCard.className = 'card';
-    commentCard.style.width = '18rem';
-    commentCard.style.margin = '10px';
+  commentPost(post, i) {
+    // Get the comment text from the textarea
+    const commentText = (<HTMLInputElement>document.getElementById('commentTextArea' + i)).value;
 
-    const commentCardBody = document.createElement('div');
-    commentCardBody.className = 'card-body';
+    // Check if the comment text is empty
+    if (commentText === '') {
+      return;
+    }
 
-    const commentCardText = document.createElement('p');
-    commentCardText.className = 'card-text';
-    commentCardText.innerHTML = post.postComments.commentText;
+    // Get the current post document from Firestore
+    const postDocRef = this.afs.collection('profiles').doc(this.profile.profileHandle)
+      .collection('posts').doc(post.uid);
 
-    const commentCardLike = document.createElement('button');
-    commentCardLike.className = 'btn btn-primary';
-    commentCardLike.innerHTML = 'Like';
-    commentCardLike.addEventListener('click', () => {
-      this.likeComment(post);
+    // Get the current server timestamp
+    const serverTimestamp = new Timestamp(Date.now() / 1000, 0);
+
+    // Get the post document from Firestore
+    postDocRef.get().toPromise().then(postDoc => {
+      // Get the post's comments array from the document data
+      const postComments = postDoc.data().postComments || [];
+
+      // Add the new comment object to the comments array
+      postComments.push({
+        commentText: commentText,
+        commentOwner: this.currentUser.user.profile.profileHandle,
+        commentTimeStamp: serverTimestamp,
+        commentLikeCount: 0,
+        commentLikeOwners: []
+      });
+
+      // Update the post document with the updated comments array
+      postDocRef.update({ postComments: postComments }).then(() => {
+        // Clear the textarea
+        (<HTMLInputElement>document.getElementById('commentTextArea' + i)).value = '';
+      }).then(() => this.loadProfilePostsData()).then(() => this.displayPosts());;
     });
-
-    commentCardBody.appendChild(commentCardText);
-    commentCardBody.appendChild(commentCardLike);
-    commentCard.appendChild(commentCardBody);
-    modal.appendChild(commentCard);
-
-    return commentCard;
-  }
-
-  commentPost(post) {
-    const modal = document.getElementById('posts');
-    const commentCard = document.createElement('div');
-    commentCard.className = 'card';
-    commentCard.style.width = '18rem';
-    commentCard.style.margin = '10px';
-
-    const commentCardBody = document.createElement('div');
-    commentCardBody.className = 'card-body';
-
-    const commentCardText = document.createElement('p');
-    commentCardText.className = 'card-text';
-    commentCardText.innerHTML = post.postComments.commentText;
-
-    const commentCardLike = document.createElement('button');
-    commentCardLike.className = 'btn btn-primary';
-    commentCardLike.innerHTML = 'Like';
-    commentCardLike.addEventListener('click', () => {
-      this.likeComment(post);
-    });
-
-    commentCardBody.appendChild(commentCardText);
-    commentCardBody.appendChild(commentCardLike);
-    commentCard.appendChild(commentCardBody);
-    modal.appendChild(commentCard);
   }
 
   //  Function to like a post
@@ -489,7 +492,7 @@ export class ProfileComponent {
         //  Increment the post's like count and add the current user's profile handle to the post's like owners
         postLikeCount: firebase.firestore.FieldValue.increment(1),
         postLikeOwners: firebase.firestore.FieldValue.arrayUnion(this.currentUser.user.profile.profileHandle)
-      });
+      }).then(() => this.loadProfilePostsData()).then(() => this.displayPosts());
     }
   }
 
@@ -510,58 +513,89 @@ export class ProfileComponent {
         //  Decrement the post's like count by 1 and remove the current user's profile handle from the post's like owners array
         postLikeCount: firebase.firestore.FieldValue.increment(-1),
         postLikeOwners: firebase.firestore.FieldValue.arrayRemove(this.currentUser.user.profile.profileHandle)
-      });
+      }).then(() => this.loadProfilePostsData()).then(() => this.displayPosts());
     }
   }
 
-  //  Function to create a new comment on an existing post
-  newComment(post, newComment: string) {
-    //  Returns a promise that resolves when the comment is added to the database
-    return this.afs.collection('profiles').doc(this.profile.profileHandle).collection('posts').doc(post.uid).update({
-      //  Add the new comment to the post's comments array
-      postComments: firebase.firestore.FieldValue.arrayUnion({
-        commentLikeCount: 0,
-        commentOwner: this.currentUser.user.profile.profileHandle,
-        commentText: newComment,
-        commentTimeStamp: new Date().getTime(),
-      })
-    });
-  }
-
   //  Function to like a comment
-  likeComment(comment) {
+  likeComment(post, postIndex, comment, commentIndex) {
     // Check if the current user has already liked the comment
     let alreadyLiked = false;
-    for (let i = 0; i < comment.postComments.commentLikeOwners.length; i++) {
-      if (comment.postComments.commentLikeOwners[i] === this.currentUser.user.profile.profileHandle) {
+    for (let i = 0; i < comment.commentLikeOwners.length; i++) {
+      if (this.posts[postIndex].postComments[commentIndex].commentLikeOwners[i] === this.currentUser.user.profile.profileHandle) {
         alreadyLiked = true;
         break;
       }
     }
 
-    //  If the current user hasn't already liked the comment, like it
+    // If the current user hasn't already liked the comment, like it
     if (!alreadyLiked) {
-      //  Returns a promise that resolves when the comment's like count is incremented and the user is added to the 'commentLikeOwners' array
-      return this.afs.collection('profiles').doc(this.profile.profileHandle).collection('posts').doc(comment).update({
-        //  Increment the comment's like count and add the current user to the 'commentLikeOwners' array
-        postComments: firebase.firestore.FieldValue.arrayUnion({
-          commentLikeCount: comment.postComments.firebase.firestore.FieldValue.increment(1),
-          commentLikeOwners: comment.postComments.firebase.firestore.FieldValue.arrayUnion(this.currentUser.user.profile.profileHandle),
-        })
+      // Get the existing postComments array
+      const postRef = this.afs.collection('profiles').doc(this.profile.profileHandle).collection('posts').doc(post.uid);
+      return postRef.get().toPromise().then(doc => {
+        if (doc.exists) {
+          const post = doc.data();
+          const postComments = post.postComments.slice(); // Make a copy of the array to modify
+          const commentToUpdate = postComments[commentIndex];
+          const updatedComment = {
+            ...commentToUpdate,
+            commentLikeCount: commentToUpdate.commentLikeCount + 1,
+            commentLikeOwners: [...commentToUpdate.commentLikeOwners, this.currentUser.user.profile.profileHandle]
+          };
+          postComments[commentIndex] = updatedComment;
+          // Update the entire postComments array with the modified item
+          return postRef.update({
+            postComments: postComments
+          }).then(() => this.loadProfilePostsData()).then(() => this.displayPosts());;
+        } else {
+          console.log("No such document!");
+        }
+      }).catch(error => {
+        console.log("Error getting document:", error);
       });
     }
   }
 
   //  Function to unlike a comment
-  unlikeComment(comment) {
-    //  Returns a promise that resolves when the comment's like count is decremented and the user is removed from the 'commentLikeOwners' array
-    return this.afs.collection('profiles').doc(this.profile.profileHandle).collection('posts').doc(comment).update({
-      //  Decrement the comment's like count and remove the current user from the 'commentLikeOwners' array
-      postComments: firebase.firestore.FieldValue.arrayUnion({
-        commentLikeCount: comment.firebase.firestore.FieldValue.increment(-1),
-        commentLikeOwners: comment.firebase.firestore.FieldValue.arrayRemove(this.currentUser.user.profile.profileHandle),
-      })
-    });
+  unlikeComment(post, postIndex, comment, commentIndex) {
+    // Check if the current user has already liked the comment
+    let alreadyLiked = false;
+    let commentToUpdate = null;
+    let updatedComment = null;
+    for (let i = 0; i < comment.commentLikeOwners.length; i++) {
+      if (this.posts[postIndex].postComments[commentIndex].commentLikeOwners[i] === this.currentUser.user.profile.profileHandle) {
+        alreadyLiked = true;
+        // Found the current user's like, remove it from the commentLikeOwners array and decrement the commentLikeCount
+        commentToUpdate = this.posts[postIndex].postComments[commentIndex];
+        updatedComment = {
+          ...commentToUpdate,
+          commentLikeCount: commentToUpdate.commentLikeCount - 1,
+          commentLikeOwners: commentToUpdate.commentLikeOwners.filter(owner => owner !== this.currentUser.user.profile.profileHandle)
+        };
+        break;
+      }
+    }
+
+    // If the current user has already liked the comment, unlike it
+    if (alreadyLiked) {
+      // Get the existing postComments array
+      const postRef = this.afs.collection('profiles').doc(this.profile.profileHandle).collection('posts').doc(post.uid);
+      return postRef.get().toPromise().then(doc => {
+        if (doc.exists) {
+          const post = doc.data();
+          const postComments = post.postComments.slice(); // Make a copy of the array to modify
+          postComments[commentIndex] = updatedComment;
+          // Update the entire postComments array with the modified item
+          return postRef.update({
+            postComments: postComments
+          }).then(() => this.loadProfilePostsData()).then(() => this.displayPosts());;
+        } else {
+          console.log("No such document!");
+        }
+      }).catch(error => {
+        console.log("Error getting document:", error);
+      });
+    }
   }
 
   //  Function to delete a post
@@ -586,26 +620,30 @@ export class ProfileComponent {
     return true;
   }
 
-  getPost() {
-    //  Check if the textarea is empty, so the user doesn't add an empty post
-    if ((<HTMLInputElement>document.getElementById("PostText")).value != '') {
-      //  Reference the firebase database
-      const db = firebase.firestore();
-
-      //  Reference the profiles document associated with the current user's profilehandle
-      const docRef = db.collection('profiles').doc(this.profile.profileHandle);
-
-      //  Update the posts by calling arrayUnion and adding the value in the PostText element on the HTML doc.
-      docRef.update({
-        posts: firebase.firestore.FieldValue.arrayUnion((<HTMLInputElement>document.getElementById("PostText")).value)
-      });
+  //  This function gets text the user has entered and creates a new post in the user's posts collection
+  createPost() {
+    //  Get the text the user has entered
+    let postText = (<HTMLInputElement>document.getElementById("PostText")).value;
+    //  Create a new post object
+    let post = {
+      uid: this.afs.createId(),
+      postText: postText,
+      postTimeStamp: new Timestamp(Date.now() / 1000, 0),
+      postLikeCount: 0,
+      postLikeOwners: [],
+      postComments: [{
+        commentText: '',
+        commentTimeStamp: new Timestamp(Date.now() / 1000, 0),
+        commentLikeCount: 0,
+        commentLikeOwners: []
+      }]
     }
-    else {
-      alert("You didn't enter any text. Don't worry, no post was created!");
-    }
-
-    //  Clear the text inside the PostText element on the HTML doc
+    //  Add the post to the user's posts collection
+    this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('posts').doc(post.uid).set(post)
+    .then(() => this.loadProfilePostsData()).then(() => this.displayPosts());
+    //  Clear the PostText element on the HTML doc.
     (<HTMLInputElement>document.getElementById("PostText")).value = '';
+    this.closePostsModal();
   }
 
   cancelPost() {
