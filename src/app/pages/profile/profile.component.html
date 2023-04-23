@@ -76,38 +76,13 @@
                   <button *ngIf="userProfile" type="button" id="createPost" class="btn btn-outline-success" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0;" (click)="showPostsModal()">
                     Create Post+
                   </button>
-                  <!-- <button type="button" id="createPost" class="btn zoom-btn btn-outline-success" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0;" (click)="showAllPostsModal()">
-                    View All Posts
-                  </button> -->
                 </div>
               </div>
               <div id="posts"></div>
               <div id="noPosts"></div>
-              <!-- <div *ngIf="!profile.posts">
-                <p class="display-6" style="margin: auto;">This user hasn't made any posts yet!</p>
-              </div>
-              <div class="card-body mt-2">
-                <div class="row g-2 mb-2">
-                  <div class="card d-flex col-lg-5 mb-2 w-50" style="padding-top: 5%; padding-bottom: 5%; text-align: center; font-size: 18px; margin: 0 auto; background-color: rgba(255, 255, 255, 0.8)" *ngIf="profile.posts[profile.posts.length - 1]">
-                    {{profile.posts[profile.posts.length - 1]}}
-                  </div>
-                  <div class="card d-flex col-lg-5 mb-2 w-50" style="padding-top: 5%; padding-bottom: 5%; text-align: center; font-size: 18px; margin: 0 auto; background-color: rgba(255, 255, 255, 0.8)" *ngIf="profile.posts[profile.posts.length - 2]">
-                    {{profile.posts[profile.posts.length - 2]}}
-                  </div>
-                </div>
-                <div class="row g-2 mb-2">
-                  <div class="card d-flex col-lg-5 mb-2 w-50" style="padding-top: 5%; padding-bottom: 5%; text-align: center; font-size: 18px; margin: 0 auto; background-color: rgba(255, 255, 255, 0.8)" *ngIf="profile.posts[profile.posts.length - 3]">
-                    {{profile.posts[profile.posts.length - 3]}}
-                  </div>
-                  <div class="card d-flex col-lg-5 mb-2 w-50" style="padding-top: 5%; padding-bottom: 5%; text-align: center; font-size: 18px; margin: 0 auto; background-color: rgba(255, 255, 255, 0.8)" *ngIf="profile.posts[profile.posts.length - 4]">
-                    {{profile.posts[profile.posts.length - 4]}}
-                  </div>
-                </div>
-              </div> -->
-
             </div>
           </div>
-          <div class="row mt-5 w-100">
+          <div class="row mt-5 w-100" id="WorkoutsCard">
             <div class="card d-flex col-lg-10 mb-5" style="text-align: center; margin: 0 auto; background-color: rgba(32, 61, 28, 0.1); border: none;">
               <div class="card-header display-6 mb-2" style="background: none;">
                 Recent Workouts
@@ -257,16 +232,3 @@
     <button class="btn zoom-btn btn-outline-secondary" style="background-color: rgba(255, 255, 255, 0.8);" (click)="closeEditProfileModal()">Close</button>
   </div>
 </div>
-
-<!--View All Workouts Modal-->
-
-<!--View All Posts Modal-->
-<!-- <div #allPostsModal class="modal" style="width: 30%; min-width: 450px; min-height: 600px;">
-  <div class="modal-header">
-      All of @{{urlProfileHandle}} posts
-  </div>
-  <div class="modal-body" id="posts"></div>
-  <div class="modal-footer" style="width: 90%;">
-    <button class="close btn btn-primary" (click)="closeAllPostsModal()">Close</button>
-  </div>
-</div> -->

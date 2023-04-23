@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -18,25 +18,16 @@ import { PostsService } from 'src/app/services/posts.service';
 import { map } from 'rxjs/operators';
 import { Timestamp } from 'firebase/firestore';
 
-interface Post {
-  uid: string;
-  postText: string;
-  postTimeStamp: Timestamp;
-  postLikeOwners: string[];
-  postLikeCount: number;
-  postComments: {
-    commentLikeCount: number;
-    commentLikeOwners: string[];
-    commentOwner: string;
-    commentText: string;
-    commentTimeStamp: Timestamp;
-  }[];
-}
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.css'],
+  template: `
+    <button class="btn btn-outline-secondary">
+      <fa-icon [icon]="faCog"></fa-icon>
+    </button>
+  `
 })
 
 export class ProfileComponent implements OnInit {
@@ -52,7 +43,9 @@ export class ProfileComponent implements OnInit {
   workouts;
   showUploadButton = false;
   showCropper = false;
-  posts: Post[];
+  posts;
+  imageChangedEvent: any = '';
+  croppedImage: any = '';
 
   @ViewChild('followersModal') followersModal: ElementRef;
   @ViewChild('followingModal') followingModal: ElementRef;
@@ -60,6 +53,7 @@ export class ProfileComponent implements OnInit {
   @ViewChild('workoutsModal') workoutsModal: ElementRef;
   @ViewChild('editProfileModal') editProfileModal: ElementRef;
   @ViewChild('allPostsModal') allPostsModal: ElementRef;
+  @ViewChild('editPostModal') editPostModal: ElementRef;
 
   constructor(
     private route: ActivatedRoute,
@@ -71,7 +65,6 @@ export class ProfileComponent implements OnInit {
     private afs: AngularFirestore,
     public location: Location,
     private storage: AngularFireStorage,
-    private ngZone: NgZone,
     private cdr: ChangeDetectorRef,
     private postsService: PostsService,
     private toastr: ToastrService,
@@ -108,10 +101,11 @@ export class ProfileComponent implements OnInit {
         this.profilePictureUrl = url;
         this.loadingImage = false;
       },()=>{
-        this.profilePictureUrl = "ttps://wilcity.com/wp-content/uploads/2020/06/115-1150152_default-profile-picture-avatar-png-green.jpg"; // default profile picture
+        this.profilePictureUrl = "https://wilcity.com/wp-content/uploads/2020/06/115-1150152_default-profile-picture-avatar-png-green.jpg"; // default profile picture
         this.loadingImage = false;
       });
     }
+
     // If the profile handle is not the current user, load the profile data from the database
     else {
       this.userProfile = false;
@@ -176,7 +170,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-
+  //  Button that allows a user to upload a profile picture
   onUploadButtonClick() {
     const input = document.createElement('input');
     input.type = 'file';
@@ -188,17 +182,17 @@ export class ProfileComponent implements OnInit {
     input.click();
   }
 
-  imageChangedEvent: any = '';
-  croppedImage: any = '';
-
+  //  Checks if the user has updated their profile picture
   fileChangeEvent(event: any): void {
     this.imageChangedEvent = event;
   }
 
+  //  Crops the image to a square
   imageCropped(event: ImageCroppedEvent) {
     this.croppedImage = event.base64;
   }
 
+  //  Uploads the image to firebase
   uploadImage() {
     this.showCropper = false;
 
@@ -282,29 +276,10 @@ export class ProfileComponent implements OnInit {
     return false;
   }
 
+
   getWorkouts(profile: string) {
-    return this.afs.collection('profiles').doc(profile).collection('workouts').valueChanges({ idField: 'uid' });
+    return this.workoutService.getWorkouts(this.profile.profileHandle);
   }
-
-  // //  Function to create a new post
-  // newPost() {
-  //   //  Get the post text from the postText element on the HTML doc
-  //   const post = (<HTMLInputElement>document.getElementById("PostText")).value;
-
-  //   //  Add the post to the current user's posts collection
-  //   return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('posts').add({
-  //     postText: post,
-  //     postLikeCount: 0,
-  //     postTimeStamp: Timestamp,
-  //     postComments: {
-  //       commentLikeCount: 0,
-  //       commentLikeOwners: [],
-  //       commentOwner: '',
-  //       commentText: '',
-  //       commentTimeStamp: Timestamp,
-  //     }
-  //   });
-  // }
 
   //  Function to display this porfile's posts in a modal
   displayPosts() {
@@ -314,6 +289,7 @@ export class ProfileComponent implements OnInit {
     posts.innerHTML = '';
 
     if (this.posts.length === 0) {
+
       const noPosts = document.createElement('div');
       noPosts.className = 'card w-100 mb-2';
       noPosts.style.width = '18rem';
@@ -325,7 +301,6 @@ export class ProfileComponent implements OnInit {
       //  Loop through the posts and create a card for each of them with a like
       //  and comment button and also display the comments for each post within the post card
       for (let i = 0; i < this.posts.length; i++) {
-        console.log("This is for post " + (i + 1));
         const postCard = document.createElement('div');
         postCard.className = 'card w-100 mb-2';
         postCard.style.width = '18rem';
@@ -337,6 +312,35 @@ export class ProfileComponent implements OnInit {
         postCardHeader.style.textAlign = 'left';
         postCardHeader.style.fontSize = '15px';
         postCardHeader.innerHTML = this.posts[i].postTimeStamp.toDate().toDateString();
+
+        if (this.profile.profileHandle === this.currentUser.user.profile.profileHandle) {
+          //  Create a "-" button to delete the post when hovered on and has an info attribute that says "Delete this post?"
+          const deletePostButton = document.createElement('button');
+          deletePostButton.className = 'btn btn-outline-secondary';
+          deletePostButton.style.float = 'right';
+          deletePostButton.innerHTML = 'Delete Post';
+          deletePostButton.addEventListener('click', () => {
+            if (confirm("Are you sure you want to delete this post?")) {
+              this.deletePost(this.posts[i]);
+            }
+          });
+
+          //  Change the background color of the delete post button when hovered on
+          deletePostButton.addEventListener('mouseover', () => {
+            deletePostButton.style.backgroundColor = 'red';
+          });
+
+          //  Change the background color of the delete post button when the mouse leaves the button
+          deletePostButton.addEventListener('mouseout', () => {
+            deletePostButton.style.backgroundColor = 'white';
+          });
+
+          deletePostButton.setAttribute('data-toggle', 'tooltip');
+          deletePostButton.setAttribute('data-placement', 'top');
+          deletePostButton.setAttribute('title', 'Delete this post?');
+
+          postCardHeader.appendChild(deletePostButton);
+        }
 
         //  Create a card body to hold the post text and the like and comment buttons
         const postCardBody = document.createElement('div');
@@ -357,16 +361,39 @@ export class ProfileComponent implements OnInit {
           postCardLike.addEventListener('click', () => {
             this.unlikePost(this.posts[i]);
           });
-        } else {
+
+          //  Change the background color of the unlike button when hovered on
+          postCardLike.addEventListener('mouseover', () => {
+            postCardLike.style.backgroundColor = 'gray';
+          });
+
+          //  Change the background color of the unlike button when the mouse leaves the button
+          postCardLike.addEventListener('mouseout', () => {
+            postCardLike.style.backgroundColor = 'white';
+          });
+        }
+
+        else {
           postCardLike.innerHTML = this.posts[i].postLikeCount + ' Like';
           postCardLike.addEventListener('click', () => {
             this.likePost(this.posts[i]);
+          });
+
+          //  Change the background color of the like button when hovered on
+          postCardLike.addEventListener('mouseover', () => {
+            postCardLike.style.backgroundColor = 'blue';
+          });
+
+          //  Change the background color of the like button when the mouse leaves the button
+          postCardLike.addEventListener('mouseout', () => {
+            postCardLike.style.backgroundColor = 'white';
           });
         }
 
         //  Create a comment button under the textarea for the user to submit a comment
         const commentButton = document.createElement('button');
         commentButton.className = 'btn btn-outline-success';
+        commentButton.style.marginLeft = '3px';
         commentButton.innerHTML = 'Comment';
         commentButton.addEventListener('click', () => {
           this.commentPost(this.posts[i], i);
@@ -379,6 +406,7 @@ export class ProfileComponent implements OnInit {
         commentTextArea.rows = 3;
         commentTextArea.placeholder = 'Reply to @' + this.profile.profileHandle + '\'s post...';
 
+        //  Append the post card to the posts div
         posts.appendChild(postCard);
         postCard.appendChild(postCardHeader);
         postCard.appendChild(postCardBody);
@@ -396,9 +424,9 @@ export class ProfileComponent implements OnInit {
             if (this.posts[i].postComments[j].commentText !== '')
             {
               const commentCard = document.createElement('div');
-              commentCard.className = 'card w-75';
+              commentCard.className = 'card w-75 mb-2';
               commentCard.style.width = '18rem';
-              commentCard.style.marginLeft = '50px';
+              commentCard.style.marginLeft = '25px';
 
               const commentCardHeader = document.createElement('div');
               commentCardHeader.className = 'card-header w-100';
@@ -406,6 +434,33 @@ export class ProfileComponent implements OnInit {
               commentCardHeader.style.textAlign = 'left';
               commentCardHeader.style.fontSize = '15px';
               commentCardHeader.innerHTML = this.posts[i].postComments[j].commentTimeStamp.toDate().toDateString() + ' by @' + this.posts[i].postComments[j].commentOwner + ':';
+
+              //  Create a gear button to allow the user to delete their own comments
+              if (this.posts[i].postComments[j].commentOwner === this.currentUser.user.profile.profileHandle || this.profile.profileHandle === this.currentUser.user.profile.profileHandle) {
+                const commentCardGear = document.createElement('button');
+                commentCardGear.className = 'btn btn-outline-secondary';
+                commentCardGear.style.float = 'right';
+                commentCardGear.innerHTML = 'Delete Comment';
+
+                //  Change backgroud color of the button to red on hover
+                commentCardGear.addEventListener('mouseover', () => {
+                  commentCardGear.style.backgroundColor = 'red';
+                });
+
+                //  Change backgroud color of the button back to white on mouseout
+                commentCardGear.addEventListener('mouseout', () => {
+                  commentCardGear.style.backgroundColor = 'white';
+                });
+
+                commentCardGear.addEventListener('click', () => {
+                  if (confirm("Are you sure you want to delete this comment?")) {
+                    this.deleteComment(this.posts[i], this.posts[i].postComments[j]);
+                  }
+                });
+
+                //  Append the gear button to the card header
+                commentCardHeader.appendChild(commentCardGear);
+              }
 
               const commentCardBody = document.createElement('div');
               commentCardBody.className = 'card-body';
@@ -425,6 +480,16 @@ export class ProfileComponent implements OnInit {
                 commentCardLike.addEventListener('click', () => {
                   this.unlikeComment(this.posts[i], i, this.posts[i].postComments[j], j);
                 });
+
+                //  Change the background color of the unlike button when hovered on
+                commentCardLike.addEventListener('mouseover', () => {
+                  commentCardLike.style.backgroundColor = 'gray';
+                });
+
+                //  Change the background color of the unlike button when the mouse leaves the button
+                commentCardLike.addEventListener('mouseout', () => {
+                  commentCardLike.style.backgroundColor = 'white';
+                });
               }
 
               else
@@ -433,9 +498,19 @@ export class ProfileComponent implements OnInit {
                 commentCardLike.addEventListener('click', () => {
                   this.likeComment(this.posts[i], i, this.posts[i].postComments[j], j);
                 });
+
+                //  Change the background color of the like button when hovered on
+                commentCardLike.addEventListener('mouseover', () => {
+                  commentCardLike.style.backgroundColor = 'blue';
+                });
+
+                //  Change the background color of the like button when the mouse leaves the button
+                commentCardLike.addEventListener('mouseout', () => {
+                  commentCardLike.style.backgroundColor = 'white';
+                });
               }
 
-              commentCardBody.append(commentCardHeader);
+              commentCard.append(commentCardHeader);
               commentCardBody.appendChild(commentCardText);
               commentCardBody.appendChild(commentCardLike);
               commentCard.appendChild(commentCardBody);
@@ -481,8 +556,41 @@ export class ProfileComponent implements OnInit {
       postDocRef.update({ postComments: postComments }).then(() => {
         // Clear the textarea
         (<HTMLInputElement>document.getElementById('commentTextArea' + i)).value = '';
-      }).then(() => this.loadProfilePostsData()).then(() => this.displayPosts());;
+      })
+      .then(() => this.loadProfilePostsData())
+      .then(() => this.displayPosts())
+      .then(() => this.toastr.success('Comment posted successfully!', 'Success'));
     });
+  }
+
+  //  Function to save a post
+  savePost(post) {
+    //  Get the post's text from the textarea
+    const postText = (<HTMLInputElement>document.getElementById('editPostTextArea' + post.uid)).value;
+
+    //  Check if the post text is empty
+    if (postText === '') {
+      return;
+    }
+
+    //  Get the current post document from Firestore
+    const postDocRef = this.afs.collection('profiles').doc(this.profile.profileHandle)
+      .collection('posts').doc(post.uid);
+
+    //  Get the current server timestamp
+    const serverTimestamp = new Timestamp(Date.now() / 1000, 0);
+
+    //  Update the post document with the updated post text and timestamp
+    postDocRef.update({
+      postText: postText,
+      postTimeStamp: serverTimestamp
+    }).then(() => {
+      //  Clear the textarea
+      (<HTMLInputElement>document.getElementById('postTextArea' + post.uid)).value = '';
+    })
+    .then(() => this.loadProfilePostsData())
+    .then(() => this.displayPosts())
+    .then(() => this.toastr.success('Post edited successfully!', 'Success'));
   }
 
   //  Function to like a post
@@ -611,7 +719,10 @@ export class ProfileComponent implements OnInit {
   //  Function to delete a post
   deletePost(post) {
     //  Returns a promise that resolves when the post is deleted from the database
-    return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('posts').doc(post.uid).delete();
+    return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('posts').doc(post.uid).delete()
+    .then(() => this.loadProfilePostsData())
+    .then(() => this.displayPosts())
+    .then(() => this.toastr.success('Post deleted successfully!', 'Success'));
   }
 
   //  Function to delete a comment
@@ -619,10 +730,12 @@ export class ProfileComponent implements OnInit {
     //  Returns a promise that resolves when the comment is deleted from the database
     return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('posts').doc(post.uid).update({
       postComments: firebase.firestore.FieldValue.arrayRemove(comment)
-    });
+    }).then(() => this.loadProfilePostsData())
+    .then(() => this.displayPosts())
+    .then(() => this.toastr.success('Comment deleted successfully!', 'Success'));
   }
 
-  //  This function shecks if the user has any workouts.
+  //  This function checks if the user has any workouts.
   checkWorkouts(): boolean {
     if (this.profile.workouts.length === 1) {
       return false;
@@ -650,7 +763,9 @@ export class ProfileComponent implements OnInit {
     }
     //  Add the post to the user's posts collection
     this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('posts').doc(post.uid).set(post)
-    .then(() => this.loadProfilePostsData()).then(() => this.displayPosts());
+    .then(() => this.loadProfilePostsData())
+    .then(() => this.displayPosts())
+    .then(() => this.toastr.success('Post created successfully!', 'Success'));
     //  Clear the PostText element on the HTML doc.
     (<HTMLInputElement>document.getElementById("PostText")).value = '';
     this.closePostsModal();
@@ -679,6 +794,7 @@ export class ProfileComponent implements OnInit {
     this.updateWeight();
     this.updateAbout();
     this.updateVisibility();
+    this.toastr.success('Profile updated successfully!', 'Success');
   }
 
   updateProfileName() {
@@ -814,6 +930,10 @@ export class ProfileComponent implements OnInit {
   //  This function will close the modal that shows the users that are following the user.
   closePostsModal() {
     this.postsModal.nativeElement.style.display = "none";
+  }
+
+  showEditPostModal() {
+    this.editPostModal.nativeElement.style.display = "block";
   }
 
   //  This function will show the users that are following the user.
