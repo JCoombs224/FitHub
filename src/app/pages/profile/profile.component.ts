@@ -40,7 +40,8 @@ export class ProfileComponent implements OnInit {
   showModal = false;
   loadingImage = true;
   profilePictureUrl = ""; // default profile picture
-  workouts;
+  workouts = [];
+  workoutsSubscription;
   showUploadButton = false;
   showCropper = false;
   posts;
@@ -65,8 +66,6 @@ export class ProfileComponent implements OnInit {
     private afs: AngularFirestore,
     public location: Location,
     private storage: AngularFireStorage,
-    private cdr: ChangeDetectorRef,
-    private postsService: PostsService,
     private toastr: ToastrService,
   ) { }
 
@@ -78,13 +77,14 @@ export class ProfileComponent implements OnInit {
       this.loadProfileData();
       this.title.setTitle(`@${this.urlProfileHandle} | FitHub`);
       this.loadProfilePostsData(this.profile.profileHandle).then(() => {
-        console.log(this.posts);
         this.displayPosts();
       });
       this.checkFollowers();
     });
 
-    this.workouts = this.workoutService.getExercises(this.urlProfileHandle);
+    this.workoutsSubscription = this.workoutService.getWorkouts().subscribe(workouts => {
+      this.workouts = workouts;
+    });
   }
 
   // Load the profile data from the database
@@ -149,10 +149,12 @@ export class ProfileComponent implements OnInit {
           return posts.map(post => {
             const data = post.payload.doc.data();
             const uid = post.payload.doc.id;
+            const postImg = data.postImg;
             const postText = data.postText;
             const postTimeStamp = data.postTimeStamp;
             const postLikeOwners = data.postLikeOwners;
             const postLikeCount = data.postLikeCount;
+            const postWorkout = data.postWorkout;
             const postComments = data.postComments.map(comment => ({
               commentLikeCount: comment.commentLikeCount,
               commentLikeOwners: comment.commentLikeOwners,
@@ -160,7 +162,7 @@ export class ProfileComponent implements OnInit {
               commentText: comment.commentText,
               commentTimeStamp: comment.commentTimeStamp,
             }));
-            return { uid, postText, postTimeStamp, postLikeOwners, postLikeCount, postComments };
+            return { uid, postImg, postText, postTimeStamp, postLikeOwners, postLikeCount, postWorkout, postComments };
           });
         })
       ).subscribe(posts => {
@@ -276,7 +278,6 @@ export class ProfileComponent implements OnInit {
     return false;
   }
 
-
   getWorkouts(profile: string) {
     return this.workoutService.getWorkouts(this.profile.profileHandle);
   }
@@ -342,10 +343,41 @@ export class ProfileComponent implements OnInit {
           postCardHeader.appendChild(deletePostButton);
         }
 
-        //  Create a card body to hold the post text and the like and comment buttons
+        //  Create a card body to hold the post text, image, and the like and comment buttons
         const postCardBody = document.createElement('div');
         postCardBody.className = 'card-body';
 
+        //  Create an image element to show post[i].postImg if it exists
+        const postCardImg = document.createElement('img');
+        postCardImg.className = 'card-img-top';
+        postCardImg.style.width = '100%';
+        postCardImg.style.height = 'auto';
+        postCardImg.style.display = 'block';
+        postCardImg.style.marginLeft = 'auto';
+        postCardImg.style.marginRight = 'auto';
+        postCardImg.style.marginBottom = '10px';
+        postCardImg.style.borderRadius = '10px';
+        postCardImg.style.border = '1px solid black';
+        postCardImg.style.objectFit = 'cover';
+        postCardImg.style.objectPosition = 'center';
+        postCardImg.style.minHeight = '100px';
+        postCardImg.style.minWidth = '100px';
+
+        //  If the post has an image, display it
+        if (this.posts[i].postImg !== '') {
+          postCardImg.src = this.posts[i].postImg;
+        }
+
+        if (this.posts[i].postWorkout !== 'None') {
+          const postCardWorkout = document.createElement('p');
+          postCardWorkout.className = 'card-text';
+          postCardWorkout.style.fontSize = '20px';
+          postCardWorkout.style.textAlign = 'left';
+          postCardWorkout.innerHTML = this.posts[i].postWorkout;
+          postCardBody.appendChild(postCardWorkout);
+        }
+
+        //  Create a card text to hold the post text
         const postCardText = document.createElement('p');
         postCardText.className = 'card-text';
         postCardText.style.fontSize = '20px';
@@ -410,6 +442,9 @@ export class ProfileComponent implements OnInit {
         posts.appendChild(postCard);
         postCard.appendChild(postCardHeader);
         postCard.appendChild(postCardBody);
+        if (typeof this.posts[i].postImg !== 'undefined' && this.posts[i].postImg !== '') {
+          postCardBody.appendChild(postCardImg);
+        }
         postCardBody.appendChild(postCardText);
         postCardBody.appendChild(commentTextArea);
         postCardBody.appendChild(postCardLike);
@@ -745,29 +780,107 @@ export class ProfileComponent implements OnInit {
 
   //  This function gets text the user has entered and creates a new post in the user's posts collection
   createPost() {
-    //  Get the text the user has entered
+    let imageToPost = (<HTMLInputElement>document.getElementById("ImageToPost")).files[0];
     let postText = (<HTMLInputElement>document.getElementById("PostText")).value;
-    //  Create a new post object
-    let post = {
-      uid: this.afs.createId(),
-      postText: postText,
-      postTimeStamp: new Timestamp(Date.now() / 1000, 0),
-      postLikeCount: 0,
-      postLikeOwners: [],
-      postComments: [{
-        commentText: '',
-        commentTimeStamp: new Timestamp(Date.now() / 1000, 0),
-        commentLikeCount: 0,
-        commentLikeOwners: []
-      }]
+    let postImgUrl = '';
+
+    let postWorkout = (<HTMLInputElement>document.getElementById("PostWorkout")).value;
+    let workout = this.workoutService.getWorkout(postWorkout);
+    let workoutName = '';
+
+    //  subscribe to the workout observable
+    workout.subscribe((workout) => {
+      //  Get the workout name
+      workoutName = workout.name;
+    });
+
+    console.log("Workout name: " + workoutName);
+
+
+    //  Check to see if the user has selected an image
+    if (imageToPost) {
+      this.toastr.info('Uploading image...', 'Please wait');
+
+      //  Create a randomized reference name for the image 32 characters long
+      let randomId = Math.random().toString(36).substring(0, 16) + Math.random().toString(36).substring(0, 16);
+
+      //  Create a storage reference for the image
+      const storageRef = firebase.storage().ref(`postImages/${randomId}`);
+
+      //  Upload the image to the storage reference
+      const uploadTask = storageRef.put(imageToPost);
+
+      //  Get the image url for the image
+      uploadTask.on('state_changed', (snapshot) => {
+        //  Show a progress bar in a toastr
+        this.toastr.info('Uploading image...', 'Please wait');
+      }, (error) => {
+        //  Handle unsuccessful uploads
+        console.log(error);
+      }, () => {
+        //  Do something once upload is complete
+        uploadTask.snapshot.ref.getDownloadURL()
+        .then((downloadURL) => {
+          //  Set the postImgUrl to the download url for the image
+          postImgUrl = downloadURL;
+        })
+        .then(() => {
+          //  Create a new post object
+          let post = {
+            uid: this.afs.createId(),
+            postText: postText,
+            postTimeStamp: new Timestamp(Date.now() / 1000, 0),
+            postLikeCount: 0,
+            postLikeOwners: [],
+            postImg: postImgUrl,
+            postWorkout: postWorkout,
+            postComments: [{
+              commentText: '',
+              commentTimeStamp: new Timestamp(Date.now() / 1000, 0),
+              commentLikeCount: 0,
+              commentLikeOwners: []
+            }]
+          }
+          //  Add the post to the user's posts collection
+          this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('posts').doc(post.uid).set(post)
+          .then(() => this.loadProfilePostsData())
+          .then(() => this.displayPosts())
+          .then(() => this.toastr.success('Post created successfully with an image!', 'Success'));
+        });
+      });
     }
-    //  Add the post to the user's posts collection
-    this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('posts').doc(post.uid).set(post)
-    .then(() => this.loadProfilePostsData())
-    .then(() => this.displayPosts())
-    .then(() => this.toastr.success('Post created successfully!', 'Success'));
+
+    else {
+      //  Create a new post object
+      let post = {
+        uid: this.afs.createId(),
+        postText: postText,
+        postTimeStamp: new Timestamp(Date.now() / 1000, 0),
+        postLikeCount: 0,
+        postLikeOwners: [],
+        postImg: postImgUrl,
+        postWorkout: postWorkout,
+        postComments: [{
+          commentText: '',
+          commentTimeStamp: new Timestamp(Date.now() / 1000, 0),
+          commentLikeCount: 0,
+          commentLikeOwners: []
+        }]
+      }
+      //  Add the post to the user's posts collection
+      this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('posts').doc(post.uid).set(post)
+      .then(() => this.loadProfilePostsData())
+      .then(() => this.displayPosts())
+      .then(() => this.toastr.success('Post created successfully without an image!', 'Success'));
+    }
+
     //  Clear the PostText element on the HTML doc.
     (<HTMLInputElement>document.getElementById("PostText")).value = '';
+
+    //  Clear the ImageToPost element on the HTML doc.
+    (<HTMLInputElement>document.getElementById("ImageToPost")).value = '';
+
+    //  Close the modal
     this.closePostsModal();
   }
 

@@ -33,6 +33,10 @@ export class PostsService {
       postLikeCount: 0,
       //  Array of users who liked the post
       postLikeOwners: [],
+      //  The post image
+      postImg: '',
+      //  The post workout
+      postWorkout: [],
       //  The post text
       postText: '',
       //  The post timestamp

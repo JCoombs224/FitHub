@@ -164,19 +164,31 @@
 </div>
 
 <!--Posts modal-->
-<div #postsModal class="modal" style="width: 30%; min-width: 450px; min-height: 300px;">
+<div #postsModal class="modal" style="width: 30%; min-width: 450px; min-height: 300px; min-height: 50%;">
   <div class="modal-header w-100">
-    <h5>
+    <h3>
       Create Post+
-    </h5>
+    </h3>
   </div>
-  <div class="modal-body">
+  <div class="modal-body" style="min-height: 70%;">
+    <div>
+      <h5 class="mt-4">Upload an image:</h5>
+      <input class="mb-2" type="file" id="ImageToPost" accept="image/*" aria-label="Choose an Image"/>
+    </div>
     <div class="form-group">
-      <textarea class="form-control" id="PostText" rows="3" placeholder="What's on your mind?"></textarea>
+      <h5>Enter text:</h5>
+      <textarea class="form-control mb-2" id="PostText" rows="3" placeholder="What's on your mind?"></textarea>
+    </div>
+    <div class="form-group">
+      <h5>Link a workout:</h5>
+      <select class="form-select mb-2" id="PostWorkout" aria-label="Select a workout">
+        <option selected>None</option>
+        <option *ngFor="let workout of workouts" value="{{workout.uid}}">{{workout.name}}</option>
+      </select>
     </div>
   </div>
   <div class="modal-footer w-100">
-    <button class="btn zoom-btn btn-outline-success" style="margin: 3px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" (click)="createPost()">Post+</button>
+    <button class="btn zoom-btn btn-outline-success" style="margin: 3px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" (click)="createPost();">Post+</button>
     <button class="btn zoom-btn btn-outline-secondary" style="background-color: rgba(255, 255, 255, 0.8);" (click)="closePostsModal()">Cancel</button>
   </div>
 </div>
