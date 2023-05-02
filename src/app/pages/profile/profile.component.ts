@@ -74,12 +74,14 @@ export class ProfileComponent implements OnInit {
     // Subscribe to the url param for the profile username and update the page based on that
     this.route.paramMap.subscribe(params => {
       this.urlProfileHandle = params.get('name');
-      this.loadProfileData();
       this.title.setTitle(`@${this.urlProfileHandle} | FitHub`);
-      this.loadProfilePostsData(this.profile.profileHandle).then(() => {
-        this.displayPosts();
+
+      this.loadProfileData().then(() => {
+        this.loadProfilePostsData(this.profile.profileHandle).then(() => {
+          this.displayPosts();
+        });
+        this.checkFollowers();
       });
-      this.checkFollowers();
     });
 
     this.workoutsSubscription = this.workoutService.getWorkouts().subscribe(workouts => {
@@ -89,43 +91,14 @@ export class ProfileComponent implements OnInit {
 
   // Load the profile data from the database
   private loadProfileData() {
-    // Check if the profile handle is the current user
-    if (this.urlProfileHandle == this.currentUser.user.profile.profileHandle) {
-      // Set the profile to the current user information
-      this.profile = this.currentUser.user.profile;
-      this.userProfile = true;
-      // Get profile picture from database
-      const filePath = `profile-pictures/${this.profile.profileHandle}`;
-      const fileRef = this.storage.ref(filePath);
-      fileRef.getDownloadURL().subscribe(url => {
-        this.profilePictureUrl = url;
-        this.loadingImage = false;
-      },()=>{
-        this.profilePictureUrl = "https://wilcity.com/wp-content/uploads/2020/06/115-1150152_default-profile-picture-avatar-png-green.jpg"; // default profile picture
-        this.loadingImage = false;
-      });
-    }
+    return new Promise((resolve) => {
+      // Check if the profile handle is the current user
+      if (this.urlProfileHandle == this.currentUser.user.profile.profileHandle) {
+        // Set the profile to the current user information
+        this.profile = this.currentUser.user.profile;
+        this.userProfile = true;
 
-    // If the profile handle is not the current user, load the profile data from the database
-    else {
-      this.userProfile = false;
-      this.profileService.getProfile(this.urlProfileHandle).ref.get().then(data => {
-        const profData = data.data();
-
-        // Set the profile data to the data from the database
-        this.profile.uid = profData.uid;
-        this.profile.profileHandle = profData.profileHandle;
-        this.profile.profileName = profData.profileName;
-        this.profile.age = profData.age;
-        this.profile.weight = profData.weight;
-        this.profile.heightFeet = profData.heightFeet;
-        this.profile.heightInches = profData.heightInches;
-        this.profile.sex = profData.sex;
-        this.profile.about = profData.about;
-        this.profile.followers = profData.followers;
-        this.profile.following = profData.following;
-        this.profile.isPrivate = profData.isPrivate;
-        this.profile.profilePicture = profData.profilePicture;
+        resolve(true);
 
         // Get profile picture from database
         const filePath = `profile-pictures/${this.profile.profileHandle}`;
@@ -133,13 +106,49 @@ export class ProfileComponent implements OnInit {
         fileRef.getDownloadURL().subscribe(url => {
           this.profilePictureUrl = url;
           this.loadingImage = false;
-        }
-        ,()=>{
+        }, () => {
           this.profilePictureUrl = "https://wilcity.com/wp-content/uploads/2020/06/115-1150152_default-profile-picture-avatar-png-green.jpg"; // default profile picture
           this.loadingImage = false;
         });
-      });
-    }
+      }
+
+      // If the profile handle is not the current user, load the profile data from the database
+      else {
+        this.userProfile = false;
+        this.profileService.getProfile(this.urlProfileHandle).ref.get().then(data => {
+          const profData = data.data();
+
+          // Set the profile data to the data from the database
+          this.profile.uid = profData.uid;
+          this.profile.profileHandle = profData.profileHandle;
+          this.profile.profileName = profData.profileName;
+          this.profile.age = profData.age;
+          this.profile.weight = profData.weight;
+          this.profile.heightFeet = profData.heightFeet;
+          this.profile.heightInches = profData.heightInches;
+          this.profile.sex = profData.sex;
+          this.profile.about = profData.about;
+          this.profile.followers = profData.followers;
+          this.profile.following = profData.following;
+          this.profile.isPrivate = profData.isPrivate;
+          this.profile.profilePicture = profData.profilePicture;
+          
+          resolve(true);
+
+          // Get profile picture from database
+          const filePath = `profile-pictures/${this.profile.profileHandle}`;
+          const fileRef = this.storage.ref(filePath);
+          fileRef.getDownloadURL().subscribe(url => {
+            this.profilePictureUrl = url;
+            this.loadingImage = false;
+          }, () => {
+              this.profilePictureUrl = "https://wilcity.com/wp-content/uploads/2020/06/115-1150152_default-profile-picture-avatar-png-green.jpg"; // default profile picture
+              this.loadingImage = false;
+            });
+        });
+      }
+    });
+
   }
 
   loadProfilePostsData(profile = this.profile.profileHandle) {
@@ -450,14 +459,11 @@ export class ProfileComponent implements OnInit {
         postCardBody.appendChild(postCardLike);
         postCardBody.appendChild(commentButton);
 
-        if (this.posts[i].postComments.length > 0)
-        {
+        if (this.posts[i].postComments.length > 0) {
           //  Loop through this posts comments and create a paragraph for each of them with a like button for each comment
-          for (let j = 0; j < this.posts[i].postComments.length; j++)
-          {
+          for (let j = 0; j < this.posts[i].postComments.length; j++) {
             //  Only display comments that contain text. This is to prevent empty comments from being displayed.
-            if (this.posts[i].postComments[j].commentText !== '')
-            {
+            if (this.posts[i].postComments[j].commentText !== '') {
               const commentCard = document.createElement('div');
               commentCard.className = 'card w-75 mb-2';
               commentCard.style.width = '18rem';
@@ -509,8 +515,7 @@ export class ProfileComponent implements OnInit {
               commentCardLike.className = 'btn btn-outline-secondary';
 
               //  Check if the current user has liked the comment
-              if (this.posts[i].postComments[j].commentLikeOwners.includes(this.currentUser.user.profile.profileHandle))
-              {
+              if (this.posts[i].postComments[j].commentLikeOwners.includes(this.currentUser.user.profile.profileHandle)) {
                 commentCardLike.innerHTML = this.posts[i].postComments[j].commentLikeCount + ' Unlike';
                 commentCardLike.addEventListener('click', () => {
                   this.unlikeComment(this.posts[i], i, this.posts[i].postComments[j], j);
@@ -527,8 +532,7 @@ export class ProfileComponent implements OnInit {
                 });
               }
 
-              else
-              {
+              else {
                 commentCardLike.innerHTML = this.posts[i].postComments[j].commentLikeCount + ' Like';
                 commentCardLike.addEventListener('click', () => {
                   this.likeComment(this.posts[i], i, this.posts[i].postComments[j], j);
@@ -592,9 +596,9 @@ export class ProfileComponent implements OnInit {
         // Clear the textarea
         (<HTMLInputElement>document.getElementById('commentTextArea' + i)).value = '';
       })
-      .then(() => this.loadProfilePostsData())
-      .then(() => this.displayPosts())
-      .then(() => this.toastr.success('Comment posted successfully!', 'Success'));
+        .then(() => this.loadProfilePostsData())
+        .then(() => this.displayPosts())
+        .then(() => this.toastr.success('Comment posted successfully!', 'Success'));
     });
   }
 
@@ -623,9 +627,9 @@ export class ProfileComponent implements OnInit {
       //  Clear the textarea
       (<HTMLInputElement>document.getElementById('postTextArea' + post.uid)).value = '';
     })
-    .then(() => this.loadProfilePostsData())
-    .then(() => this.displayPosts())
-    .then(() => this.toastr.success('Post edited successfully!', 'Success'));
+      .then(() => this.loadProfilePostsData())
+      .then(() => this.displayPosts())
+      .then(() => this.toastr.success('Post edited successfully!', 'Success'));
   }
 
   //  Function to like a post
@@ -755,9 +759,9 @@ export class ProfileComponent implements OnInit {
   deletePost(post) {
     //  Returns a promise that resolves when the post is deleted from the database
     return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('posts').doc(post.uid).delete()
-    .then(() => this.loadProfilePostsData())
-    .then(() => this.displayPosts())
-    .then(() => this.toastr.success('Post deleted successfully!', 'Success'));
+      .then(() => this.loadProfilePostsData())
+      .then(() => this.displayPosts())
+      .then(() => this.toastr.success('Post deleted successfully!', 'Success'));
   }
 
   //  Function to delete a comment
@@ -766,8 +770,8 @@ export class ProfileComponent implements OnInit {
     return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('posts').doc(post.uid).update({
       postComments: firebase.firestore.FieldValue.arrayRemove(comment)
     }).then(() => this.loadProfilePostsData())
-    .then(() => this.displayPosts())
-    .then(() => this.toastr.success('Comment deleted successfully!', 'Success'));
+      .then(() => this.displayPosts())
+      .then(() => this.toastr.success('Comment deleted successfully!', 'Success'));
   }
 
   //  This function checks if the user has any workouts.
@@ -820,33 +824,33 @@ export class ProfileComponent implements OnInit {
       }, () => {
         //  Do something once upload is complete
         uploadTask.snapshot.ref.getDownloadURL()
-        .then((downloadURL) => {
-          //  Set the postImgUrl to the download url for the image
-          postImgUrl = downloadURL;
-        })
-        .then(() => {
-          //  Create a new post object
-          let post = {
-            uid: this.afs.createId(),
-            postText: postText,
-            postTimeStamp: new Timestamp(Date.now() / 1000, 0),
-            postLikeCount: 0,
-            postLikeOwners: [],
-            postImg: postImgUrl,
-            postWorkout: postWorkout,
-            postComments: [{
-              commentText: '',
-              commentTimeStamp: new Timestamp(Date.now() / 1000, 0),
-              commentLikeCount: 0,
-              commentLikeOwners: []
-            }]
-          }
-          //  Add the post to the user's posts collection
-          this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('posts').doc(post.uid).set(post)
-          .then(() => this.loadProfilePostsData())
-          .then(() => this.displayPosts())
-          .then(() => this.toastr.success('Post created successfully with an image!', 'Success'));
-        });
+          .then((downloadURL) => {
+            //  Set the postImgUrl to the download url for the image
+            postImgUrl = downloadURL;
+          })
+          .then(() => {
+            //  Create a new post object
+            let post = {
+              uid: this.afs.createId(),
+              postText: postText,
+              postTimeStamp: new Timestamp(Date.now() / 1000, 0),
+              postLikeCount: 0,
+              postLikeOwners: [],
+              postImg: postImgUrl,
+              postWorkout: postWorkout,
+              postComments: [{
+                commentText: '',
+                commentTimeStamp: new Timestamp(Date.now() / 1000, 0),
+                commentLikeCount: 0,
+                commentLikeOwners: []
+              }]
+            }
+            //  Add the post to the user's posts collection
+            this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('posts').doc(post.uid).set(post)
+              .then(() => this.loadProfilePostsData())
+              .then(() => this.displayPosts())
+              .then(() => this.toastr.success('Post created successfully with an image!', 'Success'));
+          });
       });
     }
 
@@ -869,9 +873,9 @@ export class ProfileComponent implements OnInit {
       }
       //  Add the post to the user's posts collection
       this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('posts').doc(post.uid).set(post)
-      .then(() => this.loadProfilePostsData())
-      .then(() => this.displayPosts())
-      .then(() => this.toastr.success('Post created successfully without an image!', 'Success'));
+        .then(() => this.loadProfilePostsData())
+        .then(() => this.displayPosts())
+        .then(() => this.toastr.success('Post created successfully without an image!', 'Success'));
     }
 
     //  Clear the PostText element on the HTML doc.
