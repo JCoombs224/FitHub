@@ -10,7 +10,7 @@ import { WorkoutsService } from 'src/app/services/workouts.service';
 import { BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { AddExerciseModalComponent } from 'src/app/modals/add-exercise-modal/add-exercise-modal.component';
 import { animate, style, transition, trigger } from "@angular/animations";
-import { faX, faInfoCircle, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { faX, faInfoCircle, faPlusCircle, faDumbbell } from '@fortawesome/free-solid-svg-icons';
 import { EquipmentModalComponent } from 'src/app/modals/equipment-modal/equipment-modal.component';
 import { ConfirmDeleteModalComponent } from 'src/app/modals/confirm-delete-modal/confirm-delete-modal.component';
 
@@ -48,6 +48,7 @@ export class ViewWorkoutComponent implements OnInit{
   faX = faX;
   faInfoCircle = faInfoCircle;
   faPlusCircle = faPlusCircle;
+  faDumbbell = faDumbbell;
   userWorkout = false;
   modalRef;
   uid; // The workout UID if we're editing a workout
