@@ -30,7 +30,7 @@ import { faX, faInfoCircle, faPlusCircle, faDumbbell } from '@fortawesome/free-s
           ':leave',
           [
             style({}),
-            animate('0.4s ease-in',
+            animate('0.3s ease-in',
               style({ height: 0, opacity: 0 }))
           ]
         )
@@ -46,12 +46,16 @@ export class ActiveWorkoutComponent implements OnInit, OnDestroy {
   loading = true;
   hideEquipment = false;
   workout: any;
+  checkBoxes = [];
+  private exerciseOpen = [-1, -1];
 
   startTime: number;
   elapsedTime: number;
   displayTime: string;
   isRunning: boolean;
   timerInterval: any;
+
+  private percentComplete = 0;
 
   constructor(private router: Router,
     private title: Title,
@@ -76,6 +80,16 @@ export class ActiveWorkoutComponent implements OnInit, OnDestroy {
     // Get the workout from the database
     this.subscription = this.workoutService.getWorkout(this.uid).subscribe((workout) => {
       this.workout = workout;
+
+      // Create the checkbox indices for the exercises
+      for(let group of workout.groups) {
+        const temp = []
+        for(let exercise of group.exercises) {
+          temp.push(false);
+        }
+        this.checkBoxes.push(temp);
+      }
+      
       this.title.setTitle(this.workout.name + " | Workout | FitHub");
       this.loading = false;
       this.subscription.unsubscribe();
@@ -86,11 +100,40 @@ export class ActiveWorkoutComponent implements OnInit, OnDestroy {
     this.startTime = storedStartTime ? parseInt(storedStartTime, 10) : 0;
     this.elapsedTime = storedElapsedTime ? parseInt(storedElapsedTime, 10) : 0;
     this.updateDisplayTime();
-    this.start();
+    if(storedStartTime) {
+      this.start();
+    }
   }
 
   ngOnDestroy() {
     this.stop();
+  }
+
+  getPercentComplete() {
+    let total = 0;
+    let completed = 0;
+    for(let i = 0; i < this.checkBoxes.length; i++) {
+      for(let j = 0; j < this.checkBoxes[i].length; j++) {
+        total++;
+        if(this.checkBoxes[i][j]) {
+          completed++;
+        }
+      }
+    }
+    return Math.round((completed / total) * 100);
+  }
+
+  openExercise(i, j) {
+    if(this.exerciseOpen[0] === i && this.exerciseOpen[1] === j) {
+      this.exerciseOpen = [-1, -1];
+    }
+    else {
+      this.exerciseOpen = [i, j];
+    }
+  }
+
+  isOpen(i, j) {
+    return this.exerciseOpen[0] === i && this.exerciseOpen[1] === j;
   }
 
   start() {
@@ -102,6 +145,7 @@ export class ActiveWorkoutComponent implements OnInit, OnDestroy {
       localStorage.setItem('stopwatchElapsedTime', this.elapsedTime.toString());
       this.updateDisplayTime();
     }, 100);
+    console.log(this.checkBoxes);
   }
 
   stop() {

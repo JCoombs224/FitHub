@@ -1,5 +1,5 @@
 <div class="row justify-content-center main-bg">
-  <div class="col-12 col-xl-8 col-xxl-7 p-0">
+  <div class="col-12 col-lg-9 col-xl-8 col-xxl-7 p-0">
     <div class="card no-border min-vh-100">
       <div class="page-header-1 text-center">
         <h1 *ngIf="!loading" class="display-4">{{workout.name}}</h1>
@@ -20,18 +20,18 @@
             </div>
           </div>
           <div class="row justify-content-center mb-5">
-            <div class="col-8 col-md-6">
+            <div class="col col-sm-8 col-md-6">
               <div class="card card-stopwatch">
                 <div class="card-body">
                   <h3 class="text-secondary text-center">Elapsed Time</h3>
                   <hr>
                   <div class="stopwatch text-primary">
                     <div class="time">{{ displayTime }}</div>
-                    <!-- <div class="controls">
+                    <div class="controls">
                       <button class="btn btn-success" (click)="start()" [disabled]="isRunning">Start</button>
                       <button class="btn btn-secondary" (click)="stop()" [disabled]="!isRunning">Stop</button>
                       <button class="btn btn-warning" (click)="reset()">Reset</button>
-                    </div> -->
+                    </div>
                   </div>
                 </div>
               </div>
@@ -39,35 +39,61 @@
           </div>
           <div class="row">
             <div class="col">
-              <h4 class="text-center display-6">
+              <h3 class="text-center display-6">
                 Exercises
-              </h4>
+              </h3>
+              <h5 class="text-center" 
+              [class.text-danger]="getPercentComplete() >= 33 && getPercentComplete() < 66" 
+              [class.text-warning]="getPercentComplete() >= 66 && getPercentComplete() < 100"
+              [class.text-success]="getPercentComplete() >= 100">
+                {{getPercentComplete()}}% Complete
+              </h5>
             </div>
           </div>
 
-          <div *ngFor="let group of workout.groups" class="card mb-3">
-            <div class="card-header bg-success text-center text-light">
-              <h3 class="card-title">
-                {{group.groupType|titlecase}}
-              </h3>
-            </div>
-            <div class="card-body">
-              <ol class="list-group list-group-flush list-group-numbered">
-                <li class="list-group-item" *ngFor="let item of group.exercises">
-                  <h4 class="d-inline">{{item.name}}</h4>
-                  <div class="row mb-3 mt-3">
-                    <div class="col-auto border-end" *ngIf="item.sets && item.reps">
-                      <h6 class="ms-3">{{item.sets}} sets of {{item.reps}} reps</h6>
-                    </div>
-                    <div class="col">
-                      <h5>Instructions:</h5>
-                      <p>{{item.instructions}}</p>
-                      <h6 *ngIf="item.secondaryMuscles" class="d-inline">Secondary Muscles: </h6>{{item.secondaryMuscles|titlecase}}
-                    </div>
+          <div class="row mt-5">
+            <div class="col col-xxl-11">
+              <div *ngFor="let group of workout.groups; let i = index" class="mb-5">
+                <div class="row">
+                  <div class="col-12 col-md-4 text-md-end border-bottom border-end border-success">
+                    <h3 class="display-6" style="font-size: 2rem">{{group.groupType|titlecase}}</h3>
                   </div>
-                </li>
-              </ol>
+                  <div class="col" style="margin-top: 1.7rem;">
+                    <ol class="list-group">
+                      <li class="list-group-item list-group-item-action" [class.list-group-item-success]="checkBoxes[i][j]" *ngFor="let item of group.exercises; let j = index">
+                        <div class="d-flex justify-content-between">
+                          <div class="d-flex">
+                            <div class="me-3 border-end" >
+                              <input type="checkbox" class="form-check form-check-inline" [(ngModel)]="checkBoxes[i][j]">
+                            </div>
+                            <div class="div" (click)="openExercise(i, j)">
+                              <h5 class="d-inline">{{item.name}}</h5>
+                              <label *ngIf="item.sets && item.reps" class="ms-3">{{item.sets}} sets of {{item.reps}} reps</label>
+                            </div>
+                            
+                          </div>
+                          <div (click)="openExercise(i, j)" style="cursor: pointer;"><span *ngIf="!isOpen(i, j)">▼</span><span *ngIf="isOpen(i, j)">▲</span></div>
+                        </div>
+                        <div *ngIf="isOpen(i, j)" class="bg-white row border-top pt-3" [@slideOutAnimation]>
+                          <div class="col">
+                            <h5>Instructions:</h5>
+                            <p>{{item.instructions}}</p>
+                            <h6 *ngIf="item.secondaryMuscles" class="d-inline">Secondary Muscles: </h6>{{item.secondaryMuscles|titlecase}}
+                          </div>
+                        </div>
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="row justify-content-center">
+          <div class="col-auto">
+            <button class="btn btn-success btn-lg">Complete Workout</button>
           </div>
         </div>
       </div>
