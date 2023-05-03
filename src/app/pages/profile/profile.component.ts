@@ -382,10 +382,10 @@ export class ProfileComponent implements OnInit {
 
         postCardImgWrapper.appendChild(postCardImg);
 
-        if (this.posts[i].postWorkout !== 'None') {
+        if (this.posts[i].postWorkout != '') {
           const postCardWorkout = document.createElement('p');
           postCardWorkout.className = 'card-text';
-          postCardWorkout.style.fontSize = '20px';
+          postCardWorkout.style.fontSize = '16px';
           postCardWorkout.style.textAlign = 'left';
 
           //  Adding all of the workout elements to the post, formatting the display, and appending them to the post.
