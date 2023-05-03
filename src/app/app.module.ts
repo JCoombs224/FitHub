@@ -74,7 +74,6 @@ import { ActiveWorkoutComponent } from './pages/active-workout/active-workout.co
     ProgressComponent,
     ViewWorkoutComponent,
     ActiveWorkoutComponent,
-
   ],
 
   imports: [

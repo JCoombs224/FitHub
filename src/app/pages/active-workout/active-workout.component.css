@@ -1,0 +1,22 @@
+.stopwatch {
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.time {
+  font-size: 3.8rem;
+  text-rendering: optimizeSpeed;
+  /* text-shadow: 2px 1px 2px #052047; */
+  margin-bottom: 20px;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.card-stopwatch {
+  border: 2px solid #096a2e;
+  border-radius: 15px;
+}

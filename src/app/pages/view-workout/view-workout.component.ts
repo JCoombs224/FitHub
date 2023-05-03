@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import {FormBuilder } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -8,11 +8,8 @@ import { CurrentUserService } from 'src/app/services/current-user.service';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { WorkoutsService } from 'src/app/services/workouts.service';
 import { BsModalService, ModalOptions } from "ngx-bootstrap/modal";
-import { AddExerciseModalComponent } from 'src/app/modals/add-exercise-modal/add-exercise-modal.component';
 import { animate, style, transition, trigger } from "@angular/animations";
 import { faX, faInfoCircle, faPlusCircle, faDumbbell } from '@fortawesome/free-solid-svg-icons';
-import { EquipmentModalComponent } from 'src/app/modals/equipment-modal/equipment-modal.component';
-import { ConfirmDeleteModalComponent } from 'src/app/modals/confirm-delete-modal/confirm-delete-modal.component';
 
 @Component({
   templateUrl: './view-workout.component.html',
@@ -86,8 +83,10 @@ export class ViewWorkoutComponent implements OnInit{
       this.userWorkout = true; // If this is the current user's workout, we can edit it.
       this.subscription.unsubscribe();
     });
-
-
-
   }
+
+  startWorkout() {
+    this.router.navigate(['/active-workout', this.uid]);
+  }
+
 }

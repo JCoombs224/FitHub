@@ -1,5 +1,6 @@
 .header-wrap{
     padding-bottom: 92px;    
+    padding-top: 0;
 }
 
 .nav-position {
@@ -31,6 +32,10 @@
         position: fixed;
         width: 100%;
         bottom: 0 !important;
+    }
+
+    .nav-bottom-margin {
+        height: 76px;
     }
 
     .navbar-collapse {
