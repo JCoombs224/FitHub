@@ -28,7 +28,8 @@ const routes: Routes = [
   { path: 'my-workouts/create', component: CreateWorkoutComponent, canActivate: [AuthGuard]}, // Route to create a new workout
   { path: 'edit-workout/:uid', component: CreateWorkoutComponent, canActivate: [AuthGuard]}, // Route to edit a workout
   { path: 'workout/:uid', component: ViewWorkoutComponent, canActivate: [AuthGuard]}, // Route to view a workout that is not currently in progress
-  { path: 'active-workout/:uid', component: ActiveWorkoutComponent, canActivate: [AuthGuard]}, // Route for a workout that is currently in progress
+  { path: 'workout/:profile/:uid', component: ViewWorkoutComponent, canActivate: [AuthGuard]}, // Route to view a workout from another profile
+  { path: 'active-workout/:profile/:uid', component: ActiveWorkoutComponent, canActivate: [AuthGuard]}, // Route for a workout that is currently in progress
   { path: 'profile/:name/create-post', component: CreatePostComponent, canActivate: [AuthGuard]},
   { path: 'profile/:name/edit-profile', component: EditProfileComponent, canActivate: [AuthGuard]},
   { path: 'progress', component: ProgressComponent, canActivate: [AuthGuard]},

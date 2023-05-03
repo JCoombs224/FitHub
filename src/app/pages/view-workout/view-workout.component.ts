@@ -46,9 +46,10 @@ export class ViewWorkoutComponent implements OnInit{
   faInfoCircle = faInfoCircle;
   faPlusCircle = faPlusCircle;
   faDumbbell = faDumbbell;
-  userWorkout = false;
+  userWorkout = true;
   modalRef;
   uid; // The workout UID if we're editing a workout
+  profile; // The user's profile
   private subscription; // The subscription to the workout data if we're editing a workout
   loading = true;
   hideEquipment = false;
@@ -75,18 +76,26 @@ export class ViewWorkoutComponent implements OnInit{
     // Get the workout UID from the URL
     this.uid = this.route.snapshot.paramMap.get('uid');
 
+    // Check if this is the current user's workout
+    if(this.route.snapshot.paramMap.get('profile')) {
+      this.userWorkout = false; // If this is the current user's workout, we can edit it.
+      this.profile = this.route.snapshot.paramMap.get('profile');
+    }
+    else {
+      this.profile = this.currentUser.user.profile.profileHandle; // If this is the current user's workout, we can't edit it.
+    }
+
     // Get the workout from the database
-    this.subscription = this.workoutService.getWorkout(this.uid).subscribe((workout) => {
+    this.subscription = this.workoutService.getWorkout(this.uid, this.profile).subscribe((workout) => {
       this.workout = workout;
       this.title.setTitle(this.workout.name+" | Workout | FitHub");
       this.loading = false;
-      this.userWorkout = true; // If this is the current user's workout, we can edit it.
       this.subscription.unsubscribe();
     });
   }
 
   startWorkout() {
-    this.router.navigate(['/active-workout', this.uid]);
+    this.router.navigate(['active-workout/', this.profile, this.uid]);
   }
 
 }

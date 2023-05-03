@@ -90,6 +90,7 @@ export class WorkoutsService {
 
   // Get a specific workout for the current user
   getWorkout(uid, profile = this.currentUser.user.profile.profileHandle) {
+    console.log(profile, uid);
     return this.afs.collection('profiles')
       .doc(profile)
       .collection('workouts')

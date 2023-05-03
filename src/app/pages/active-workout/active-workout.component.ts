@@ -42,6 +42,7 @@ export class ActiveWorkoutComponent implements OnInit, OnDestroy {
 
   modalRef;
   uid; // The workout UID if we're editing a workout
+  profile; // The profile of the user who created the workout
   private subscription; // The subscription to the workout data if we're editing a workout
   loading = true;
   hideEquipment = false;
@@ -76,9 +77,10 @@ export class ActiveWorkoutComponent implements OnInit, OnDestroy {
 
     // Get the workout UID from the URL
     this.uid = this.route.snapshot.paramMap.get('uid');
+    this.profile = this.route.snapshot.paramMap.get('profile');
 
     // Get the workout from the database
-    this.subscription = this.workoutService.getWorkout(this.uid).subscribe((workout) => {
+    this.subscription = this.workoutService.getWorkout(this.uid, this.profile).subscribe((workout) => {
       this.workout = workout;
 
       // Create the checkbox indices for the exercises
