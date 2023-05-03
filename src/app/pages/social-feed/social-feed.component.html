@@ -6,82 +6,46 @@
       </div>
       <div class="col-md-6">
         <!-- Center column containing the social feed -->
-
-        <!-- infiniteScroll directive for handling infinite scrolling -->
-        <div
-          infiniteScroll
-          [infiniteScrollDistance]="2"
-          [infiniteScrollThrottle]="300"
-          (scrolled)="loadMorePosts()"
-          class="feed-container"
-        >
-          <!-- Loop through each post in the 'posts' array -->
-          <div class="card mb-4" *ngFor="let post of posts">
-             <!-- Post header with username and date -->
-            <div class="card-header">
-              <strong>{{ post.username }}</strong> - Posted on <small>{{ post.date | date }}</small>
+        <div class="card border-dark mb-3 post-card" *ngFor="let post of feed">
+          <div class="card-header post-header text-white">
+            <a class="link-light" routerLink="profile/{{post.profileHandle}}" style="font-size: 1.2rem">@{{post.profileHandle}}</a>
+            <small> - Posted on {{post.postDateString}}</small>
+          </div>
+          <div class="card-body">
+            <div *ngIf="post.postImg" class="post-img-wrapper">
+              <img class="img-fluid post-img easeload" onload="this.style.opacity=1" src="{{post.postImg}}" alt="Post Image" loading="lazy">
             </div>
-            <!-- Post content -->
-            <div class="card-body">
-              <img src="https://picsum.photos/600/400?random={{ post.id }}" alt="Workout picture" class="card-img-top mb-3" />
-              <p class="card-text">{{ post.content }}</p>
-              <!-- Buttons for liking and commenting on the post -->
-              <div class="comments">
-                <button class="btn btn-sm btn-forest-green" (click)="onLike(post)">
-                  <span *ngIf="!post.liked">Like ({{ post.likes }})</span>
-                  <span *ngIf="post.liked">Unlike ({{ post.likes }})</span>
-                </button>
-                &nbsp;
-                <button class="btn btn-sm btn-secondary" (click)="onComment(post)">
-                  Comment
-                </button>
-                <!-- Show comments if 'post.showComments' is true -->
-                <div *ngIf="post.showComments">
-                  <div *ngFor="let comment of post.comments">
-                    <div class="mb-2">
-                      <strong>{{ comment.username }}</strong>
-                      <div>{{ comment.content }}</div>
+            <hr *ngIf="post.postImg" class="mt-0 mb-3">
+            <div class="post-text">
+              <p>{{post.postText}}</p>
+            </div>
+            <textarea class="form-control mb-2" rows="3" placeholder="Reply to @{{post.profileHandle}}'s post..."></textarea>
+            <div class="d-flex mb-1">
+              <span (click)="toggleLike(post)">
+                <button *ngIf="!post.postLikeOwners.includes(this.profileHandle)" class="btn btn-outline-success">{{post.postLikeCount}} Like</button>
+                <button *ngIf="post.postLikeOwners.includes(this.profileHandle)" class="btn btn-success">{{post.postLikeCount}} Unlike</button>
+              </span>
+              <button class="btn btn-outline-secondary ms-2">Comment</button>
+            </div>
+            <label>Comments</label>
+            <div class="row">
+              <div class="col-10">
+                <span *ngFor="let comment of post.postComments | orderBy: '-commentTimeStamp'">
+                  <div class="card mb-1" *ngIf="comment.commentOwner">
+                    <div class="card-header">
+                      <a routerLink="profile/{{comment.profileHandle}}">@{{comment.commentOwner}}</a>
+                      <small> - {{comment.commentTimeStamp.toDate().toDateString()}}</small>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div>{{ comment.likes }} likes</div>
-                      <div>
-                        <button class="btn btn-sm btn-forest-green" (click)="onCommentLike(comment)">
-                          <span *ngIf="!comment.liked">Like</span>
-                          <span *ngIf="comment.liked">Unlike</span>
-                        </button>
-                      </div>
+                    <div class="card-body">
+                      <p>{{comment.commentText}}</p>
+                        <button *ngIf="!post.postLikeOwners.includes(this.profileHandle)" class="btn btn-outline-success">{{comment.commentLikeCount}} Like</button>
+                        <button *ngIf="post.postLikeOwners.includes(this.profileHandle)" class="btn btn-success">{{comment.commentLikeCount}} Unlike</button>
                     </div>
                   </div>
-                  <div class="comment-box mt-3">
-                    <textarea [(ngModel)]="post.newComment" class="form-control" rows="2" placeholder="Write a comment..."></textarea>
-                    <button class="btn btn-sm btn-secondary mt-2" (click)="postComment(post)">Post Comment</button>
-                  </div>
-                </div>
-                <!-- Show a preview of comments if 'post.showComments' is false -->
-                <div *ngIf="!post.showComments && post.comments.length > 0">
-                  <div *ngFor="let comment of post.comments.slice(0, 3)">
-                    <div class="mb-2">
-                      <strong>{{ comment.username }}</strong>
-                      <div>{{ comment.content }}</div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div>{{ comment.likes }} likes</div>
-                      <div>
-                        <button class="btn btn-sm btn-forest-green" (click)="onCommentLike(comment)">
-                          <span *ngIf="!comment.liked">Like</span>
-                          <span *ngIf="comment.liked">Unlike</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Button for viewing all comments -->
-                  <div class="text-muted mt-2" (click)="onComment(post)" *ngIf="post.comments.length >= 4">View all comments ({{ post.commentsCount }})</div>
-                </div>
+                </span>
               </div>
             </div>
-            <!-- Post footer (can be used for additional content) -->
-            <div class="card-footer">
-            </div>
+            
           </div>
         </div>
       </div>

@@ -3,18 +3,20 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { ProfileService } from './profile.service';
 import { Timestamp } from 'firebase/firestore'
 import firebase from 'firebase/compat/app';
+import { CurrentUserService } from './current-user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class PostsService {
-  profile = this.profileService.initProfile;
   userProfile = false;
+  private socialFeed = [];
 
   constructor(
     private afs: AngularFirestore,
     private profileService: ProfileService,
+    private currentUser: CurrentUserService
   ) { }
 
   get initPost() {
@@ -23,12 +25,12 @@ export class PostsService {
       uid: '',
       // Comments inner structure
       postComments: [{
-                      commentLikeCount: 0,
-                      commentLikeOwners: [],
-                      commentOwner: '',
-                      commentText: '',
-                      commentTimeStamp: new Timestamp(new Date().getTime(), 0),
-                    }],
+        commentLikeCount: 0,
+        commentLikeOwners: [],
+        commentOwner: '',
+        commentText: '',
+        commentTimeStamp: new Timestamp(new Date().getTime(), 0),
+      }],
       //  Number of likes for the post
       postLikeCount: 0,
       //  Array of users who liked the post
@@ -44,8 +46,39 @@ export class PostsService {
     };
   }
 
-  // Get all workouts for the current user
-  getPosts(profile = this.profile.profileHandle) {
-    return this.afs.collection('profiles').doc(profile).collection('posts', ref => ref.orderBy('postTimeStamp', 'desc')).snapshotChanges().subscribe(posts => console.log(posts));
+  getSocialFeed() {
+    // Get the list of users that the current user is following
+    const following = this.currentUser.user.profile.following;
+    // Add user to the list of users to get posts from
+    following.push(this.currentUser.user.profile.profileHandle);
+
+    const promise = new Promise((resolve, reject) => {
+      if(this.socialFeed.length > 0) {
+        resolve(true);
+      }
+      else {
+        following.forEach((follow, index) => {
+          this.afs.collection('profiles').doc(follow).collection('posts', ref => ref.orderBy('postTimeStamp', 'desc')).valueChanges().subscribe(posts => {
+            posts.forEach(post => {
+              post.postDateString = post.postTimeStamp.toDate().toDateString();
+              post.profileHandle = follow;
+              this.socialFeed.push(post);
+            });
+            if (index == following.length - 1) {
+              // Sort the social feed by timestamp
+              this.socialFeed.sort((a, b) => {
+                return b.postTimeStamp - a.postTimeStamp;
+              });
+              resolve(true);
+            }
+          });
+        });
+      }
+    });
+
+    return promise.then(() => {
+      return this.socialFeed;
+    });
   }
+
 }
