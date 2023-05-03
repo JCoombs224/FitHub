@@ -17,6 +17,7 @@ import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 import { PostsService } from 'src/app/services/posts.service';
 import { map } from 'rxjs/operators';
 import { Timestamp } from 'firebase/firestore';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -67,6 +68,7 @@ export class ProfileComponent implements OnInit {
     public location: Location,
     private storage: AngularFireStorage,
     private toastr: ToastrService,
+    private router: Router,
   ) { }
 
   // When the page is loaded
@@ -385,7 +387,29 @@ export class ProfileComponent implements OnInit {
           postCardWorkout.className = 'card-text';
           postCardWorkout.style.fontSize = '20px';
           postCardWorkout.style.textAlign = 'left';
-          postCardWorkout.innerHTML = this.posts[i].postWorkout;
+
+          //  Adding all of the workout elements to the post, formatting the display, and appending them to the post.
+          this.workoutService.getWorkout(this.posts[i].postWorkout).subscribe(workout => {
+            //  Create a card text to hold the workout name and description with a hyperlink to the workout's page held in the workout.name
+            postCardWorkout.innerHTML = "Link to the full description: " + '<a href="#/workout/' + this.posts[i].postWorkout + '">' + workout.name + '</a>' + '<br>' + workout.description + '<br>';
+
+            //  Loop through the groups and display the exercises in each group
+            for (let j = 0; j < workout.groups.length; j++) {
+              postCardWorkout.innerHTML += '<br>' + '<b>&nbsp;&nbsp;' + this.toTitleCase(workout.groups[j].groupType) + '</b>';
+
+              for (let k = 0; k < workout.groups[j].exercises.length; k++) {
+                postCardWorkout.innerHTML += '<br><b>&nbsp;&nbsp;&nbsp;&nbsp;' + workout.groups[j].exercises[k].name + '</b>';
+                if (workout.groups[j].exercises[k].sets !== 0) {
+                  postCardWorkout.innerHTML += '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets: ' + workout.groups[j].exercises[k].sets;
+                }
+                if (workout.groups[j].exercises[k].reps !== 0) {
+                  postCardWorkout.innerHTML += '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reps: ' + workout.groups[j].exercises[k].reps + '<br>';
+                }
+                postCardWorkout.innerHTML += '<b>&nbsp;&nbsp;&nbsp;&nbsp;Instructions: </b>' + workout.groups[j].exercises[k].instructions.substring(0, 50) + '...<br>';
+              }
+            }
+          });
+
           postCardBody.appendChild(postCardWorkout);
         }
 
@@ -1022,6 +1046,10 @@ export class ProfileComponent implements OnInit {
     visibility[0].checked = true;
   }
 
+  openWorkout(workout) {
+    this.router.navigate(['workout/', this.profile.profileHandle, workout.uid]);
+  }
+
   /**
    * Functions that open the modal popups
    */
@@ -1078,5 +1106,9 @@ export class ProfileComponent implements OnInit {
 
   closeAllPostsModal() {
     this.allPostsModal.nativeElement.style.display = "none";
+  }
+
+  toTitleCase(str: string): string {
+    return str.toLowerCase().replace(/\b(\w)/g, (match) => match.toUpperCase());
   }
 }
