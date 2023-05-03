@@ -90,12 +90,24 @@ export class WorkoutsService {
 
   // Get a specific workout for the current user
   getWorkout(uid, profile = this.currentUser.user.profile.profileHandle) {
-    console.log(profile, uid);
     return this.afs.collection('profiles')
       .doc(profile)
       .collection('workouts')
       .doc(uid)
       .valueChanges()
       .pipe(debounceTime(250)); // Debounce time to prevent multiple calls to the database, which fixed an issue where the workout would load multiple times
+  }
+
+  completeWorkout(data) {
+    return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).update({
+      completedWorkouts: firebase.firestore.FieldValue.arrayUnion({
+        workoutUid: data.uid,
+        workoutName: data.name,
+        workoutCreator: data.createdBy,
+        percentCompleted: data.percentComplete,
+        timeToComplete: data.elapsedTime,
+        dateCompleted: data.date,
+      })
+    });
   }
 }

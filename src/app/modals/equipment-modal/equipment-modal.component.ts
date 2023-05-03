@@ -70,7 +70,6 @@ export class EquipmentModalComponent implements OnInit {
 
   ngOnInit(): void {
     if(this.equipment) {
-      console.log(this.equipment);
       this.equipmentChecklist.get('name').setValue(this.equipment.name);
       this.editing = true;
       for (let i of this.equipment.equipment) {

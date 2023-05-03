@@ -10,6 +10,7 @@ import { WorkoutsService } from 'src/app/services/workouts.service';
 import { BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { animate, style, transition, trigger } from "@angular/animations";
 import { faX, faInfoCircle, faPlusCircle, faDumbbell } from '@fortawesome/free-solid-svg-icons';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   templateUrl: './active-workout.component.html',
@@ -105,6 +106,7 @@ export class ActiveWorkoutComponent implements OnInit, OnDestroy {
     if(storedStartTime) {
       this.start();
     }
+    this.startTime = Date.now() - this.elapsedTime;
   }
 
   ngOnDestroy() {
@@ -147,7 +149,6 @@ export class ActiveWorkoutComponent implements OnInit, OnDestroy {
       localStorage.setItem('stopwatchElapsedTime', this.elapsedTime.toString());
       this.updateDisplayTime();
     }, 100);
-    console.log(this.checkBoxes);
   }
 
   stop() {
@@ -167,11 +168,33 @@ export class ActiveWorkoutComponent implements OnInit, OnDestroy {
     const minutes = Math.floor(this.elapsedTime / 60000);
     const seconds = Math.floor((this.elapsedTime % 60000) / 1000);
     const milliseconds = Math.floor((this.elapsedTime % 1000) / 10);
-    this.displayTime = `${this.padNumber(minutes)}:${this.padNumber(seconds)}:${this.padNumber(milliseconds)}`;
+    this.displayTime = `${this.padNumber(minutes)}:${this.padNumber(seconds)}`;//:${this.padNumber(milliseconds)}`;
+  }
+
+  private getElapsedTime() {
+    const elapsed = Date.now() - this.startTime;
+    const minutes = Math.floor(elapsed / 60000);
+    const seconds = Math.floor((elapsed % 60000) / 1000);
+    const milliseconds = Math.floor((elapsed % 1000) / 10);
+    return `${this.padNumber(minutes)}:${this.padNumber(seconds)}`;//:${this.padNumber(milliseconds)}`;
   }
 
   padNumber(number: number) {
     return number.toString().padStart(2, '0');
+  }
+
+  completeWorkout() {
+    const data = {uid: this.uid, name: this.workout.name, createdBy: this.profile, percentComplete: this.getPercentComplete(), elapsedTime: this.getElapsedTime().toString(), date: new Timestamp(Date.now() / 1000, 0)};
+    this.workoutService.completeWorkout(data).then(() => {
+      // Update the local profile to reflect the changes
+      this.currentUser.fetchProfile(this.currentUser.user.account);
+
+      this.toastr.success("Great Job!", "Workout Complete");
+      this.router.navigate(['/dashboard']);
+    }).catch((error) => {
+      this.toastr.error("Something went wrong", "Error");
+      console.log(error);
+    });
   }
 
 }

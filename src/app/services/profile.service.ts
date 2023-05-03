@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
-import { faBullseye } from '@fortawesome/free-solid-svg-icons';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +21,7 @@ export class ProfileService {
       about: '',
       profilePicture: '',
       isPrivate: false,
+      completedWorkouts: [{}],
       workouts: [{}],
       followers: [],
       following: [],

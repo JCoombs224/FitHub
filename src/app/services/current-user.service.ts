@@ -46,7 +46,7 @@ export class CurrentUserService {
       if (localUser) {
         this.user = JSON.parse(localUser);
         if(this.user.account.profileHandle) {
-          this.getProfile(this.user.account);
+          this.fetchProfile(this.user.account);
         }
       }
     }
@@ -112,7 +112,7 @@ export class CurrentUserService {
     });
   }
 
-  private getProfile(user) {
+  fetchProfile(user) {
     this.user.account.profileHandle = user.profileHandle;
 
     this.profileService.getProfile(user.profileHandle).ref.get().then(data => {
@@ -130,6 +130,7 @@ export class CurrentUserService {
       this.user.profile.followers = profile.followers;
       this.user.profile.following = profile.following;
       this.user.profile.posts = profile.posts;
+      this.user.profile.completedWorkouts = profile.completedWorkouts;
       this.user.profile.isPrivate= profile.isPrivate;
 
       if (isPlatformBrowser(this.platformId)) {
@@ -139,12 +140,11 @@ export class CurrentUserService {
         sessionStorage.removeItem(this.USER_INFO);
         sessionStorage.setItem(this.USER_INFO, JSON.stringify(this.user));
       }
-    })
+    });
 
   }
 
   setUser(user) {
-    console.log(user);
     this.user.account.uid = user.uid;
     this.user.account.email = user.email;
     this.user.account.displayName = user.displayName;
@@ -153,7 +153,7 @@ export class CurrentUserService {
 
     if (user.profileHandle) {
       // Update the profile info and navigate to dashboard if profile exists or create profile if not
-      this.getProfile(user);
+      this.fetchProfile(user);
       setTimeout(() => { 
         this.router.navigate(["/dashboard"]);
        }, 500);

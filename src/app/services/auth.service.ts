@@ -101,7 +101,6 @@ export class AuthService {
     return this.afAuth
       .signInWithPopup(provider)
       .then((result) => {
-        console.log(result);
         this.SetUserData(result.user);
         return true;
       })
@@ -123,7 +122,6 @@ export class AuthService {
     return this.afAuth
       .signInWithPopup(provider)
       .then((result) => {
-        console.log(result);
         this.SetNewUserData(result.user);
         return true;
       })
