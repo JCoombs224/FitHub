@@ -1,17 +1,20 @@
 <div class="row min-vh-100 main-bg">
   <div class="container mt-xl-4">
     <div class="row">
-      <div class="col-12 col-xl-10 col-xxl-7 p-0 min-vh-100 d-flex" style="margin: 0 auto;">
+      <div class="col-12 col-xl-10 col-xxl-8 p-0 min-vh-100 d-flex" style="margin: 0 auto;">
         <div class="card w-100 min-vh-100 flex-column mb-5 display-4" style="border: none; transform: none;">
           <div class="card-header text-white" style="background-color: rgba(9, 106, 46, 1);">
             <div>
-              <div class="row flex-row">
-                <div class="col-md-2 d-flex align-items-center justify-content-start min-vw-25" style="position: relative" (mouseenter)="showUploadButton = true" (mouseleave)="showUploadButton = false">
-                  <div *ngIf="loadingImage" class="spinner-border text-center text-light" role="status">
+              <div class="row">
+                <div class="col-md-3 d-flex align-items-center justify-content-start">
+                  <div style="position: relative" (mouseenter)="showUploadButton = true" (mouseleave)="showUploadButton = false">
+                     <div *ngIf="loadingImage" class="spinner-border text-center text-light" role="status">
                     <span class="sr-only">Loading...</span>
                   </div>
-                  <img [src]="profilePictureUrl" display="flex-row" style="margin: 0; align-content: center; max-width: 350px; max-height: 350px; overflow: hidden; z-index: 1;">
+                  <img [src]="profilePictureUrl" class="img-fluid">
                   <button *ngIf="showUploadButton && userProfile" class="btn btn-light btn-image-upload" (click)="onUploadButtonClick()"><fa-icon [icon]="faEdit"></fa-icon></button>
+                  </div>
+                 
                 </div>
 
                 <div *ngIf="showCropper" class="crop-container">
@@ -23,30 +26,30 @@
 
                 </div>
 
-                <div class="col-md-3 mt-5 no-wrap" style="padding-right: auto; background: none; border:none;">
+                <div class="col-md-auto col-xl-3 ps-md-0 mt-5 no-wrap" style="padding-right: auto; background: none; border:none;">
                   <h5 class="no-wrap text-truncate">@{{profile.profileHandle}}</h5>
-                  <p class="no-wrap" style="font-size: 18px;">{{profile.age}}</p>
-                  <p class="no-wrap" style="font-size: 18px;">{{profile.heightFeet}}' {{profile.heightInches}}"</p>
-                  <p class="no-wrap" style="font-size: 18px;">{{profile.weight}} lbs.</p>
+                  <p class="no-wrap" style="font-size: 1rem;">{{profile.age}}</p>
+                  <p class="no-wrap" style="font-size: 1rem;">{{profile.heightFeet}}' {{profile.heightInches}}"</p>
+                  <p class="no-wrap" style="font-size: 1rem;">{{profile.weight}} lbs.</p>
                   <div *ngIf="userProfile">
-                    <p style="font-size: 18px;" *ngIf="profile.isPrivate">Private</p>
-                    <p style="font-size: 18px;" *ngIf="!profile.isPrivate">Public</p>
+                    <p style="font-size: 1rem;" *ngIf="profile.isPrivate">Private</p>
+                    <p style="font-size: 1rem;" *ngIf="!profile.isPrivate">Public</p>
                   </div>
                 </div>
-                <div class="card no-wrap col-md-5 text-center mt-1" style=" background-color: rgba(255, 255, 255, 0.1); border: none;">
+                <div class="card no-wrap col-md text-center mt-1" style=" background-color: rgba(255, 255, 255, 0.1); border: none;">
                   <div class="card-header display-6 no-wrap" display="flex-row" style="padding: 5%; background: none;">
                     About
                   </div>
-                  <p style="font-size: 20px;">{{profile.about}}</p>
+                  <p class="pt-2" style="font-size: 1.1rem;">{{profile.about}}</p>
                 </div>
-                <div class="card col-md-2" style="padding-left: 1%; background:none; border:none;">
+                <div class="card col-md-auto" style="padding-left: 1%; background:none; border:none;">
                   <button class="btn zoom-btn btn-outline-success w-100" display="flex-row" style="margin: 5px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" (click)="showFollowersModal()">
                     <h5 style="text-align: center;">{{profile.followers.length}}</h5>
-                    <p class="mb-1 h5 no-wrap">Followers</p>
+                    <p class="mb-1 no-wrap">Followers</p>
                   </button>
                   <button class="btn zoom-btn btn-outline-success w-100" display="flex-row" style="margin: 5px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" (click)="showFollowingModal()">
                     <h5>{{profile.following.length}}</h5>
-                    <p class="mb-1 h5 no-wrap">Following</p>
+                    <p class="mb-1 no-wrap">Following</p>
                   </button>
                   <hr>
                   <div *ngIf="userProfile">
