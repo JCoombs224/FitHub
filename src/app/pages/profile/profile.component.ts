@@ -132,7 +132,7 @@ export class ProfileComponent implements OnInit {
           this.profile.following = profData.following;
           this.profile.isPrivate = profData.isPrivate;
           this.profile.profilePicture = profData.profilePicture;
-          
+
           resolve(true);
 
           // Get profile picture from database
@@ -372,7 +372,7 @@ export class ProfileComponent implements OnInit {
         postCardImg.style.borderRadius = '10px';
         postCardImg.style.border = '1px solid black';
         postCardImg.style.maxHeight = '60vh';
-        
+
         postCardImgWrapper.appendChild(postCardImg);
 
         //  If the post has an image, display it
@@ -481,7 +481,9 @@ export class ProfileComponent implements OnInit {
               commentCardHeader.style.backgroundColor = 'white';
               commentCardHeader.style.textAlign = 'left';
               commentCardHeader.style.fontSize = '15px';
-              commentCardHeader.innerHTML = this.posts[i].postComments[j].commentTimeStamp.toDate().toDateString() + ' by @' + this.posts[i].postComments[j].commentOwner + ':';
+              //  Display the comment timestamp and the comment owner as a link to their profile
+              commentCardHeader.innerHTML = this.posts[i].postComments[j].commentTimeStamp.toDate().toDateString();
+              commentCardHeader.innerHTML += ' - <a href="#/profile/' + this.posts[i].postComments[j].commentOwner + '">' + this.posts[i].postComments[j].commentOwner + '</a>';
 
               //  Create a gear button to allow the user to delete their own comments
               if (this.posts[i].postComments[j].commentOwner === this.currentUser.user.profile.profileHandle || this.profile.profileHandle === this.currentUser.user.profile.profileHandle) {
