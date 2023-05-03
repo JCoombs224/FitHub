@@ -84,6 +84,12 @@ export class WorkoutsService {
     });
   }
 
+  updateFavorite(uid, favorite) {
+    return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('workouts').doc(uid).update({
+      favorite: favorite
+    });
+  }
+
   deleteWorkout(uid) {
     return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('workouts').doc(uid).delete();
   }

@@ -7,6 +7,8 @@ import { ToastrService } from 'ngx-toastr';
 import { CurrentUserService } from 'src/app/services/current-user.service';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { WorkoutsService } from 'src/app/services/workouts.service';
+import { faStar as starSolid } from '@fortawesome/free-solid-svg-icons';
+import { faStar as starOutline } from '@fortawesome/free-regular-svg-icons';
 
 @Component({
   selector: 'app-my-workouts',
@@ -15,6 +17,8 @@ import { WorkoutsService } from 'src/app/services/workouts.service';
 })
 export class MyWorkoutsComponent implements OnInit, OnDestroy {
   faPlusCircle = faPlusCircle;
+  starOutline = starOutline;
+  starSolid = starSolid;
   workouts = [];
   private subscription;
   loading = true;
@@ -41,6 +45,7 @@ export class MyWorkoutsComponent implements OnInit, OnDestroy {
     this.subscription = this.workoutService.getWorkouts().subscribe(workouts => {
       this.workouts = workouts;
       this.loading = false;
+      this.subscription.unsubscribe();
     });
   }
 
@@ -50,5 +55,14 @@ export class MyWorkoutsComponent implements OnInit, OnDestroy {
 
   openWorkout(workout) {
     this.router.navigate(["workout/" + workout.uid]);
+  }
+
+  onFavClicked(event, workout) {
+    event.stopPropagation();
+    workout.favorite = !workout.favorite;
+    this.workoutService.updateFavorite(workout.uid, workout.favorite).catch(error => {
+      this.toastr.error("Something went wrong. Please try again later.");
+      console.log(error);
+    });
   }
 }

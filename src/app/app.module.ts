@@ -51,6 +51,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { ProgressComponent } from './progress/progress.component';
 import { ViewWorkoutComponent } from './pages/view-workout/view-workout.component';
 import { ActiveWorkoutComponent } from './pages/active-workout/active-workout.component';
+import { NgPipesModule } from 'ngx-pipes';
 
 @NgModule({
   declarations: [
@@ -113,6 +114,7 @@ import { ActiveWorkoutComponent } from './pages/active-workout/active-workout.co
     FormsModule,
     NgChartsModule,
     ImageCropperModule,
+    NgPipesModule,
   ],
   providers: [AuthService, BsModalService, BsDatepickerConfig, BsDropdownConfig, { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy }],
   bootstrap: [AppComponent]

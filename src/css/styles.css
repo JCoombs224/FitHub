@@ -122,3 +122,14 @@
 .no-border {
   border: none !important;
 }
+
+.fav-star {
+  float: right;
+  font-size: 1.5rem;
+  color: #ffc107;
+  cursor: pointer;
+}
+
+.fav-star:hover {
+  transform: scale(1.1);
+}

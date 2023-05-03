@@ -1,6 +1,5 @@
 .card-new-workout {
-    transition: 0.5s;
-    cursor: pointer;
+    transition: 0.2s;
 }
 
 .card-new-workout .card{
@@ -8,7 +7,7 @@
 }
 
 .card-new-workout:hover {
-    transform: scale(1.07);
+    transform: scale(1.02);
     color: green;
 }
 
