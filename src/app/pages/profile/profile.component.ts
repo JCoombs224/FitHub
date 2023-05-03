@@ -375,12 +375,12 @@ export class ProfileComponent implements OnInit {
         postCardImg.style.border = '1px solid black';
         postCardImg.style.maxHeight = '60vh';
 
-        postCardImgWrapper.appendChild(postCardImg);
-
         //  If the post has an image, display it
-        if (this.posts[i].postImg !== '') {
+        if (this.posts[i].postImg != '') {
           postCardImg.src = this.posts[i].postImg;
         }
+
+        postCardImgWrapper.appendChild(postCardImg);
 
         if (this.posts[i].postWorkout !== 'None') {
           const postCardWorkout = document.createElement('p');
@@ -391,7 +391,7 @@ export class ProfileComponent implements OnInit {
           //  Adding all of the workout elements to the post, formatting the display, and appending them to the post.
           this.workoutService.getWorkout(this.posts[i].postWorkout).subscribe(workout => {
             //  Create a card text to hold the workout name and description with a hyperlink to the workout's page held in the workout.name
-            postCardWorkout.innerHTML = "Link to the full description: " + '<a href="#/workout/' + this.posts[i].postWorkout + '">' + workout.name + '</a>' + '<br>' + workout.description + '<br>';
+            postCardWorkout.innerHTML = "<b>Link to the full workout: </b>" + '<a href="#/workout/' + this.posts[i].postWorkout + '">' + workout.name + '</a><br>' + '<br><b>Workout description:</b><br> ' + workout.description + '<br>';
 
             //  Loop through the groups and display the exercises in each group
             for (let j = 0; j < workout.groups.length; j++) {
@@ -399,11 +399,14 @@ export class ProfileComponent implements OnInit {
 
               for (let k = 0; k < workout.groups[j].exercises.length; k++) {
                 postCardWorkout.innerHTML += '<br><b>&nbsp;&nbsp;&nbsp;&nbsp;' + workout.groups[j].exercises[k].name + '</b>';
-                if (workout.groups[j].exercises[k].sets !== 0) {
+                if (workout.groups[j].exercises[k].sets != 0) {
                   postCardWorkout.innerHTML += '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets: ' + workout.groups[j].exercises[k].sets;
                 }
-                if (workout.groups[j].exercises[k].reps !== 0) {
+                if (workout.groups[j].exercises[k].reps != 0) {
                   postCardWorkout.innerHTML += '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reps: ' + workout.groups[j].exercises[k].reps + '<br>';
+                }
+                if (workout.groups[j].exercises[k].sets == 0 && workout.groups[j].exercises[k].reps == 0) {
+                  postCardWorkout.innerHTML += '<br>';
                 }
                 postCardWorkout.innerHTML += '<b>&nbsp;&nbsp;&nbsp;&nbsp;Instructions: </b>' + workout.groups[j].exercises[k].instructions.substring(0, 50) + '...<br>';
               }
@@ -1045,6 +1048,16 @@ export class ProfileComponent implements OnInit {
 
     visibility[0].checked = true;
   }
+
+  // displayRecentWorkouts() {
+  //   //  Get the workouts from the user's profile
+  //   this.profileWorkouts = this.afs.collection('profiles').doc(this.profile.profileHandle).collection('workouts', ref => ref.orderBy('date', 'desc')).valueChanges();
+
+  //   //  Display the workouts
+  //   this.profileWorkouts.subscribe(workouts => {
+  //     this.workouts = workouts;
+  //   });
+  // }
 
   openWorkout(workout) {
     this.router.navigate(['workout/', this.profile.profileHandle, workout.uid]);
