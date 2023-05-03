@@ -312,13 +312,13 @@ export class ProfileComponent implements OnInit {
       //  and comment button and also display the comments for each post within the post card
       for (let i = 0; i < this.posts.length; i++) {
         const postCard = document.createElement('div');
-        postCard.className = 'card w-100 mb-2';
-        postCard.style.width = '18rem';
+        postCard.className = 'card mb-2';
+        postCard.style.width = 'auto';
+        postCard.style.borderColor = '#212529';
 
         //  Create a card header with no background to show the timestamp of the post
         const postCardHeader = document.createElement('div');
-        postCardHeader.className = 'card-header';
-        postCardHeader.style.backgroundColor = 'white';
+        postCardHeader.className = 'card-header bg-dark text-white';
         postCardHeader.style.textAlign = 'left';
         postCardHeader.style.fontSize = '15px';
         postCardHeader.innerHTML = this.posts[i].postTimeStamp.toDate().toDateString();
@@ -342,7 +342,7 @@ export class ProfileComponent implements OnInit {
 
           //  Change the background color of the delete post button when the mouse leaves the button
           deletePostButton.addEventListener('mouseout', () => {
-            deletePostButton.style.backgroundColor = 'white';
+            deletePostButton.style.backgroundColor = 'transparent';
           });
 
           deletePostButton.setAttribute('data-toggle', 'tooltip');
@@ -357,20 +357,23 @@ export class ProfileComponent implements OnInit {
         postCardBody.className = 'card-body';
 
         //  Create an image element to show post[i].postImg if it exists
+        const postCardImgWrapper = document.createElement('div');
+        postCardImgWrapper.style.display = 'flex';
+        postCardImgWrapper.style.justifyContent = 'center';
+        postCardImgWrapper.style.padding = '0';
+        postCardImgWrapper.className = 'pb-5';
+
         const postCardImg = document.createElement('img');
-        postCardImg.className = 'card-img-top';
-        postCardImg.style.width = '100%';
-        postCardImg.style.height = 'auto';
-        postCardImg.style.display = 'block';
-        postCardImg.style.marginLeft = 'auto';
-        postCardImg.style.marginRight = 'auto';
-        postCardImg.style.marginBottom = '10px';
+        postCardImg.className = 'img-fluid';
+        postCardImg.style.width = 'auto';
+        postCardImg.style.height = '100%';
+        postCardImg.style.display = 'flex';
+        postCardImg.style.justifyContent = 'center';
         postCardImg.style.borderRadius = '10px';
         postCardImg.style.border = '1px solid black';
-        postCardImg.style.objectFit = 'cover';
-        postCardImg.style.objectPosition = 'center';
-        postCardImg.style.minHeight = '100px';
-        postCardImg.style.minWidth = '100px';
+        postCardImg.style.maxHeight = '60vh';
+        
+        postCardImgWrapper.appendChild(postCardImg);
 
         //  If the post has an image, display it
         if (this.posts[i].postImg !== '') {
@@ -385,6 +388,9 @@ export class ProfileComponent implements OnInit {
           postCardWorkout.innerHTML = this.posts[i].postWorkout;
           postCardBody.appendChild(postCardWorkout);
         }
+
+        const hr = document.createElement('hr');
+        hr.className = 'mb-5 mt-0';
 
         //  Create a card text to hold the post text
         const postCardText = document.createElement('p');
@@ -452,7 +458,8 @@ export class ProfileComponent implements OnInit {
         postCard.appendChild(postCardHeader);
         postCard.appendChild(postCardBody);
         if (typeof this.posts[i].postImg !== 'undefined' && this.posts[i].postImg !== '') {
-          postCardBody.appendChild(postCardImg);
+          postCardBody.appendChild(postCardImgWrapper);
+          postCardBody.appendChild(hr);
         }
         postCardBody.appendChild(postCardText);
         postCardBody.appendChild(commentTextArea);
