@@ -1113,7 +1113,7 @@ export class ProfileComponent implements OnInit {
           let cardButton = document.createElement('button');
           cardButton.className = "btn btn-outline-success";
           cardButton.innerHTML = "View Workout";
-          cardButton.onclick = () => this.openWorkoutUid(this.profile.completedWorkouts[i]['workoutUid']);
+          cardButton.onclick = () => this.openWorkout(this.profile.profileHandle, this.profile.completedWorkouts[i]['workoutUid']);
 
           cardBody.appendChild(cardText);
           cardBody.appendChild(cardButton);
@@ -1130,8 +1130,8 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  openWorkout(workout) {
-    this.router.navigate(['workout/', this.profile.profileHandle, workout.uid]);
+  openWorkout(profile, workout) {
+    this.router.navigate(['workout/', profile, workout]);
   }
 
   openWorkoutUid(workoutUid){

@@ -30,7 +30,8 @@ export class FavoriteWorkoutsComponent implements OnInit {
   ngOnInit(): void {
     this.title.setTitle('Favorite Workouts');
 
-    this.workoutsService.getFavoriteWorkouts().subscribe((workouts) => {
+    const subscription = this.workoutsService.getFavoriteWorkouts().subscribe((workouts) => {
+      subscription.unsubscribe();
       this.favoriteWorkouts = workouts.map((workout) => {
         return {
           uid: workout.uid,
@@ -45,8 +46,9 @@ export class FavoriteWorkoutsComponent implements OnInit {
   }
 
   goToWorkout(workout) {
-    this.workoutsService.getWorkoutByUid(workout.uid).subscribe(data => {
+    const subscription = this.workoutsService.getWorkoutByUid(workout.uid).subscribe(data => {
       this.router.navigate([`/workout/${workout.uid}`], {state: {data}});
+      subscription.unsubscribe();
     });
   }
 }
