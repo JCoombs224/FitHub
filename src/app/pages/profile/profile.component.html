@@ -1,12 +1,12 @@
 <div class="row min-vh-100 main-bg">
   <div class="container mt-xl-5">
-    <div class="row" display="flex" flex-wrap="wrap">
-      <div class="col-12 col-xl-10 col-xxl-8 min-vh-100 d-flex" style="margin: 0 auto;" >
+    <div class="row">
+      <div class="col-12 col-xl-10 col-xxl-7 min-vh-100 d-flex" style="margin: 0 auto;" >
         <div class="card w-100 min-vh-100 flex-column mb-5 display-4" style="border: none; transform: none; background-color: rgba(255, 255, 255, 0.85)">
           <div class="card-header text-white" style="background-color: rgba(9, 106, 46, 1);">
             <div>
               <div class="row">
-                <div class="col-md-3 d-flex align-items-center justify-content-start">
+                <div class="col-md-auto d-flex align-items-center justify-content-start">
                   <div style="position: relative" (mouseenter)="showUploadButton = true" (mouseleave)="showUploadButton = false">
                      <div *ngIf="loadingImage" class="spinner-border text-center text-light" role="status">
                     <span class="sr-only">Loading...</span>
@@ -65,39 +65,39 @@
               </div>
             </div>
           </div>
-          <div class="row mt-5 ">
-            <div class="card d-flex col col-lg-10 mb-5" style="text-align: left; margin: 0 auto; background-color: rgba(32, 61, 28, 0.1); border: none;">
+          <div class="row mt-5">
+            <div class="card col-12 col-lg-8 p-3 ms-5" style="text-align: left; margin: 0 auto; background-color: rgba(32, 61, 28, 0.1); border: none;">
               <div class="card-header display-6" style="background: none;">
                 Posts
               </div>
               <div class="card-body" style="background: none;">
-                <div class="row">
+                <div class="row ps-5 pe-5">
                   <button *ngIf="userProfile" type="button" id="createPost" class="btn btn-outline-success" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0;" (click)="showPostsModal()">
                     Create Post+
                   </button>
                 </div>
               </div>
-              <div id="posts"></div>
+              <div id="posts" class="p-5 pt-0"></div>
               <div id="noPosts"></div>
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card d-flex" style="margin-left: 10px auto; background-color: rgba(255, 255, 255, 0.85); border: none; flex-wrap: wrap; height: auto;">
-          <div class="card-header mb-2" style="background: none;">
-            <b>Recent Workouts</b>
-          </div>
-          <div id="WorkoutsCard"></div>
-          <div class="card-footer w-100" style="background: none;">
-            <div class="row" style="bottom: 0;">
-              <div *ngIf="userProfile">
-                <button type="button" id="createWorkout" class="btn btn-outline-success mb-1" routerLink="/my-workouts/create" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0; width: 100%;">
-                  Create Workout+
-                </button>
-                <button type="button" id="viewAllWorkouts" class="btn btn-outline-success" routerLink="/my-workouts" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; position: 0; width: 100%;">
-                  View All Workouts
-                </button>
+            <div class="col me-3">
+              <div class="card p-3">
+                <div class="card-header mb-2" style="background: none; font-size: 1.5rem">
+                  <b>Recent Workouts</b>
+                </div>
+                <div id="WorkoutsCard"></div>
+                <div class="card-footer w-100" style="background: none;">
+                  <div class="row" style="bottom: 0;">
+                    <div *ngIf="userProfile">
+                      <button type="button" id="createWorkout" class="btn btn-outline-success mb-1" routerLink="/my-workouts/create" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0; width: 100%;">
+                        Create Workout+
+                      </button>
+                      <button type="button" id="viewAllWorkouts" class="btn btn-outline-success" routerLink="/my-workouts" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; position: 0; width: 100%;">
+                        View All Workouts
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

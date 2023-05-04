@@ -157,7 +157,7 @@ export class ProfileComponent implements OnInit {
 
   loadProfilePostsData(profile = this.profile.profileHandle) {
     return new Promise<void>((resolve, reject) => {
-      this.afs.collection('profiles').doc(profile).collection('posts', ref => ref.orderBy('postTimeStamp', 'desc')).snapshotChanges().pipe(
+      const subscription = this.afs.collection('profiles').doc(profile).collection('posts', ref => ref.orderBy('postTimeStamp', 'desc')).snapshotChanges().pipe(
         map((posts: any[]) => {
           return posts.map(post => {
             const data = post.payload.doc.data();
@@ -180,6 +180,7 @@ export class ProfileComponent implements OnInit {
         })
       ).subscribe(posts => {
         this.posts = posts;
+        subscription.unsubscribe();
         resolve();
       });
     });
@@ -392,7 +393,7 @@ export class ProfileComponent implements OnInit {
           postCardWorkout.style.textAlign = 'left';
 
           //  Adding all of the workout elements to the post, formatting the display, and appending them to the post.
-          this.workoutService.getWorkout(this.posts[i].postWorkout).subscribe(workout => {
+          const subscription = this.workoutService.getWorkout(this.posts[i].postWorkout).subscribe(workout => {
             //  Create a card text to hold the workout name and description with a hyperlink to the workout's page held in the workout.name
             postCardWorkout.innerHTML = "<b>Link to the full workout: </b>" + '<a href="#/workout/' + this.posts[i].postWorkout + '">' + workout.name + '</a><br>' + '<br><b>Workout description:</b><br> ' + workout.description + '<br>';
 
@@ -414,6 +415,7 @@ export class ProfileComponent implements OnInit {
                 postCardWorkout.innerHTML += '<b>&nbsp;&nbsp;&nbsp;&nbsp;Instructions: </b>' + workout.groups[j].exercises[k].instructions.substring(0, 50) + '...<br>';
               }
             }
+            subscription.unsubscribe();
           });
 
           postCardBody.appendChild(postCardWorkout);
@@ -1067,7 +1069,6 @@ export class ProfileComponent implements OnInit {
 
     //  Create a header for the card to hold the workout name
     let cardHeader = document.createElement('h5');
-    cardHeader.className = "card-header";
     cardHeader.style.background = "none";
     cardHeader.innerHTML = "Recent Workouts";
 
@@ -1078,7 +1079,7 @@ export class ProfileComponent implements OnInit {
 
       let cardText = document.createElement('p');
       cardText.className = "card-text";
-      cardText.style.fontSize = "20px";
+      cardText.style.fontSize = "1.1rem";
       cardText.innerHTML = "You have no completed workouts yet!";
 
       cardBody.appendChild(cardText);

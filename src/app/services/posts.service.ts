@@ -48,7 +48,8 @@ export class PostsService {
 
   getSocialFeed() {
     // Get the list of users that the current user is following
-    const following = this.currentUser.user.profile.following;
+    const following = [...this.currentUser.user.profile.following];
+    
     // Add user to the list of users to get posts from
     following.push(this.currentUser.user.profile.profileHandle);
 
@@ -58,11 +59,12 @@ export class PostsService {
       }
       else {
         following.forEach((follow, index) => {
-          this.afs.collection('profiles').doc(follow).collection('posts', ref => ref.orderBy('postTimeStamp', 'desc')).valueChanges().subscribe(posts => {
+          const subscription = this.afs.collection('profiles').doc(follow).collection('posts', ref => ref.orderBy('postTimeStamp', 'desc')).valueChanges().subscribe(posts => {
             posts.forEach(post => {
               post.postDateString = post.postTimeStamp.toDate().toDateString();
               post.profileHandle = follow;
               this.socialFeed.push(post);
+              subscription.unsubscribe();
             });
             if (index == following.length - 1) {
               // Sort the social feed by timestamp
