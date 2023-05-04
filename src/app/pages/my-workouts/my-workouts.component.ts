@@ -68,7 +68,7 @@ export class MyWorkoutsComponent implements OnInit, OnDestroy {
 
   viewWorkout(workout) {
     this.workoutService.getWorkoutByUid(workout.uid).subscribe((data) => {
-      const workoutId = data['id'].toString(); // assuming the workout ID is stored as a string in the database
+      const workoutId = data['id'].toString();
       this.router.navigate(['/workout', workoutId]);
     });
   }

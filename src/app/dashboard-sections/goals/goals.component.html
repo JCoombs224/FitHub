@@ -1,0 +1,22 @@
+<div class="container">
+  <h3>Select goals:</h3>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let goal of availableGoals" (click)="onSelectGoal(goal)">
+      {{goal.description}}
+    </li>
+  </ul>
+
+  <h3>Create a new goal:</h3>
+  <div class="form-group">
+    <!-- <input [(ngModel)]="newGoalDescription" class="form-control" placeholder="Enter new goal description"> -->
+    <button class="btn btn-primary mt-2" (click)="onCreateNewGoal()">Add New Goal</button>
+  </div>
+
+  <h3>Selected goals:</h3>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let goal of selectedGoals">
+      {{goal.description}}
+    </li>
+  </ul>
+</div>
+

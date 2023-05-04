@@ -2,7 +2,7 @@
 <div class="container">
   <div class="row">
     <div class="col-12">
-      <div class="card mb-5 w-100 align-items-center custom-height mt-5">
+      <div class="card mb-4 mt-4 w-100 align-items-center custom-height">
         <div class="card-body text-center d-flex flex-column justify-content-center">
           <h5 class="card-title custom-text-color">My Progress</h5>
           <div class="progress-wrapper">
@@ -21,7 +21,7 @@
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" [id]="'goal' + i" [checked]="goal.completed" (change)="completeGoal(i, !goal.completed)">
                   <label class="form-check-label" [for]="'goal' + i">
-                    {{goal.name}}
+                    {{goal.description}}
                   </label>
                 </div>
               </li>

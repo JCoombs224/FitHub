@@ -1,12 +1,10 @@
 // src/app/services/goals.service.ts
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { map } from 'rxjs/operators';
+import { map, first } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
-import { first } from 'rxjs/operators';
 
 export interface Goal {
-  id: string;
   description: string;
   completed: boolean;
 }
@@ -15,7 +13,7 @@ export interface Goal {
   providedIn: 'root',
 })
 export class GoalsService {
-  private goalsCollection = this.afs.collection('goals');
+  private goalsDoc = this.afs.collection('goals').doc('pRnbn6OuepXPBrq1GyHH');
   private progress$ = new BehaviorSubject<number>(0);
 
   constructor(private afs: AngularFirestore) {
@@ -27,14 +25,16 @@ export class GoalsService {
   }
 
   getGoals() {
-    return this.goalsCollection.snapshotChanges().pipe(
-      map((actions) =>
-        actions.map((a) => {
-          const data = a.payload.doc.data() as any;
-          const id = a.payload.doc.id;
-          return { id, ...data };
-        }).filter((goal) => goal.hasOwnProperty('completed'))
-      )
+    return this.goalsDoc.valueChanges().pipe(
+      map((data: any) => {
+        const goalsArray = data.Goals.map((goalDescription: string, index: number) => {
+          return {
+            description: goalDescription,
+            completed: data.completed && data.completed[index] ? true : false,
+          };
+        });
+        return goalsArray;
+      })
     );
   }
 
@@ -42,8 +42,9 @@ export class GoalsService {
     this.getGoals()
       .pipe(first())
       .subscribe(async (goals) => {
-        const goal = goals[goalIndex];
-        await this.goalsCollection.doc(goal.id).update({ completed });
+        goals[goalIndex].completed = completed;
+        const completedArray = goals.map((goal: Goal) => goal.completed);
+        await this.goalsDoc.update({ completed: completedArray });
 
         // Update the progress
         const completedGoals = goals.filter((goal) => goal.completed).length;

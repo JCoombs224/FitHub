@@ -42,9 +42,16 @@ export class DashboardComponent implements OnInit {
   public barChartData: ChartDataset[] = [
     {
       data: [],
-      label: 'Workout History',
+      label: 'Time Spent',
       backgroundColor: 'rgba(0, 150, 0, 1)',
       borderColor: 'rgba(0, 150, 0, 1)',
+      borderWidth: 1,
+    },
+    {
+      data: [],
+      label: 'Exercises Completed',
+      backgroundColor: 'rgba(75, 192, 192, 1)',
+      borderColor: 'rgba(75, 192, 192, 1)',
       borderWidth: 1,
     },
   ];
@@ -99,82 +106,13 @@ export class DashboardComponent implements OnInit {
 
   // Replace data with actual input data from the user.
   allWorkoutData = [
-    { date: '2023-02-01', value: 10 },
-    { date: '2023-02-02', value: 12 },
-    { date: '2023-02-03', value: 15 },
-    { date: '2023-02-04', value: 17 },
-    { date: '2023-02-05', value: 22 },
-    { date: '2023-02-06', value: 20 },
-    { date: '2023-02-07', value: 25 },
-    { date: '2023-02-08', value: 30 },
-    { date: '2023-02-09', value: 28 },
-    { date: '2023-02-12', value: 10 },
-    { date: '2023-02-13', value: 12 },
-    { date: '2023-02-14', value: 15 },
-    { date: '2023-02-16', value: 17 },
-    { date: '2023-02-17', value: 22 },
-    { date: '2023-02-20', value: 14 },
-    { date: '2023-02-21', value: 25 },
-    { date: '2023-02-22', value: 20 },
-    { date: '2023-02-23', value: 10 },
-
-    { date: '2023-03-01', value: 10 },
-    { date: '2023-03-01', value: 10 },
-    { date: '2023-03-02', value: 12 },
-    { date: '2023-03-03', value: 15 },
-    { date: '2023-03-04', value: 17 },
-    { date: '2023-03-05', value: 22 },
-    { date: '2023-03-06', value: 20 },
-    { date: '2023-03-07', value: 25 },
-    { date: '2023-03-08', value: 30 },
-
-    { date: '2023-04-01', value: 10 },
-    { date: '2023-04-02', value: 12 },
-    { date: '2023-04-03', value: 15 },
-    { date: '2023-04-04', value: 17 },
-    { date: '2023-04-05', value: 22 },
-    { date: '2023-04-06', value: 20 },
-    { date: '2023-04-07', value: 25 },
-    { date: '2023-04-08', value: 30 },
-    { date: '2023-04-09', value: 28 },
-    { date: '2023-04-12', value: 10 },
-    { date: '2023-04-13', value: 12 },
-    { date: '2023-04-14', value: 15 },
-    { date: '2023-04-16', value: 17 },
-    { date: '2023-04-17', value: 10 },
-    { date: '2023-04-18', value: 22 },
-    { date: '2023-04-19', value: 18 },
-    { date: '2023-04-20', value: 14 },
-    { date: '2023-04-21', value: 25 },
-    { date: '2023-04-22', value: 20 },
-    { date: '2023-04-23', value: 10 },
-
-    { date: '2023-06-01', value: 10 },
-    { date: '2023-06-01', value: 10 },
-    { date: '2023-06-02', value: 12 },
-    { date: '2023-06-03', value: 15 },
-    { date: '2023-06-04', value: 17 },
-    { date: '2023-06-05', value: 22 },
-    { date: '2023-06-06', value: 20 },
-    { date: '2023-06-07', value: 25 },
-    { date: '2023-06-08', value: 30 },
-
-    { date: '2023-08-01', value: 10 },
-    { date: '2023-08-01', value: 10 },
-    { date: '2023-08-02', value: 12 },
-    { date: '2023-08-03', value: 15 },
-    { date: '2023-08-04', value: 17 },
-    { date: '2023-08-05', value: 22 },
-    { date: '2023-08-06', value: 20 },
-    { date: '2023-08-07', value: 25 },
-    { date: '2023-08-08', value: 30 },
-    { date: '2023-08-09', value: 20 },
-    { date: '2023-08-10', value: 25 },
-    { date: '2023-08-11', value: 30 },
-
-    { date: '2023-10-03', value: 15 },
-    { date: '2023-10-04', value: 17 },
-    { date: '2023-10-05', value: 22 },
+    { date: '2023-04-30', timeSpent: 60, exercises: 10 },
+    { date: '2023-05-01', timeSpent: 60, exercises: 10 },
+    { date: '2023-05-02', timeSpent: 45, exercises: 12 },
+    { date: '2023-05-03', timeSpent: 75, exercises: 15 },
+    { date: '2023-05-04', timeSpent: 30, exercises: 17 },
+    { date: '2023-05-05', timeSpent: 90, exercises: 22 },
+    { date: '2023-05-06', timeSpent: 60, exercises: 20 },
   ];
 
   // Sets the default time range
@@ -205,7 +143,7 @@ export class DashboardComponent implements OnInit {
   }
 
   groupDataByRange(data: any[], range: string) {
-    const groupedData: { [key: string]: number } = {};
+    const groupedData: { [key: string]: { timeSpent: number; exercises: number } } = {};
 
     // Generate all labels based on the range
     const now = new Date();
@@ -238,7 +176,7 @@ export class DashboardComponent implements OnInit {
     // Initialize groupedData with all the labels and set values to 0
     for (let d = new Date(startDate); d < endDate; ) {
       const label = formatLabel(d);
-      groupedData[label] = 0;
+      groupedData[label] = { timeSpent: 0, exercises: 0 };
 
       switch (range) {
         case 'week':
@@ -259,21 +197,29 @@ export class DashboardComponent implements OnInit {
       const groupKey = formatLabel(workoutDate);
 
       if (groupKey in groupedData) {
-        groupedData[groupKey] += workout.value;
+        groupedData[groupKey].timeSpent += workout.timeSpent;
+        groupedData[groupKey].exercises += workout.exercises;
       }
     });
 
-    return Object.entries(groupedData).map(([key, value]) => ({ date: key, value }));
+    return Object.entries(groupedData).map(([key, value]) => ({ date: key, ...value }));
   }
 
   updateChartData(data: any[]) {
     this.barChartLabels = data.map(workout => workout.date);
     this.barChartData = [
       {
-        data: data.map(workout => workout.value),
-        label: 'Workout History',
+        data: data.map(workout => workout.timeSpent),
+        label: 'Time Spent',
         backgroundColor: 'rgba(0, 150, 0, 1)',
         borderColor: 'rgba(0, 150, 0, 1)',
+        borderWidth: 1,
+      },
+      {
+        data: data.map(workout => workout.exercises),
+        label: 'Exercises Completed',
+        backgroundColor: 'rgba(36, 36, 36, 1)',
+        borderColor: 'rgba(36, 36, 36, 1)',
         borderWidth: 1,
       },
     ];

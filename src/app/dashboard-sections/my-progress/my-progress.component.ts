@@ -7,6 +7,9 @@ import { ToastrService } from 'ngx-toastr';
 import { CurrentUserService } from 'src/app/services/current-user.service';
 import { GoalsService } from 'src/app/services/goals.service';
 import { WorkoutsService } from 'src/app/services/workouts.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-my-progress',
@@ -29,7 +32,8 @@ export class MyProgressComponent {
     private toastr: ToastrService,
     public currentUserService: CurrentUserService,
     private goalsService: GoalsService,
-    private workoutsService: WorkoutsService
+    private workoutsService: WorkoutsService,
+    private firestore: AngularFirestore
   ) {}
 
   ngOnInit(): void {
@@ -39,6 +43,7 @@ export class MyProgressComponent {
       this.router.navigate(['/create-profile']);
     }
     this.goalsService.getGoals().subscribe((goals) => {
+      console.log('Goals:', goals);
       this.goals = goals;
       this.updateProgress();
     });
