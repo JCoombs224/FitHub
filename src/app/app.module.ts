@@ -52,7 +52,8 @@ import { ProgressComponent } from './pages/progress/progress.component';
 import { ViewWorkoutComponent } from './pages/view-workout/view-workout.component';
 import { ActiveWorkoutComponent } from './pages/active-workout/active-workout.component';
 import { NgPipesModule } from 'ngx-pipes';
-import { FavoriteWorkoutsComponent } from './favorite-workouts/favorite-workouts.component';
+import { FavoriteWorkoutsComponent } from './dashboard-sections/favorite-workouts/favorite-workouts.component';
+import { MyProgressComponent } from './dashboard-sections/my-progress/my-progress.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { FavoriteWorkoutsComponent } from './favorite-workouts/favorite-workouts
     ViewWorkoutComponent,
     ActiveWorkoutComponent,
     FavoriteWorkoutsComponent,
+    MyProgressComponent,
   ],
 
   imports: [

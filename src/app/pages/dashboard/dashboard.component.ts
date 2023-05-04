@@ -9,6 +9,7 @@ import { ChartOptions, ChartType, ChartDataset } from 'chart.js';
 import { faAward, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import { GoalsService } from 'src/app/services/goals.service';
 import { WorkoutsService } from 'src/app/services/workouts.service';
+import { MyProgressComponent } from 'src/app/dashboard-sections/my-progress/my-progress.component';
 
 @Component({
   selector: 'app-dashboard',

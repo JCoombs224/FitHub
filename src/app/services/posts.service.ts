@@ -49,7 +49,7 @@ export class PostsService {
   getSocialFeed() {
     // Get the list of users that the current user is following
     const following = [...this.currentUser.user.profile.following];
-    
+
     // Add user to the list of users to get posts from
     following.push(this.currentUser.user.profile.profileHandle);
 

@@ -124,10 +124,10 @@ export class WorkoutsService {
     .valueChanges({ idField: 'uid' });
   }
 
-  getWorkoutByUid(uid) {
+  getWorkoutByUid(id) {
     return this.afs.collection('profiles')
     .doc(this.currentUser.user.profile.profileHandle)
-    .collection('workouts').doc(uid)
+    .collection('workouts').doc(id)
     .valueChanges();
   }
 }

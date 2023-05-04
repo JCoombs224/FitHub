@@ -5,7 +5,6 @@
         <div class="card w-100 min-vh-100 d-flex flex-column mb-4">
           <div class="card-body text-center">
             <h5 class="card-title custom-text-color">Feed</h5>
-            <!-- Favorite Workouts -->
             <app-favorite-workouts></app-favorite-workouts>
             <!-- Goals and Achievements -->
             <div class="bg-light p-3 rounded mb-3">
@@ -30,21 +29,8 @@
       </div>
       <div class="col-12 col-lg-10 d-flex flex-column">
         <div class="row d-flex">
-          <div class="col-12 col-lg-4 d-flex">
-            <div class="card mb-4 w-100 align-self-stretch custom-height">
-              <div class="card-body text-center d-flex flex-column justify-content-center">
-                <h5 class="card-title custom-text-color">My Progress</h5>
-                <div class="progress-wrapper">
-                  <svg class="progress-ring" width="200" height="200">
-                    <circle class="progress-ring__circle" stroke="lightgrey" stroke-width="30" fill="transparent" r="82" cx="100" cy="100" />
-                    <circle class="progress-ring__circle progress-ring__circle--value" stroke="Green" stroke-width="30" [attr.stroke-dasharray]="circumference" [attr.stroke-dashoffset]="strokeDashoffset" fill="transparent" r="82" cx="100" cy="100" />
-                  </svg>
-                  <span class="progress-value h3 font-weight-bold">{{progressValue}}<sup class="small">%</sup></span>
-                </div>
-                <p class="card-text mt-3">{{progressSummary}}</p>
-                <button routerLink="/progress" class="btn btn-outline-success" data-mdb-ripple-color="dark">View My Progress</button>
-              </div>
-            </div>
+          <div class="col-12 col-lg-4 d-flex flex-column">
+            <app-my-progress></app-my-progress>
           </div>
           <div class="col-12 col-lg-8 d-flex">
             <div class="card mb-4 w-100 align-self-stretch custom-height">

@@ -17,38 +17,10 @@ h1 {
 .card {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.87);
 }
 
 .card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
+  transform: scale(1.005);
+  /* box-shadow: 0 7px 14px rgba(255, 255, 255, 0.527); */
 }
-
-.card-title {
-  font-weight: bold;
-}
-
-.progress-wrapper {
-  position: relative;
-  display: inline-block;
-}
-
-.progress-ring {
-  transform: rotate(-90deg);
-}
-
-.progress-ring__circle {
-  stroke-linecap: round;
-}
-
-.progress-ring__circle--value {
-  transition: stroke-dashoffset 0.35s;
-}
-
-.progress-value {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
