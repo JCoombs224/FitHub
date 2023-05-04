@@ -1,8 +1,8 @@
 <div class="row min-vh-100 main-bg">
-  <div class="container mt-xl-4">
-    <div class="row">
-      <div class="col-12 col-xl-10 col-xxl-8 p-0 min-vh-100 d-flex" style="margin: 0 auto;">
-        <div class="card w-100 min-vh-100 flex-column mb-5 display-4" style="border: none; transform: none;">
+  <div class="container mt-xl-5">
+    <div class="row" display="flex" flex-wrap="wrap">
+      <div class="col-12 col-xl-10 col-xxl-8 min-vh-100 d-flex" style="margin: 0 auto;" >
+        <div class="card w-100 min-vh-100 flex-column mb-5 display-4" style="border: none; transform: none; background-color: rgba(255, 255, 255, 0.85)">
           <div class="card-header text-white" style="background-color: rgba(9, 106, 46, 1);">
             <div>
               <div class="row">
@@ -14,18 +14,14 @@
                   <img [src]="profilePictureUrl" class="img-fluid">
                   <button *ngIf="showUploadButton && userProfile" class="btn btn-light btn-image-upload" (click)="onUploadButtonClick()"><fa-icon [icon]="faEdit"></fa-icon></button>
                   </div>
-
                 </div>
-
                 <div *ngIf="showCropper" class="crop-container">
                   <image-cropper [imageChangedEvent]="imageChangedEvent" (imageCropped)="imageCropped($event)" [maintainAspectRatio]="true" [aspectRatio]="1" [resizeToWidth]="256"></image-cropper>
                   <div class="d-flex justify-content-end bg-dark">
                     <button class="btn btn-danger" (click)="showCropper = false;">Cancel</button>
                     <button class="btn btn-success" (click)="uploadImage()">Crop</button>
                   </div>
-
                 </div>
-
                 <div class="col-md-auto col-xl-3 ps-md-0 mt-5 no-wrap" style="padding-right: auto; background: none; border:none;">
                   <h5 class="no-wrap text-truncate">@{{profile.profileHandle}}</h5>
                   <p class="no-wrap" style="font-size: 1rem;">{{profile.age}}</p>
@@ -54,7 +50,7 @@
                   <hr>
                   <div *ngIf="userProfile">
                     <button class="btn zoom-btn btn-outline-success w-100" display="flex-row" style="margin: 5px; margin-bottom: 10px; background-color: #b0dfba;" data-mdb-ripple-color="dark" id="editProfile" (click)="showEditProfileModal()">
-                      <h5 class="mb-1 no-wrap">Edit Profile</h5>
+                      Edit Profile
                     </button>
                   </div>
                   <div *ngIf="!userProfile">
@@ -70,7 +66,7 @@
             </div>
           </div>
           <div class="row mt-5 ">
-            <div class="card d-flex col col-lg-10" style="text-align: left; margin: 0 auto; background-color: rgba(32, 61, 28, 0.1); border: none;">
+            <div class="card d-flex col col-lg-10 mb-5" style="text-align: left; margin: 0 auto; background-color: rgba(32, 61, 28, 0.1); border: none;">
               <div class="card-header display-6" style="background: none;">
                 Posts
               </div>
@@ -85,48 +81,23 @@
               <div id="noPosts"></div>
             </div>
           </div>
-          <div class="row mt-5" id="WorkoutsCard">
-            <div class="card d-flex col-lg-10 mb-5" style="text-align: center; margin: 0 auto; background-color: rgba(32, 61, 28, 0.1); border: none;">
-              <div class="card-header display-6 mb-2" style="background: none;">
-                Recent Workouts
-              </div>
-              <div class="card-body mt-2">
-                <div class="row g-2 mb-2">
-                  <div class="card d-flex col-lg-5 mb-2 w-50">
-                    <img src="https://th.bing.com/th/id/OIP.8XLECwYGdt3DBa45yi83RAHaE8?pid=ImgDet&rs=1"
-                      alt="image 1" class="w-100 rounded-3 mt-1">
-                      <p style="font-size: 18px;">Bies and Tries Day</p>
-                  </div>
-                  <div class="card d-flex col-lg-5 mb-2 w-50">
-                    <img src="https://boxlifemagazine.com/wp-content/uploads/2019/08/Dumbbell-Workouts.jpg"
-                      alt="image 1" class="w-100 rounded-3 mt-1">
-                      <p style="font-size: 18px;">Back and Core Day</p>
-                  </div>
-                </div>
-                <div class="row g-2">
-                  <div class="card d-flex col-lg-5 mb-2 w-50">
-                    <img src="https://astr.tv/wp-content/uploads/2020/03/workouts-routines.jpg"
-                      alt="image 1" class="w-100 rounded-3 mt-1">
-                      <p style="font-size: 18px;">Leg Day</p>
-                  </div>
-                  <div class="card d-flex col-lg-5 mb-2 w-50">
-                    <img src="https://th.bing.com/th/id/R.e3aed13bfaf0fc34a85a2cd2782d769c?rik=5O8gO%2fHcbPfDKA&riu=http%3a%2f%2fi.huffpost.com%2fgen%2f1319881%2fimages%2fo-GYM-facebook.jpg&ehk=2lQVG9Kib9F4TpgQEoPqDYTxh2UANAMiGGxiaQSkx7w%3d&risl=&pid=ImgRaw&r=0"
-                      alt="image 1" class="w-100 rounded-3 mt-1">
-                      <p style="font-size: 18px;">Cardio Day</p>
-                  </div>
-                </div>
-              </div>
-              <div class="card-footer w-100" style="background: none;">
-                <div class="row">
-                  <div>
-                    <button *ngIf="userProfile" type="button" id="createWorkout" class="btn btn-outline-success" routerLink="/my-workouts/create" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0; width: 100%;">
-                      Create Workout+
-                    </button>
-                    <button type="button" id="viewAllWorkouts" class="btn btn-outline-success" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto;position: 0; width: 100%;">
-                      View All Workouts
-                    </button>
-                  </div>
-                </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card d-flex" style="margin-left: 10px auto; background-color: rgba(255, 255, 255, 0.85); border: none; flex-wrap: wrap; height: auto;">
+          <div class="card-header mb-2" style="background: none;">
+            <b>Recent Workouts</b>
+          </div>
+          <div id="WorkoutsCard"></div>
+          <div class="card-footer w-100" style="background: none;">
+            <div class="row" style="bottom: 0;">
+              <div *ngIf="userProfile">
+                <button type="button" id="createWorkout" class="btn btn-outline-success mb-1" routerLink="/my-workouts/create" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0; width: 100%;">
+                  Create Workout+
+                </button>
+                <button type="button" id="viewAllWorkouts" class="btn btn-outline-success" routerLink="/my-workouts" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; position: 0; width: 100%;">
+                  View All Workouts
+                </button>
               </div>
             </div>
           </div>

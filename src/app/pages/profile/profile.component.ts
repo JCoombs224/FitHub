@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -14,11 +14,9 @@ import { finalize } from 'rxjs/operators';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
-import { PostsService } from 'src/app/services/posts.service';
 import { map } from 'rxjs/operators';
 import { Timestamp } from 'firebase/firestore';
 import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-profile',
@@ -48,6 +46,7 @@ export class ProfileComponent implements OnInit {
   posts;
   imageChangedEvent: any = '';
   croppedImage: any = '';
+  isSmallScreen: boolean = window.innerWidth <= 768;
 
   @ViewChild('followersModal') followersModal: ElementRef;
   @ViewChild('followingModal') followingModal: ElementRef;
@@ -56,6 +55,7 @@ export class ProfileComponent implements OnInit {
   @ViewChild('editProfileModal') editProfileModal: ElementRef;
   @ViewChild('allPostsModal') allPostsModal: ElementRef;
   @ViewChild('editPostModal') editPostModal: ElementRef;
+  @ViewChild('WorkoutsContainer') workoutsContainer: ElementRef;
 
   constructor(
     private route: ActivatedRoute,
@@ -69,7 +69,7 @@ export class ProfileComponent implements OnInit {
     private storage: AngularFireStorage,
     private toastr: ToastrService,
     private router: Router,
-  ) { }
+  ) {    }
 
   // When the page is loaded
   ngOnInit(): void {
@@ -81,6 +81,7 @@ export class ProfileComponent implements OnInit {
       this.loadProfileData().then(() => {
         this.loadProfilePostsData(this.profile.profileHandle).then(() => {
           this.displayPosts();
+          this.displayRecentWorkouts();
         });
         this.checkFollowers();
       });
@@ -134,6 +135,7 @@ export class ProfileComponent implements OnInit {
           this.profile.following = profData.following;
           this.profile.isPrivate = profData.isPrivate;
           this.profile.profilePicture = profData.profilePicture;
+          this.profile.completedWorkouts = profData.completedWorkouts;
 
           resolve(true);
 
@@ -295,17 +297,18 @@ export class ProfileComponent implements OnInit {
 
   //  Function to display this porfile's posts in a modal
   displayPosts() {
-
     //  Get the element by id: posts
     const posts = document.getElementById('posts');
     posts.innerHTML = '';
 
-    if (this.posts.length === 0) {
+    if (this.posts.length == 0) {
 
       const noPosts = document.createElement('div');
-      noPosts.className = 'card w-100 mb-2';
+      noPosts.className = 'w-100 mb-4';
       noPosts.style.width = '18rem';
-      noPosts.innerHTML = 'No posts to display';
+      noPosts.style.fontSize = '20px';
+      noPosts.style.textAlign = 'center';
+      noPosts.innerHTML = '<b>No posts to display.</b>';
       posts.appendChild(noPosts);
     }
 
@@ -1049,18 +1052,89 @@ export class ProfileComponent implements OnInit {
     visibility[0].checked = true;
   }
 
-  // displayRecentWorkouts() {
-  //   //  Get the workouts from the user's profile
-  //   this.profileWorkouts = this.afs.collection('profiles').doc(this.profile.profileHandle).collection('workouts', ref => ref.orderBy('date', 'desc')).valueChanges();
+  displayRecentWorkouts() {
+    //  Create a reference to the workout card
+    let workoutCard = document.getElementById('WorkoutsCard');
 
-  //   //  Display the workouts
-  //   this.profileWorkouts.subscribe(workouts => {
-  //     this.workouts = workouts;
-  //   });
-  // }
+    //  Clear the card of any previous workouts
+    workoutCard.innerHTML = '';
+
+    //  Create a card to hold the completed workouts centered on the page
+    let card = document.createElement('div');
+    card.className = "card text-center";
+    card.style.backgroundColor = "rgba(32, 61, 28, 0.7)";
+    card.style.width = "auto";
+
+    //  Create a header for the card to hold the workout name
+    let cardHeader = document.createElement('h5');
+    cardHeader.className = "card-header";
+    cardHeader.style.background = "none";
+    cardHeader.innerHTML = "Recent Workouts";
+
+    //  Check if the profile has any completed workouts and show that they have none
+    if (this.profile.completedWorkouts == undefined || this.profile.completedWorkouts == null || this.profile.completedWorkouts.length == 0) {
+      let cardBody = document.createElement('div');
+      cardBody.className = "card-body";
+
+      let cardText = document.createElement('p');
+      cardText.className = "card-text";
+      cardText.style.fontSize = "20px";
+      cardText.innerHTML = "You have no completed workouts yet!";
+
+      cardBody.appendChild(cardText);
+      card.appendChild(cardHeader);
+      card.appendChild(cardBody);
+      workoutCard.appendChild(card);
+    }
+
+    else {
+      //  Display up to the last four completed workouts
+      for (let i = 0; i < this.profile.completedWorkouts.length; i++) {
+        if (i < 4) {
+          //  Create a card to hold the completed workout
+          let cardWorkout = document.createElement('div');
+          cardWorkout.className = "card text-center mb-3";
+          cardWorkout.style.backgroundColor = "rgba(32, 61, 28, 0.1)";
+          cardWorkout.style.width = "auto";
+          cardWorkout.style.marginLeft = "3px";
+          cardWorkout.style.marginRight = "3px";
+
+          let cardBody = document.createElement('div');
+          cardBody.className = "card-body";
+
+          let cardText = document.createElement('p');
+          cardText.className = "card-text";
+          cardText.style.fontSize = "20px";
+          cardText.innerHTML = this.profile.completedWorkouts[i]['workoutName'];
+          cardText.innerHTML += "<br>Percent Complete: " + this.profile.completedWorkouts[i]['percentCompleted'] + "%";
+          cardText.innerHTML += "<br>Time: " + this.profile.completedWorkouts[i]['timeToComplete'] + " minutes";
+
+          let cardButton = document.createElement('button');
+          cardButton.className = "btn btn-outline-success";
+          cardButton.innerHTML = "View Workout";
+          cardButton.onclick = () => this.openWorkoutUid(this.profile.completedWorkouts[i]['workoutUid']);
+
+          cardBody.appendChild(cardText);
+          cardBody.appendChild(cardButton);
+          cardWorkout.appendChild(cardBody);
+          workoutCard.appendChild(cardWorkout);
+
+          //  Append the card to the workout card
+          card.appendChild(cardHeader);
+        }
+        else {
+          break;
+        }
+      }
+    }
+  }
 
   openWorkout(workout) {
     this.router.navigate(['workout/', this.profile.profileHandle, workout.uid]);
+  }
+
+  openWorkoutUid(workoutUid){
+    this.router.navigate(['workout/', workoutUid]);
   }
 
   /**
