@@ -48,10 +48,11 @@ import { NgChartsModule } from 'ng2-charts';
 import { EquipmentModalComponent } from './modals/equipment-modal/equipment-modal.component';
 import { ConfirmDeleteModalComponent } from './modals/confirm-delete-modal/confirm-delete-modal.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
-import { ProgressComponent } from './progress/progress.component';
+import { ProgressComponent } from './pages/progress/progress.component';
 import { ViewWorkoutComponent } from './pages/view-workout/view-workout.component';
 import { ActiveWorkoutComponent } from './pages/active-workout/active-workout.component';
 import { NgPipesModule } from 'ngx-pipes';
+import { FavoriteWorkoutsComponent } from './favorite-workouts/favorite-workouts.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { NgPipesModule } from 'ngx-pipes';
     ProgressComponent,
     ViewWorkoutComponent,
     ActiveWorkoutComponent,
+    FavoriteWorkoutsComponent,
   ],
 
   imports: [

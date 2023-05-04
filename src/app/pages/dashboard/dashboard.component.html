@@ -6,13 +6,7 @@
           <div class="card-body text-center">
             <h5 class="card-title custom-text-color">Feed</h5>
             <!-- Favorite Workouts -->
-            <div class="bg-light p-3 rounded mb-3">
-              <h6 class="custom-text-color mb-3 pb-2 border-bottom border-dark">Favorite Workouts</h6>
-              <div *ngFor="let workout of favoriteWorkouts" class="bg-white p-3 mb-2 rounded shadow-sm d-flex justify-content-between align-items-center">
-                <a [routerLink]="['/workout', workout.id]" class="text-decoration-none text-dark ">{{ workout.name }}</a>
-                <i class="fas fa-heart text-danger"></i>
-              </div>
-            </div>
+            <app-favorite-workouts></app-favorite-workouts>
             <!-- Goals and Achievements -->
             <div class="bg-light p-3 rounded mb-3">
               <h6 class="custom-text-color mb-3 pb-2 border-bottom border-dark">Recent Achievements</h6>

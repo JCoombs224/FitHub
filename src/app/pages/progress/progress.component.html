@@ -21,7 +21,7 @@
           <ul class="list-group list-group-flush">
             <li class="list-group-item">Total Workout Time: 20 hours</li>
             <li class="list-group-item">Total Running Time: 8 hours</li>
-            <li class="list-group-item">Totle Cycling Time: 5 hours</li>
+            <li class="list-group-item">Total Cycling Time: 5 hours</li>
             <li class="list-group-item">Total Weight Lifting Time: 7 hours</li>
           </ul>
         </div>
@@ -39,17 +39,26 @@
           </ul>
         </div>
       </div>
-      <div class="col-12 col-md-6 mb-4">
-        <div class="card h-100 border-0 shadow progress-card">
-          <div class="card-header text-white">
-            <h2 class="m-0">Upcoming Goals</h2>
-          </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">Goal: Complete a half marathon</li>
-            <li class="list-group-item">Goal: 30 consecutive days of workouts</li>
-          </ul>
+    </div>
+    <div class="col-12 col-md-6 mb-4">
+      <div class="card h-100 border-0 shadow progress-card">
+        <div class="card-header text-white">
+          <h2 class="m-0">Upcoming Goals</h2>
         </div>
+        <ul class="list-group list-group-flush">
+            <li *ngFor="let goal of goals; index as i">{{ i }}. {{ goal.description }} (completed: {{ goal.completed }})
+            <input type="checkbox" [checked]="goal.completed" (change)="completeGoal(i, $event.target['checked'])">
+            {{ goal.description }}
+            </li>
+          </ul>
       </div>
+    </div>
+    <div class="col-12">
+      <svg class="progress-ring" width="200" height="200">
+        <circle class="progress-ring__circle" stroke="lightgrey" stroke-width="30" fill="transparent" r="82" cx="100" cy="100" />
+        <circle class="progress-ring__circle progress-ring__circle--value" stroke="Green" stroke-width="30" [attr.stroke-dasharray]="circumference" [attr.stroke-dashoffset]="strokeDashoffset" fill="transparent" r="82" cx="100" cy="100" />
+      </svg>
+      <span class="progress-value h3 font-weight-bold">{{progressValue}}<sup class="small">%</sup></span>
     </div>
   </div>
 </div>

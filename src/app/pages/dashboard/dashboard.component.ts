@@ -7,6 +7,8 @@ import { ToastrService } from 'ngx-toastr';
 import { CurrentUserService } from 'src/app/services/current-user.service';
 import { ChartOptions, ChartType, ChartDataset } from 'chart.js';
 import { faAward, faLightbulb } from '@fortawesome/free-solid-svg-icons';
+import { GoalsService } from 'src/app/services/goals.service';
+import { WorkoutsService } from 'src/app/services/workouts.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,13 +32,6 @@ export class DashboardComponent implements OnInit {
     { description: 'Try adding yoga to improve flexibility' },
   ];
 
-  favoriteWorkouts = [
-    { id: 1, name: 'HIIT Workout' },
-    { id: 2, name: 'Strength Training' },
-    { id: 3, name: 'Yoga' },
-    { id: 4, name: 'Calisthenics' },
-  ];
-
   public barChartOptions: ChartOptions = {
     responsive: true,
   };
@@ -53,13 +48,10 @@ export class DashboardComponent implements OnInit {
     },
   ];
 
-  progressValue = 75;
+  goals: any[] = [];
+  progressValue: number;
+  circumference = 2 * Math.PI * 82;
   strokeDashoffset: number;
-  circumference: number;
-
-  calculateStrokeDashoffset(progressValue: number, circleRadius: number): number {
-    return (1 - progressValue / 100) * (2 * Math.PI * circleRadius);
-  }
 
   constructor(
     private router: Router,
@@ -67,7 +59,9 @@ export class DashboardComponent implements OnInit {
     private fb: FormBuilder,
     public authService: AuthService,
     private toastr: ToastrService,
-    public currentUserService: CurrentUserService
+    public currentUserService: CurrentUserService,
+    private goalsService: GoalsService,
+    private workoutsService: WorkoutsService
   ) {}
 
   ngOnInit(): void {
@@ -76,11 +70,30 @@ export class DashboardComponent implements OnInit {
     if (this.currentUserService.user.profile.profileHandle == '') {
       this.router.navigate(['/create-profile']);
     }
-    this.circumference = 2 * Math.PI * 82;
-    this.strokeDashoffset = this.calculateStrokeDashoffset(this.progressValue, 82);
+    this.goalsService.getGoals().subscribe((goals) => {
+      this.goals = goals;
+      this.updateProgress();
+    });
 
     // Initialize the chart with the 'week' time range
     this.changeTimeRange('week');
+  }
+
+  completeGoal(goalIndex: number, completed: boolean): void {
+    this.goalsService.completeGoal(goalIndex, completed).then(() => {
+      this.goals[goalIndex].completed = completed;
+      this.updateProgress();
+    });
+  }
+
+  updateProgress(): void {
+    const completedGoals = this.goals.filter((goal) => goal.completed).length;
+    this.progressValue = (completedGoals / this.goals.length) * 100;
+    this.strokeDashoffset = this.calculateStrokeDashoffset(this.progressValue, 82);
+  }
+
+  calculateStrokeDashoffset(progressValue: number, circleRadius: number): number {
+    return (1 - progressValue / 100) * (2 * Math.PI * circleRadius);
   }
 
   // Replace data with actual input data from the user.

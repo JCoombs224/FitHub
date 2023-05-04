@@ -116,4 +116,18 @@ export class WorkoutsService {
       })
     });
   }
+
+  getFavoriteWorkouts(profile = this.currentUser.user.profile.profileHandle) {
+    return this.afs.collection('profiles')
+    .doc(profile)
+    .collection('workouts', ref => ref.where('favorite', '==', true))
+    .valueChanges({ idField: 'uid' });
+  }
+
+  getWorkoutByUid(uid) {
+    return this.afs.collection('profiles')
+    .doc(this.currentUser.user.profile.profileHandle)
+    .collection('workouts').doc(uid)
+    .valueChanges();
+  }
 }

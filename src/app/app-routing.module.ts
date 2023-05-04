@@ -12,7 +12,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { CreateWorkoutComponent } from './pages/create-workout/create-workout.component';
 import { CreatePostComponent } from './pages/create-post/create-post.component';
 import { EditProfileComponent } from './pages/edit-profile/edit-profile.component';
-import { ProgressComponent } from './progress/progress.component';
+import { ProgressComponent } from './pages/progress/progress.component';
 import { ViewWorkoutComponent } from './pages/view-workout/view-workout.component';
 import { ActiveWorkoutComponent } from './pages/active-workout/active-workout.component';
 

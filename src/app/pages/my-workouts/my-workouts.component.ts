@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service'; 
+import { AuthService } from 'src/app/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { CurrentUserService } from 'src/app/services/current-user.service';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
@@ -63,6 +63,13 @@ export class MyWorkoutsComponent implements OnInit, OnDestroy {
     this.workoutService.updateFavorite(workout.uid, workout.favorite).catch(error => {
       this.toastr.error("Something went wrong. Please try again later.");
       console.log(error);
+    });
+  }
+
+  viewWorkout(workout) {
+    this.workoutService.getWorkoutByUid(workout.uid).subscribe((data) => {
+      const workoutId = data['id'].toString(); // assuming the workout ID is stored as a string in the database
+      this.router.navigate(['/workout', workoutId]);
     });
   }
 }
