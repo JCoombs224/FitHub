@@ -8,7 +8,7 @@
         <!-- Center column containing the social feed -->
         <div class="card border-dark mb-3 post-card" *ngFor="let post of feed">
           <div class="card-header post-header text-white">
-            <a class="link-light" routerLink="profile/{{post.profileHandle}}" style="font-size: 1.2rem">@{{post.profileHandle}}</a>
+            <a class="link-light" routerLink="/profile/{{post.profileHandle}}" style="font-size: 1.2rem">@{{post.profileHandle}}</a>
             <small> - Posted on {{post.postDateString}}</small>
           </div>
           <div class="card-body">
@@ -33,7 +33,7 @@
                 <span *ngFor="let comment of post.postComments | orderBy: '-commentTimeStamp'">
                   <div class="card mb-1" *ngIf="comment.commentOwner">
                     <div class="card-header">
-                      <a routerLink="profile/{{comment.profileHandle}}">@{{comment.commentOwner}}</a>
+                      <a routerLink="/profile/{{comment.commentOwner}}">@{{comment.commentOwner}}</a>
                       <small> - {{comment.commentTimeStamp.toDate().toDateString()}}</small>
                     </div>
                     <div class="card-body">

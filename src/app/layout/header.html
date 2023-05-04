@@ -37,16 +37,19 @@
     </div>
 
     <div class="navbar-right text-right">
-      <div class="btn-group" dropdown #dropdown="bs-dropdown" [autoClose]="true">
-        <button id="button-basic" dropdownToggle type="button" class="btn btn-text text-light dropdown-toggle" aria-controls="dropdown-basic"><fa-icon style="font-size: 1.2rem;" [icon]="faCog"></fa-icon>
-        </button>
-        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic">
-           <!-- <li role="menuitem"><a class="dropdown-item" href="#">File</a></li>
-           <li role="menuitem"><a class="dropdown-item" href="#">Edit</a></li>
-           <li role="menuitem"><a class="dropdown-item" href="#">Search</a></li>
-           <li class="divider dropdown-divider"></li> -->
-           <li role="menuitem"><button class="dropdown-item" (click)="logOut()">Log Out</button></li>
-        </ul>
+      <div class="d-flex">
+        <input type="text" class="form-control form-control-sm bg-transparent text-light" placeholder="Search...">
+        <div class="btn-group" dropdown #dropdown="bs-dropdown" [autoClose]="true">
+          <button id="button-basic" dropdownToggle type="button" class="btn btn-text text-light dropdown-toggle" aria-controls="dropdown-basic"><fa-icon style="font-size: 1.2rem;" [icon]="faCog"></fa-icon>
+          </button>
+          <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic">
+            <!-- <li role="menuitem"><a class="dropdown-item" href="#">File</a></li>
+            <li role="menuitem"><a class="dropdown-item" href="#">Edit</a></li>
+            <li role="menuitem"><a class="dropdown-item" href="#">Search</a></li>
+            <li class="divider dropdown-divider"></li> -->
+            <li role="menuitem"><button class="dropdown-item" (click)="logOut()">Log Out</button></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
