@@ -5,11 +5,11 @@
     <button id="button-basic" dropdownToggle type="button" class="btn btn-text text-light dropdown-toggle" aria-controls="dropdown-basic"><fa-icon style="font-size: 1.2rem;" [icon]="faCog"></fa-icon>
     </button>
     <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic">
-       <!-- <li role="menuitem"><a class="dropdown-item" href="#">File</a></li>
+      <!-- <li role="menuitem"><a class="dropdown-item" href="#">File</a></li>
        <li role="menuitem"><a class="dropdown-item" href="#">Edit</a></li>
        <li role="menuitem"><a class="dropdown-item" href="#">Search</a></li>
        <li class="divider dropdown-divider"></li> -->
-       <li role="menuitem"><button class="dropdown-item" (click)="logOut()">Log Out</button></li>
+      <li role="menuitem"><button class="dropdown-item" (click)="logOut()">Log Out</button></li>
     </ul>
   </div>
 </div>
@@ -17,41 +17,49 @@
 <div class="d-flex header-wrap text-white">
   <nav class="navbar navbar-expand navbar-dark bg-dark nav-position">
     <div class="container-fluid">
-    <a class="navbar-brand p-2" href="#"><img height="60px" src="../assets/Logo1/png/logo-no-background.png" alt="FitHub" title="FitHub"></a>
-    <div class="navbar-collapse ms-md-3">
-      <ul class="nav nav-pills nav-fill">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/dashboard" routerLinkActive="active"><fa-icon [icon]="faHouse"></fa-icon><br><span class="nav-label">Dashboard</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/social-feed" routerLinkActive="active"><fa-icon [icon]="faFeed"></fa-icon><br><span class="nav-label">Social Feed</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/my-workouts" routerLinkActive="active"><fa-icon [icon]="faDumbbell"></fa-icon><br><span class="nav-label">My Workouts</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/profile/{{user.profile.profileHandle}}" routerLinkActive="active"><fa-icon [icon]="faUser"></fa-icon><br><span class="nav-label">My Profile</span></a>
-        </li>
+      <a class="navbar-brand p-2" href="#"><img height="60px" src="../assets/Logo1/png/logo-no-background.png" alt="FitHub" title="FitHub"></a>
+      <div class="navbar-collapse ms-md-3">
+        <ul class="nav nav-pills nav-fill">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/dashboard" routerLinkActive="active"><fa-icon [icon]="faHouse"></fa-icon><br><span class="nav-label">Dashboard</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/social-feed" routerLinkActive="active"><fa-icon [icon]="faFeed"></fa-icon><br><span class="nav-label">Social Feed</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/my-workouts" routerLinkActive="active"><fa-icon [icon]="faDumbbell"></fa-icon><br><span class="nav-label">My Workouts</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/profile/{{user.profile.profileHandle}}" routerLinkActive="active"><fa-icon [icon]="faUser"></fa-icon><br><span class="nav-label">My Profile</span></a>
+          </li>
 
-      </ul>
-    </div>
+        </ul>
+      </div>
 
-    <div class="navbar-right text-right">
-      <div class="d-flex">
-        <input type="text" class="form-control form-control-sm bg-transparent text-light" placeholder="Search...">
-        <div class="btn-group" dropdown #dropdown="bs-dropdown" [autoClose]="true">
-          <button id="button-basic" dropdownToggle type="button" class="btn btn-text text-light dropdown-toggle" aria-controls="dropdown-basic"><fa-icon style="font-size: 1.2rem;" [icon]="faCog"></fa-icon>
-          </button>
-          <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic">
-            <!-- <li role="menuitem"><a class="dropdown-item" href="#">File</a></li>
-            <li role="menuitem"><a class="dropdown-item" href="#">Edit</a></li>
-            <li role="menuitem"><a class="dropdown-item" href="#">Search</a></li>
-            <li class="divider dropdown-divider"></li> -->
-            <li role="menuitem"><button class="dropdown-item" (click)="logOut()">Log Out</button></li>
-          </ul>
+      <div class="navbar-right text-right">
+        <div class="d-flex">
+          <div class="input-group">
+            <input class="form-control border-end-0" type="search" placeholder="Search..." [(ngModel)]="searchQuery" (keydown)="search()">
+            <span class="input-group-text bg-white">
+              <fa-icon [icon]="faSearch"></fa-icon>
+            </span>  
+            <div class="search-dropdown" *ngIf="searchQuery && searchResults">
+              <ul class="list-group">
+                <li *ngFor="let res of searchResults" class="list-group-item list-group-item-action" routerLink="/profile/{{res.profileHandle}}" (click)="clearSearch()"><strong>@{{res.profileHandle}}</strong> - {{res.profileName}}</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="btn-group" dropdown #dropdown="bs-dropdown" [autoClose]="true">
+            <button id="button-basic" dropdownToggle type="button" class="btn btn-text text-light dropdown-toggle" aria-controls="dropdown-basic"><fa-icon style="font-size: 1.2rem;"
+                [icon]="faCog"></fa-icon>
+            </button>
+            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic">
+              <li role="menuitem"><button class="dropdown-item" (click)="logOut()">Log Out</button></li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   </nav>
 </div>

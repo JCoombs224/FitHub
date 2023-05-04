@@ -13,6 +13,20 @@
     display: none;
 }
 
+.search-dropdown {
+    position: absolute;
+    cursor: pointer;
+    width: 227px;
+    margin-top: 42px;
+    z-index: 101;
+}
+
+.search-dropdown > ul {
+    /* border-radius: 5px; */
+    box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.75);
+    transition: 0.5s;
+}
+
 @media screen and (min-width: 621px) {
     .nav-position {
         top: 0;
