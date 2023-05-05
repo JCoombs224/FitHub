@@ -1,7 +1,7 @@
 <div class="row min-vh-100 main-bg">
   <div class="container mt-4">
     <div class="row justify-content-center">
-      <div class="col-md-10 col-lg-8 col-xl-6 col-xxl-5">
+      <div class="col-md-10 col-lg-8 col-xl-6" style="margin: 0 auto;">
         <!-- Center column containing the social feed -->
         <div class="card border-dark mb-3 post-card" *ngFor="let post of feed; let i = index">
           <div class="card-header post-header text-white">
@@ -16,7 +16,7 @@
             <div class="post-text">
               <p>{{post.postText}}</p>
             </div>
-            <div class="text-center text-decoration-underline" style="font-size: 1.1rem">Shared Workout</div>
+            <div class="text-center text-decoration-underline" *ngIf="post.workoutData" style="font-size: 1.1rem">Shared Workout</div>
             <div class="row justify-content-center mb-3" *ngIf="post.workoutData" style="height: 10%">
               <div class="card-new-workout">
                 <div class="card border-success card-social-feed-workout" (click)="openWorkout(post.postWorkout)">

@@ -27,6 +27,7 @@
       </div>
       <div class="d-flex justify-content-between p-2" style="background-color: #074920;">
         <button class="btn btn-success" (click)="startWorkout()"><fa-icon [icon]="faDumbbell"></fa-icon> Start Workout</button>
+        <button *ngIf="showCurateButton()" class="btn btn-secondary" (click)="curate()">Add to Curated Workouts</button>
         <button class="btn btn-warning" *ngIf="userWorkout" [routerLink]="'/edit-workout/'+uid"><fa-icon [icon]="faEdit"></fa-icon> Edit Workout</button>
       </div>
       <div class="card-body">

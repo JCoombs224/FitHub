@@ -98,4 +98,17 @@ export class ViewWorkoutComponent implements OnInit{
     this.router.navigate(['active-workout/', this.profile, this.uid]);
   }
 
+  showCurateButton() {
+    return this.profile == 'jamisoncoombs' || this.profile == 'SwankyWorkouts' || this.profile == 'rusty';
+  }
+
+  curate() {
+    this.workoutService.addCuratedWorkout(this.workout).then(() => {
+      this.toastr.success("Workout added curated workouts.", "Success!");
+    }).catch((error) => {
+      this.toastr.error("Please try again.", "Something went wrong");
+      console.log(error);
+    });
+  }
+
 }

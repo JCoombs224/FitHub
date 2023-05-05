@@ -146,4 +146,13 @@ export class WorkoutsService {
     .doc(id)
     .valueChanges();
   }
+
+  addCuratedWorkout(workout) {
+    return this.afs.collection('curatedWorkouts').add({
+      name: workout.name,
+      description: workout.description,
+      equipment: workout.equipment,
+      groups: workout.groups
+    });
+  }
 }
