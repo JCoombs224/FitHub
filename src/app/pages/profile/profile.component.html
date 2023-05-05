@@ -11,7 +11,7 @@
                      <div *ngIf="loadingImage" class="spinner-border text-center text-light" role="status">
                     <span class="sr-only">Loading...</span>
                   </div>
-                  <img [src]="profilePictureUrl" class="img-fluid">
+                  <img [src]="profilePictureUrl" class="img-fluid" style="max-width: 256px">
                   <button *ngIf="showUploadButton && userProfile" class="btn btn-light btn-image-upload" (click)="onUploadButtonClick()"><fa-icon [icon]="faEdit"></fa-icon></button>
                   </div>
                 </div>
@@ -66,13 +66,13 @@
             </div>
           </div>
           <div class="row mt-5">
-            <div class="card col-12 col-lg-8 p-3 ms-5" style="text-align: left; margin: 0 auto; background-color: rgba(32, 61, 28, 0.1); border: none;">
+            <div class="card col-12 col-lg-8 p-3 ms-lg-5" style="text-align: left; margin: 0 auto; background-color: rgba(32, 61, 28, 0.1); border: none;">
               <div class="card-header display-6" style="background: none;">
                 Posts
               </div>
               <div class="card-body" style="background: none;">
                 <div class="row ps-5 pe-5">
-                  <button *ngIf="userProfile" type="button" id="createPost" class="btn btn-outline-success" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0;" (click)="showPostsModal()">
+                  <button *ngIf="userProfile" type="button" id="createPost" class="btn btn-outline-success" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px;" (click)="showPostsModal()">
                     Create Post+
                   </button>
                 </div>
@@ -89,10 +89,10 @@
                 <div class="card-footer w-100" style="background: none;">
                   <div class="row" style="bottom: 0;">
                     <div *ngIf="userProfile">
-                      <button type="button" id="createWorkout" class="btn btn-outline-success mb-1" routerLink="/my-workouts/create" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; position: 0; width: 100%;">
+                      <button type="button" id="createWorkout" class="btn btn-outline-success mb-1" routerLink="/my-workouts/create" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; width: 100%;">
                         Create Workout+
                       </button>
-                      <button type="button" id="viewAllWorkouts" class="btn btn-outline-success" routerLink="/my-workouts" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; position: 0; width: 100%;">
+                      <button type="button" id="viewAllWorkouts" class="btn btn-outline-success" routerLink="/my-workouts" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; width: 100%;">
                         View All Workouts
                       </button>
                     </div>

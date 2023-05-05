@@ -3,6 +3,17 @@
     <div class="row justify-content-center">
       <div class="col-md-10 col-lg-8 col-xl-6" style="margin: 0 auto;">
         <!-- Center column containing the social feed -->
+        <div class="card border-dark mb-3 post-card" style="min-height: 30vh" *ngIf="feed">
+          <div class="card-header post-header text-white">
+            <h2 class="text-center">Social Feed</h2>
+          </div>
+          <div class="card-body">
+            <h5 class="text-center">Follow other users to see their posts here!</h5>
+            <div class="d-flex justify-content-center">
+              <img src="../../../assets/Logo1/png/logo-no-background.png" class="img-fluid logo-glow p-5" style="width: 50%">
+            </div>
+          </div>
+        </div>
         <div class="card border-dark mb-3 post-card" *ngFor="let post of feed; let i = index">
           <div class="card-header post-header text-white">
             <a class="link-light" routerLink="/profile/{{post.profileHandle}}" style="font-size: 1.2rem">@{{post.profileHandle}}</a>

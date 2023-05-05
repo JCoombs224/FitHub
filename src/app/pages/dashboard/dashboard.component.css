@@ -58,7 +58,7 @@ h6 {
 
 .feed-section {
   position: fixed;
-  z-index: 100;
+  z-index: 2;
   height: calc(90vh - 0.5rem);
   width: 17%;
   padding-left: 2rem;
@@ -78,8 +78,10 @@ h6 {
 
 @media (max-width: 991.98px) {
   .feed-section {
-    position: static;
+    position: inherit;
     height: auto;
+    width: 100%;
+    padding: 0;
   }
 
   .feed-card {
