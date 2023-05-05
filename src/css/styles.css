@@ -174,3 +174,53 @@
   -ms-transition: all 1s ease; 
   -o-transition: all 1s ease; 
 }
+
+.btn-like {
+  color: #096a2e;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.btn-comment {
+  color: #adadad;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.cancel-comment {
+  /* position: absolute; */
+  /* top: 5%; */
+  /* right: 2%; */
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.btn-grow {
+  transition: 0.5s 'ease-in-out';
+}
+.btn-grow :hover {
+  transform: scale(1.08);
+  transition: 0.5s 'ease-in-out';
+}
+
+.card-new-workout {
+  transition: 0.2s;
+}
+
+.card-new-workout .card{
+  transition: 0.2s;
+}
+
+.card-new-workout:hover {
+  transform: scale(1.02);
+  color: green;
+}
+
+.card-new-workout:hover .card{
+  border-color: green;
+  background-color: rgb(218, 255, 206);
+}
+
+.card-social-feed-workout {
+  background-color: rgb(235, 255, 229);
+}

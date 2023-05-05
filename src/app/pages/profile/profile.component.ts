@@ -1090,8 +1090,9 @@ export class ProfileComponent implements OnInit {
 
     else {
       //  Display up to the last four completed workouts
-      for (let i = 0; i < this.profile.completedWorkouts.length; i++) {
-        if (i < 4) {
+      const length = this.profile.completedWorkouts.length;
+      for (let i = 1; i < length; i++) {
+        if (i < 5) {
           //  Create a card to hold the completed workout
           let cardWorkout = document.createElement('div');
           cardWorkout.className = "card text-center mb-3";
@@ -1106,14 +1107,14 @@ export class ProfileComponent implements OnInit {
           let cardText = document.createElement('p');
           cardText.className = "card-text";
           cardText.style.fontSize = "20px";
-          cardText.innerHTML = this.profile.completedWorkouts[i]['workoutName'];
-          cardText.innerHTML += "<br>Percent Complete: " + this.profile.completedWorkouts[i]['percentCompleted'] + "%";
-          cardText.innerHTML += "<br>Time: " + this.profile.completedWorkouts[i]['timeToComplete'] + " minutes";
+          cardText.innerHTML = this.profile.completedWorkouts[length-i]['workoutName'];
+          cardText.innerHTML += "<br>Percent Complete: " + this.profile.completedWorkouts[length-i]['percentCompleted'] + "%";
+          cardText.innerHTML += "<br>Time: " + this.profile.completedWorkouts[length-i]['timeToComplete'] + " minutes";
 
           let cardButton = document.createElement('button');
           cardButton.className = "btn btn-outline-success";
           cardButton.innerHTML = "View Workout";
-          cardButton.onclick = () => this.openWorkout(this.profile.profileHandle, this.profile.completedWorkouts[i]['workoutUid']);
+          cardButton.onclick = () => this.openWorkout(this.profile.profileHandle, this.profile.completedWorkouts[length-i]['workoutUid']);
 
           cardBody.appendChild(cardText);
           cardBody.appendChild(cardButton);
