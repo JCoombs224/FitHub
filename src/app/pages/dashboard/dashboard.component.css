@@ -60,6 +60,8 @@ h6 {
   position: fixed;
   z-index: 100;
   height: calc(90vh - 0.5rem);
+  width: 17%;
+  padding-left: 2rem;
 }
 
 .feed-card {
@@ -72,6 +74,22 @@ h6 {
 
 .main-content {
   padding-left: 18%;
+}
+
+@media (max-width: 991.98px) {
+  .feed-section {
+    position: static;
+    height: auto;
+  }
+
+  .feed-card {
+    height: auto;
+  }
+
+  .main-content {
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+  }
 }
 
 

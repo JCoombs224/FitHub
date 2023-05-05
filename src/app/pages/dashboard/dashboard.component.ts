@@ -89,7 +89,7 @@ export class DashboardComponent implements OnInit {
       this.findMostUsedWorkout(completedWorkouts);
     });
 
-    interval(10000).subscribe(() => {
+    interval(8000).subscribe(() => {
       this.currentTipIndex = (this.currentTipIndex + 1) % this.personalizedTips.length;
     });
   }
