@@ -1,0 +1,32 @@
+.timeline-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4rem;
+}
+
+.timeline-day {
+  flex: 1;
+  text-align: center;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  cursor: pointer;
+}
+
+.timeline-day.active {
+  background-color: #008817;
+  color: #fff;
+}
+
+/* .chart-container {
+  position: relative;
+  height: 300px;
+  width: 500px;
+  padding: 20px;
+  margin: 0 auto;
+} */
+
+.chart-container {
+  height: calc(50vh - 2rem); /* Subtract 2rem for the title and margin */
+}

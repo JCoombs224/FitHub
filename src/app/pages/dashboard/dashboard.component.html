@@ -35,17 +35,7 @@
           <div class="col-12 col-lg-8 d-flex">
             <div class="card mb-4 w-100 align-self-stretch custom-height">
               <div class="card-body text-center">
-                <h5 class="card-title custom-text-color">Workout History</h5>
-                <div class="d-flex justify-content-center mb-3">
-                  <div class="btn-group mt-2 mb-4" role="group" aria-label="Time range buttons">
-                    <button (click)="changeTimeRange('week')" [class.active]="selectedTimeRange === 'week'" class="btn btn-outline-success mx-1">Week</button>
-                    <button (click)="changeTimeRange('month')" [class.active]="selectedTimeRange === 'month'" class="btn btn-outline-success mx-1">Month</button>
-                    <button (click)="changeTimeRange('year')" [class.active]="selectedTimeRange === 'year'" class="btn btn-outline-success mx-1">Year</button>
-                  </div>
-                </div>
-                <div class="chart-container" style="position: relative;">
-                  <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"></canvas>
-                </div>
+                <app-workout-graph></app-workout-graph>
               </div>
             </div>
           </div>

@@ -5,6 +5,12 @@ import { CurrentUserService } from './current-user.service';
 import { debounceTime } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import firebase from 'firebase/compat/app';
+import { map } from 'rxjs/operators';
+
+interface ProfileData {
+  uid: string;
+  completedWorkouts: any[];
+}
 
 @Injectable({
   providedIn: 'root'
@@ -117,6 +123,15 @@ export class WorkoutsService {
     });
   }
 
+  // Get all completed workouts for the current user
+  getCompletedWorkouts(profile = this.currentUser.user.profile.profileHandle) {
+    return this.afs.collection('profiles')
+    .doc<ProfileData>(profile)
+    .valueChanges({ idField: 'uid' })
+      .pipe(map(profileData => profileData.completedWorkouts));
+  }
+
+
   getFavoriteWorkouts(profile = this.currentUser.user.profile.profileHandle) {
     return this.afs.collection('profiles')
     .doc(profile)
@@ -127,7 +142,8 @@ export class WorkoutsService {
   getWorkoutByUid(id) {
     return this.afs.collection('profiles')
     .doc(this.currentUser.user.profile.profileHandle)
-    .collection('workouts').doc(id)
+    .collection('workouts')
+    .doc(id)
     .valueChanges();
   }
 }

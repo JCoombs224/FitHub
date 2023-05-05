@@ -34,7 +34,6 @@ import { CreateWorkoutComponent } from './pages/create-workout/create-workout.co
 import { CreatePostModalComponent } from './modals/create-post-modal/create-post-modal.component';
 import { RouteReuseStrategy } from '@angular/router';
 import { CustomRouteReuseStrategy } from './providers/route-reuse-strategy';
-import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDatepickerModule, BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule,BsDropdownConfig } from 'ngx-bootstrap/dropdown';
@@ -55,6 +54,7 @@ import { NgPipesModule } from 'ngx-pipes';
 import { FavoriteWorkoutsComponent } from 'src/app/dashboard-sections/favorite-workouts/favorite-workouts.component';
 import { MyProgressComponent } from 'src/app/dashboard-sections/my-progress/my-progress.component';
 import { GoalsComponent } from 'src/app/dashboard-sections/goals/goals.component';
+import { WorkoutGraphComponent } from './dashboard-sections/workout-graph/workout-graph.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +80,8 @@ import { GoalsComponent } from 'src/app/dashboard-sections/goals/goals.component
     ActiveWorkoutComponent,
     FavoriteWorkoutsComponent,
     MyProgressComponent,
-    GoalsComponent
+    GoalsComponent,
+    WorkoutGraphComponent
   ],
 
   imports: [
