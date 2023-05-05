@@ -53,7 +53,7 @@ export class SocialFeedComponent implements OnInit {
   profile = this.currentUser.user.profile;
   profileHandle = this.currentUser.user.profile.profileHandle;
   userProfile = false;
-  feed;
+  feed = [];
 
   constructor(
     private profileService: ProfileService,

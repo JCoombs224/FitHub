@@ -3,7 +3,7 @@
     <div class="row justify-content-center">
       <div class="col-md-10 col-lg-8 col-xl-6" style="margin: 0 auto;">
         <!-- Center column containing the social feed -->
-        <div class="card border-dark mb-3 post-card" style="min-height: 30vh" *ngIf="feed">
+        <div class="card border-dark mb-3 post-card" style="min-height: 30vh" *ngIf="feed.length == 0">
           <div class="card-header post-header text-white">
             <h2 class="text-center">Social Feed</h2>
           </div>
