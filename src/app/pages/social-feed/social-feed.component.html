@@ -30,7 +30,7 @@
             <div class="text-center text-decoration-underline" *ngIf="post.workoutData" style="font-size: 1.1rem">Shared Workout</div>
             <div class="row justify-content-center mb-3" *ngIf="post.workoutData" style="height: 10%">
               <div class="card-new-workout">
-                <div class="card border-success card-social-feed-workout" (click)="openWorkout(post.postWorkout)">
+                <div class="card border-success card-social-feed-workout" (click)="openWorkout(post)">
                   <div class="card-body row">
                     <div class="col border-end">
                       <strong style="font-size: 1.1rem">{{post.workoutData.name}}</strong>

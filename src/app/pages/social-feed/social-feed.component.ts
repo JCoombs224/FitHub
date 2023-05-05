@@ -9,6 +9,7 @@ import { PostsService } from 'src/app/services/posts.service';
 import { Title } from '@angular/platform-browser';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { Timestamp } from 'firebase/firestore';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-social-feed',
@@ -61,7 +62,8 @@ export class SocialFeedComponent implements OnInit {
     private workoutService: WorkoutsService,
     private afs: AngularFirestore,
     private postsService: PostsService,
-    private title: Title
+    private title: Title,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -85,8 +87,8 @@ export class SocialFeedComponent implements OnInit {
     }
   }
 
-  openWorkout(uid) {
-
+  openWorkout(post) {
+    this.router.navigate(['/workout/', post.profileHandle, post.postWorkout]);
   }
 
   comment(post) {
