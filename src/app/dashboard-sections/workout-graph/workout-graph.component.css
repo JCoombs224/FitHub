@@ -1,3 +1,11 @@
+.custom-text-color {
+  color: #0b8200;
+}
+
+h5 {
+  font-weight: bold;
+}
+
 .timeline-container {
   display: flex;
   justify-content: space-between;
@@ -27,6 +35,29 @@
   margin: 0 auto;
 } */
 
-.chart-container {
-  height: calc(50vh - 2rem); /* Subtract 2rem for the title and margin */
+.timeline-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.timeline-day {
+  text-align: center;
+  background-color: #ffffff;
+  color: #6c757d;
+  font-weight: bold;
+  box-shadow: 0 0.2rem 0.3rem rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  /* margin-left: 0.2rem;
+  margin-right: 0.2rem;  */
+}
+
+.timeline-day:first-child {
+  margin-left: 0;
+}
+
+.timeline-day:last-child {
+  margin-right: 0;
 }

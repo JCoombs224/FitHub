@@ -8,6 +8,7 @@ import { CurrentUserService } from 'src/app/services/current-user.service';
 import { faAward, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import { GoalsService } from 'src/app/services/goals.service';
 import { WorkoutsService } from 'src/app/services/workouts.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,6 +18,8 @@ import { WorkoutsService } from 'src/app/services/workouts.service';
 
 export class DashboardComponent implements OnInit {
   progressSummary = 'Track your progress and reach your fitness goals!';
+  averageTimeSpent: string;
+  mostUsedWorkout: string;
 
   faAward = faAward;
   faLightbulb = faLightbulb;
@@ -57,6 +60,35 @@ export class DashboardComponent implements OnInit {
       this.goals = goals;
       this.updateProgress();
     });
+
+    this.workoutsService.getCompletedWorkouts().pipe(take(1)).subscribe((completedWorkouts) => {
+      this.calculateAverageTimeSpent(completedWorkouts);
+      this.findMostUsedWorkout(completedWorkouts);
+    });
+  }
+
+  calculateAverageTimeSpent(completedWorkouts: any[]): void {
+    const totalTime = completedWorkouts.reduce((total, workout) => {
+      const timeParts = workout.timeToComplete.split(':');
+      const timeInMinutes = timeParts.length === 3
+        ? +timeParts[0] * 60 + +timeParts[1] + +timeParts[2] / 60
+        : +timeParts[0] + +timeParts[1] / 60;
+      return total + timeInMinutes;
+    }, 0);
+
+    const averageTime = completedWorkouts.length ? totalTime / completedWorkouts.length : 0;
+    const averageMinutes = Math.floor(averageTime);
+    const averageSeconds = Math.round((averageTime - averageMinutes) * 60);
+    this.averageTimeSpent = `${averageMinutes.toString().padStart(2, '0')}:${averageSeconds.toString().padStart(2, '0')}`;
+  }
+
+  findMostUsedWorkout(completedWorkouts: any[]): void {
+    const workoutCounts = completedWorkouts.reduce((countMap, workout) => {
+      countMap[workout.workoutName] = (countMap[workout.workoutName] || 0) + 1;
+      return countMap;
+    }, {});
+
+    this.mostUsedWorkout = Object.keys(workoutCounts).reduce((a, b) => workoutCounts[a] > workoutCounts[b] ? a : b, '');
   }
 
   completeGoal(goalIndex: number, completed: boolean): void {

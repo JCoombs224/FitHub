@@ -4,7 +4,7 @@
       <div class="col-12 col-lg-2 d-flex">
         <div class="card w-100 min-vh-100 d-flex flex-column mb-4">
           <div class="card-body text-center">
-            <h5 class="card-title custom-text-color">Feed</h5>
+            <h5 class="card-title custom-text-color mt-3 mb-4">Feed</h5>
             <app-favorite-workouts></app-favorite-workouts>
             <!-- Goals and Achievements -->
             <div class="bg-light p-3 rounded mb-3">
@@ -31,6 +31,29 @@
         <div class="row d-flex">
           <div class="col-12 col-lg-4 d-flex flex-column">
             <app-my-progress></app-my-progress>
+            <div class="card mt-5 mb-4 w-100">
+              <div class="card-body text-center align-items-center">
+                <h5 class="card-title custom-text-color">Quick Stats</h5>
+                <div class="row">
+                  <div class="col-6 col-lg-6">
+                    <div class="card mb-2">
+                      <div class="card-body">
+                        <h6 class="card-subtitle mb-2 custom-text-color mb-3 pb-2 border-bottom border-dark">Avgerage Time per Workout</h6>
+                        <p class="card-text">{{ averageTimeSpent }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6 col-lg-6">
+                    <div class="card mb-2">
+                      <div class="card-body">
+                        <h6 class="card-subtitle mb-2 custom-text-color mb-3 pb-2 border-bottom border-dark">Most frequently used workout</h6>
+                        <p class="card-text">{{ mostUsedWorkout }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="col-12 col-lg-8 d-flex">
             <div class="card mb-4 w-100 align-self-stretch custom-height">

@@ -35,7 +35,12 @@ h1 {
 }
 
 .form-check-input {
-  background-color: #0b8200d5;
+  background-color: rgb(129, 129, 129);
+  border-color: rgb(129, 129, 129);
+}
+
+.form-check-input:hover {
+  cursor: pointer;
 }
 
 .progress-wrapper {

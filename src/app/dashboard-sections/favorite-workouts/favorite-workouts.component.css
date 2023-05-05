@@ -1,3 +1,11 @@
 .fav-workout {
   cursor: pointer;
 }
+
+.custom-text-color {
+  color: #0b8200;
+}
+
+h6 {
+  font-weight: bold;
+}

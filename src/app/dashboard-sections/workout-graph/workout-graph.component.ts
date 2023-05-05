@@ -90,6 +90,8 @@ export class WorkoutGraphComponent {
       const groupedData = this.groupDataByRange(filteredData, this.selectedTimeRange);
       console.log('Grouped Data:', groupedData); // Debug: log the groupedData
       this.updateChartData(groupedData);
+
+      this.changeTimeRange('week');
     });
 
     this.updateTimeline();
