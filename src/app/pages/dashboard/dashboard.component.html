@@ -16,7 +16,7 @@
               </ul>
             </div>
             <!-- Personalized Tips -->
-            <div class="bg-light p-3 rounded mb-3">
+            <!-- <div class="bg-light p-3 rounded mb-3">
               <h6 class="custom-text-color mb-3 pb-2 border-bottom border-dark">Personalized Tips</h6>
               <ul class="list-unstyled tip-container">
                 <ng-container *ngFor="let tip of personalizedTips; let i = index">
@@ -27,7 +27,20 @@
                   </li>
                 </ng-container>
               </ul>
-            </div>
+            </div> -->
+          </div>
+          <!-- Personalized Tips -->
+          <div class="p-3 mb-3 text-center">
+            <h6 class="custom-text-color mb-3 pb-2 border-bottom border-dark">Personalized Tips</h6>
+            <ul class="list-unstyled tip-container">
+              <ng-container *ngFor="let tip of personalizedTips; let i = index">
+                <li class="text-dark">
+                  <div class="tip" [ngClass]="{ 'fade': i === currentTipIndex }">
+                    <i class="faLightbulb text-warning"><fa-icon [icon]="faLightbulb"></fa-icon></i> {{ tip.description }}
+                  </div>
+                </li>
+              </ng-container>
+            </ul>
           </div>
         </div>
       </div>
