@@ -1,4 +1,4 @@
-<h5 class="card-title custom-text-color mb-4 mt-3">Weekly Workout Tracker</h5>
+<h5 class="card-title custom-text-color mb-1 mt-3">Weekly Workout Tracker</h5>
 <div class="timeline-container">
   <div id="timeline-sunday" class="timeline-day" data-day="Sunday">S</div>
   <div id="timeline-monday" class="timeline-day" data-day="Monday">M</div>
@@ -8,8 +8,8 @@
   <div id="timeline-friday" class="timeline-day" data-day="Friday">F</div>
   <div id="timeline-saturday" class="timeline-day" data-day="Saturday">S</div>
 </div>
-<h5 class="card-title custom-text-color">Workout History</h5>
-<div class="d-flex justify-content-center mb-3">
+<h5 class="card-title custom-text-color mb-4">Workout History</h5>
+<div class="d-flex justify-content-center">
   <div class="btn-group mt-2 mb-4" role="group" aria-label="Time range buttons">
     <button (click)="changeTimeRange('week')" [class.active]="selectedTimeRange === 'week'" class="btn btn-outline-success mx-1">Week</button>
     <button (click)="changeTimeRange('month')" [class.active]="selectedTimeRange === 'month'" class="btn btn-outline-success mx-1">Month</button>

@@ -1,8 +1,8 @@
 <div class="row min-vh-100 main-bg">
   <div class="container mt-4">
     <div class="row">
-      <div class="col-12 col-lg-2 d-flex">
-        <div class="card w-100 min-vh-100 d-flex flex-column mb-4">
+      <div class="col-12 col-lg-2 d-flex feed-section">
+        <div class="card w-100 d-flex flex-column mb-4 feed-card">
           <div class="card-body text-center">
             <h5 class="card-title custom-text-color mt-3 mb-4">Feed</h5>
             <app-favorite-workouts></app-favorite-workouts>
@@ -16,29 +16,33 @@
               </ul>
             </div>
             <!-- Personalized Tips -->
-            <div class="bg-light p-3 rounded">
+            <div class="bg-light p-3 rounded mb-3">
               <h6 class="custom-text-color mb-3 pb-2 border-bottom border-dark">Personalized Tips</h6>
-              <ul class="list-unstyled">
-                <li *ngFor="let tip of personalizedTips" class="text-dark mb-2">
-                  <i class="faLightbulb text-warning"><fa-icon [icon]="faLightbulb" ></fa-icon></i> {{ tip.description }}
-                </li>
+              <ul class="list-unstyled tip-container">
+                <ng-container *ngFor="let tip of personalizedTips; let i = index">
+                  <li class="text-dark mb-2">
+                    <div class="tip" [ngClass]="{ 'fade': i === currentTipIndex }">
+                      <i class="faLightbulb text-warning"><fa-icon [icon]="faLightbulb"></fa-icon></i> {{ tip.description }}
+                    </div>
+                  </li>
+                </ng-container>
               </ul>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-12 col-lg-10 d-flex flex-column">
+      <div class="col-12 col-lg-11 d-flex flex-column main-content">
         <div class="row d-flex">
           <div class="col-12 col-lg-4 d-flex flex-column">
             <app-my-progress></app-my-progress>
             <div class="card mt-5 mb-4 w-100">
               <div class="card-body text-center align-items-center">
-                <h5 class="card-title custom-text-color">Quick Stats</h5>
+                <h5 class="card-title custom-text-color mt-1 mb-4">Quick Stats</h5>
                 <div class="row">
                   <div class="col-6 col-lg-6">
                     <div class="card mb-2">
                       <div class="card-body">
-                        <h6 class="card-subtitle mb-2 custom-text-color mb-3 pb-2 border-bottom border-dark">Avgerage Time per Workout</h6>
+                        <h6 class="card-subtitle mb-2 custom-text-color mb-3 pb-2 border-bottom border-dark">Average Time per Workout</h6>
                         <p class="card-text">{{ averageTimeSpent }}</p>
                       </div>
                     </div>

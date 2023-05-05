@@ -9,6 +9,8 @@ import { faAward, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import { GoalsService } from 'src/app/services/goals.service';
 import { WorkoutsService } from 'src/app/services/workouts.service';
 import { take } from 'rxjs/operators';
+import { interval } from 'rxjs';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -20,6 +22,8 @@ export class DashboardComponent implements OnInit {
   progressSummary = 'Track your progress and reach your fitness goals!';
   averageTimeSpent: string;
   mostUsedWorkout: string;
+  currentTipIndex = 0;
+
 
   faAward = faAward;
   faLightbulb = faLightbulb;
@@ -32,7 +36,26 @@ export class DashboardComponent implements OnInit {
   personalizedTips = [
     { description: 'Stay hydrated during workouts' },
     { description: 'Try adding yoga to improve flexibility' },
+    { description: 'Incorporate strength training to build muscle and boost metabolism' },
+    { description: 'Include a mix of cardio and resistance training for optimal fitness' },
+    { description: 'Gradually increase workout intensity to avoid plateaus' },
+    { description: 'Monitor your heart rate to ensure you are in the target zone' },
+    { description: 'Set realistic fitness goals and track your progress' },
+    { description: 'Fuel your body with a well-balanced diet, rich in protein, healthy fats, and complex carbs' },
+    { description: 'Get sufficient sleep to support recovery and overall wellbeing' },
+    { description: 'Incorporate regular stretching to reduce the risk of injury' },
+    { description: 'Find a workout buddy to stay motivated and accountable' },
+    { description: 'Listen to your body and adjust your routine as needed' },
+    { description: 'Try different forms of exercise to keep things interesting and prevent boredom' },
+    { description: 'Practice proper form to maximize results and minimize the risk of injury' },
+    { description: 'Take rest days to allow your body time to recover and rebuild' },
+    { description: 'Consider seeking guidance from a personal trainer or fitness professional' },
+    { description: 'Track your food intake to ensure you are consuming enough nutrients' },
+    { description: 'Stay consistent with your workouts to see long-term results' },
+    { description: 'Celebrate your achievements and reward yourself for reaching milestones' },
+    { description: 'Stay patient, as progress may not always be linear' },
   ];
+
 
   goals: any[] = [];
   progressValue: number;
@@ -64,6 +87,10 @@ export class DashboardComponent implements OnInit {
     this.workoutsService.getCompletedWorkouts().pipe(take(1)).subscribe((completedWorkouts) => {
       this.calculateAverageTimeSpent(completedWorkouts);
       this.findMostUsedWorkout(completedWorkouts);
+    });
+
+    interval(10000).subscribe(() => {
+      this.currentTipIndex = (this.currentTipIndex + 1) % this.personalizedTips.length;
     });
   }
 
