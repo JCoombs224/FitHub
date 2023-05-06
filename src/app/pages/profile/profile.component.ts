@@ -80,6 +80,7 @@ export class ProfileComponent implements OnInit {
       this.title.setTitle(`@${this.urlProfileHandle} | FitHub`);
 
       this.loadProfileData().then(() => {
+        this.displayRecentWorkouts();
         // this.loadProfilePostsData(this.profile.profileHandle).then(() => {
         //   this.displayPosts();
         //   this.displayRecentWorkouts();

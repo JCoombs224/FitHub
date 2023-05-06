@@ -15,7 +15,30 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.component.html',
-  styleUrls: ['./feed.component.css']
+  styleUrls: ['./feed.component.css'],
+  animations: [
+    trigger(
+      'slideOutAnimation',
+      [
+        transition(
+          ':enter',
+          [
+            style({ height: 0, opacity: 0 }),
+            animate('0.2s ease-out',
+              style({}))
+          ]
+        ),
+        transition(
+          ':leave',
+          [
+            style({}),
+            animate('0.2s ease-in',
+              style({ height: 0, opacity: 0 }))
+          ]
+        )
+      ]
+    )
+  ]
 })
 export class FeedComponent implements OnInit, OnChanges {
 
@@ -105,6 +128,9 @@ export class FeedComponent implements OnInit, OnChanges {
   }
 
   comment(post) {
+    if(post.commentText.length == 0) {
+      return;
+    }
     // Get the current server timestamp
     const serverTimestamp = new Timestamp(Date.now() / 1000, 0);
 

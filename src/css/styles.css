@@ -223,6 +223,18 @@
   background-color: rgb(235, 255, 229);
 }
 
+@media screen and (min-width: 1200px) {
+  .col-profile {
+    width: 80% !important;
+  }
+}
+
+@media screen and (min-width: 1800px) {
+  .col-profile {
+    width: 60% !important;
+  }
+}
+
 @media screen and (min-width: 1650px) {
   .col-feed {
       width: 35%;

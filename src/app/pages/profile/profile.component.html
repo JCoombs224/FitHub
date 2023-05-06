@@ -1,7 +1,7 @@
 <div class="row min-vh-100 main-bg">
   <div class="container mt-xl-5">
     <div class="row">
-      <div class="col-12 col-xl-10 col-xxl-7 min-vh-100 d-flex" style="margin: 0 auto; min-width: 75vw;" >
+      <div class="col-12 col-xl-10 col-xxl-7 min-vh-100 col-profile d-flex" style="margin: 0 auto" >
         <div class="card w-100 min-vh-100 flex-column mb-5" style="border: none; transform: none; background-color: rgba(255, 255, 255, 0.85)">
           <div class="card-header text-white" style="background-color: rgba(9, 106, 46, 1);">
             <div>
@@ -71,7 +71,7 @@
                 Posts
               </div>
               <div class="card-body" style="background: none;">
-                <div class="row ps-5 pe-5">
+                <div class="row ms-4 me-4 ps-5 pe-5">
                   <button *ngIf="userProfile" type="button" id="createPost" class="btn btn-outline-success" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px;" (click)="showPostsModal()">
                     Create Post+
                   </button>
