@@ -99,7 +99,8 @@ export class ViewWorkoutComponent implements OnInit{
   }
 
   showCurateButton() {
-    return this.profile == 'jamisoncoombs' || this.profile == 'SwankyWorkouts' || this.profile == 'rusty';
+    const handle = this.currentUser.user.profile.profileHandle;
+    return handle == 'jamisoncoombs' || handle == 'SwankyWorkouts' || handle == 'rusty';
   }
 
   curate() {
