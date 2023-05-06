@@ -55,6 +55,7 @@ import { FavoriteWorkoutsComponent } from 'src/app/dashboard-sections/favorite-w
 import { MyProgressComponent } from 'src/app/dashboard-sections/my-progress/my-progress.component';
 import { GoalsComponent } from 'src/app/dashboard-sections/goals/goals.component';
 import { WorkoutGraphComponent } from './dashboard-sections/workout-graph/workout-graph.component';
+import { FeedComponent } from './pages/social-feed/feed/feed.component';
 
 @NgModule({
   declarations: [
@@ -82,6 +83,7 @@ import { WorkoutGraphComponent } from './dashboard-sections/workout-graph/workou
     MyProgressComponent,
     GoalsComponent,
     WorkoutGraphComponent,
+    FeedComponent,
   ],
 
   imports: [

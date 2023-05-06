@@ -10,6 +10,7 @@ import { Title } from '@angular/platform-browser';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { Timestamp } from 'firebase/firestore';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-social-feed',
@@ -43,24 +44,12 @@ import { Router } from '@angular/router';
 
 export class SocialFeedComponent implements OnInit {
 
-  // Font Awesome Icons
-  faHeartSolid = faHeartSolid;
-  faHeartOutline = faHeartOutline;
-  faComment = faComment;
-  faXmarkCircle = faXmarkCircle;
-  faPaperPlane = faPaperPlane;
-
-  private urlProfileHandle;
-  profile = this.currentUser.user.profile;
-  profileHandle = this.currentUser.user.profile.profileHandle;
-  userProfile = false;
-  feed = [];
-
   constructor(
     private profileService: ProfileService,
     public currentUser: CurrentUserService,
     private workoutService: WorkoutsService,
     private afs: AngularFirestore,
+    private toastr: ToastrService,
     private postsService: PostsService,
     private title: Title,
     private router: Router
@@ -68,85 +57,7 @@ export class SocialFeedComponent implements OnInit {
 
   ngOnInit() {
     this.title.setTitle("Social Feed | FitHub");
-    this.postsService.getSocialFeed().then(feed => {
-      this.feed = feed;
-      this.loadWorkoutCards();
-      console.log(feed);
-    });
   }
 
-  loadWorkoutCards() {
-    for (let post of this.feed) {
-      if (post.postWorkout && post.postWorkout != "None") {
-        // Get the workout from the database
-        const subscription = this.workoutService.getWorkout(post.postWorkout, post.profileHandle).subscribe((workout) => {
-          post.workoutData = workout;
-          subscription.unsubscribe();
-        });
-      }
-    }
-  }
-
-  openWorkout(post) {
-    this.router.navigate(['/workout/', post.profileHandle, post.postWorkout]);
-  }
-
-  comment(post) {
-    // Get the current server timestamp
-    const serverTimestamp = new Timestamp(Date.now() / 1000, 0);
-
-    const comment = {
-      commentText: post.commentText,
-      commentOwner: this.currentUser.user.profile.profileHandle,
-      commentTimeStamp: serverTimestamp,
-      commentLikeCount: 0,
-      commentLikeOwners: []
-    }
-
-    let temp = [comment, ...post.postComments];
-
-    const promise = new Promise((resolve, reject) => {
-      this.postsService.postComment(post, comment).then(() => {
-        post.commentOpen = false;
-        post.commentText = "";
-        post.postComments = [];
-        resolve(true);
-      });
-    });
-
-    promise.then(() => {
-      setTimeout(() => {
-        post.postComments = temp;
-      }, 200);
-    });
-  }
-
-  toggleLikePost(post) {
-    const alreadyLiked = post.postLikeOwners.includes(this.profileHandle);
-
-    if (alreadyLiked) {
-      post.postLikeOwners.splice(post.postLikeOwners.indexOf(this.profileHandle), 1);
-      post.postLikeCount--;
-    }
-    else {
-      post.postLikeOwners.push(this.profileHandle);
-      post.postLikeCount++;
-    }
-    this.postsService.toggleLikePost(post, alreadyLiked);
-  }
-
-  toggleLikeComment(post, comment, commentIndex) {
-    const alreadyLiked = comment.commentLikeOwners.includes(this.profileHandle);
-
-    if (alreadyLiked) {
-      comment.commentLikeOwners.splice(comment.commentLikeOwners.indexOf(this.profileHandle), 1);
-      comment.commentLikeCount--;
-    }
-    else {
-      comment.commentLikeOwners.push(this.profileHandle);
-      comment.commentLikeCount++;
-    }
-
-    this.postsService.toggleLikeComment(post, commentIndex, alreadyLiked);
-  }
+  
 }

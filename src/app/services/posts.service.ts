@@ -13,6 +13,9 @@ import { ToastrService } from 'ngx-toastr';
 export class PostsService {
   userProfile = false;
   private socialFeed = [];
+  private profileFeed = [];
+  private lastProfile = '';
+  private subscription;
 
   constructor(
     private afs: AngularFirestore,
@@ -40,7 +43,10 @@ export class PostsService {
       this.toastr.error("Please try again.", "Something went wrong");
       console.log(error);
     });
+  }
 
+  deletePost(post) {
+    return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).collection('posts').doc(post.uid).delete();
   }
 
   getSocialFeed(force = false) {
@@ -81,6 +87,32 @@ export class PostsService {
 
     return promise.then(() => {
       return this.socialFeed;
+    });
+  }
+
+  getProfileFeed(profile) {
+    if(profile == this.lastProfile) {
+      this.subscription.unsubscribe();
+      return Promise.resolve(this.profileFeed);
+    }
+    this.lastProfile = profile;
+    const promise = new Promise((resolve, reject) => {
+      this.subscription = this.afs.collection('profiles').doc(profile).collection('posts', ref => ref.orderBy('postTimeStamp', 'desc')).valueChanges().subscribe(posts => {
+        this.profileFeed = [];
+        posts.forEach((post, index) => {
+          post.postDateString = post.postTimeStamp.toDate().toDateString();
+          post.profileHandle = profile;
+          post.commentOpen = false; // used to toggle the comment input field
+          post.commentText = ''; // used for the comment input field
+          post.postComments = [...post.postComments] || [];
+          this.profileFeed.push(post);
+        });
+        resolve(true);
+      });
+    });
+    
+    return promise.then(() => {
+      return [...this.profileFeed];
     });
   }
 

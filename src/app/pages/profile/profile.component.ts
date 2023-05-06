@@ -44,6 +44,7 @@ export class ProfileComponent implements OnInit {
   showUploadButton = false;
   showCropper = false;
   posts;
+  updateFeed = 0;
   imageChangedEvent: any = '';
   croppedImage: any = '';
   isSmallScreen: boolean = window.innerWidth <= 768;
@@ -79,16 +80,23 @@ export class ProfileComponent implements OnInit {
       this.title.setTitle(`@${this.urlProfileHandle} | FitHub`);
 
       this.loadProfileData().then(() => {
-        this.loadProfilePostsData(this.profile.profileHandle).then(() => {
-          this.displayPosts();
-          this.displayRecentWorkouts();
-        });
+        // this.loadProfilePostsData(this.profile.profileHandle).then(() => {
+        //   this.displayPosts();
+        //   this.displayRecentWorkouts();
+        // });
         this.checkFollowers();
       });
     });
 
     this.workoutsSubscription = this.workoutService.getWorkouts().subscribe(workouts => {
       this.workouts = workouts;
+    });
+  }
+
+  reloadCurrentRoute() {
+    let currentUrl = this.router.url;
+    this.router.navigateByUrl('/', {skipLocationChange: true, onSameUrlNavigation: 'reload'}).then(() => {
+        this.router.navigate([currentUrl]);
     });
   }
 
@@ -156,34 +164,34 @@ export class ProfileComponent implements OnInit {
   }
 
   loadProfilePostsData(profile = this.profile.profileHandle) {
-    return new Promise<void>((resolve, reject) => {
-      const subscription = this.afs.collection('profiles').doc(profile).collection('posts', ref => ref.orderBy('postTimeStamp', 'desc')).snapshotChanges().pipe(
-        map((posts: any[]) => {
-          return posts.map(post => {
-            const data = post.payload.doc.data();
-            const uid = post.payload.doc.id;
-            const postImg = data.postImg;
-            const postText = data.postText;
-            const postTimeStamp = data.postTimeStamp;
-            const postLikeOwners = data.postLikeOwners;
-            const postLikeCount = data.postLikeCount;
-            const postWorkout = data.postWorkout;
-            const postComments = data.postComments.map(comment => ({
-              commentLikeCount: comment.commentLikeCount,
-              commentLikeOwners: comment.commentLikeOwners,
-              commentOwner: comment.commentOwner,
-              commentText: comment.commentText,
-              commentTimeStamp: comment.commentTimeStamp,
-            }));
-            return { uid, postImg, postText, postTimeStamp, postLikeOwners, postLikeCount, postWorkout, postComments };
-          });
-        })
-      ).subscribe(posts => {
-        this.posts = posts;
-        subscription.unsubscribe();
-        resolve();
-      });
-    });
+    // return new Promise<void>((resolve, reject) => {
+    //   const subscription = this.afs.collection('profiles').doc(profile).collection('posts', ref => ref.orderBy('postTimeStamp', 'desc')).snapshotChanges().pipe(
+    //     map((posts: any[]) => {
+    //       return posts.map(post => {
+    //         const data = post.payload.doc.data();
+    //         const uid = post.payload.doc.id;
+    //         const postImg = data.postImg;
+    //         const postText = data.postText;
+    //         const postTimeStamp = data.postTimeStamp;
+    //         const postLikeOwners = data.postLikeOwners;
+    //         const postLikeCount = data.postLikeCount;
+    //         const postWorkout = data.postWorkout;
+    //         const postComments = data.postComments.map(comment => ({
+    //           commentLikeCount: comment.commentLikeCount,
+    //           commentLikeOwners: comment.commentLikeOwners,
+    //           commentOwner: comment.commentOwner,
+    //           commentText: comment.commentText,
+    //           commentTimeStamp: comment.commentTimeStamp,
+    //         }));
+    //         return { uid, postImg, postText, postTimeStamp, postLikeOwners, postLikeCount, postWorkout, postComments };
+    //       });
+    //     })
+    //   ).subscribe(posts => {
+    //     this.posts = posts;
+    //     subscription.unsubscribe();
+    //     resolve();
+    //   });
+    // });
   }
 
   //  Button that allows a user to upload a profile picture
@@ -298,308 +306,310 @@ export class ProfileComponent implements OnInit {
 
   //  Function to display this porfile's posts in a modal
   displayPosts() {
+    this.updateFeed++;
+    console.log(this.updateFeed);
     //  Get the element by id: posts
-    const posts = document.getElementById('posts');
-    posts.innerHTML = '';
+    // const posts = document.getElementById('posts');
+    // posts.innerHTML = '';
 
-    if (this.posts.length == 0) {
+    // if (this.posts.length == 0) {
 
-      const noPosts = document.createElement('div');
-      noPosts.className = 'w-100 mb-4';
-      noPosts.style.width = '18rem';
-      noPosts.style.fontSize = '20px';
-      noPosts.style.textAlign = 'center';
-      noPosts.innerHTML = '<b>No posts to display.</b>';
-      posts.appendChild(noPosts);
-    }
+    //   const noPosts = document.createElement('div');
+    //   noPosts.className = 'w-100 mb-4';
+    //   noPosts.style.width = '18rem';
+    //   noPosts.style.fontSize = '20px';
+    //   noPosts.style.textAlign = 'center';
+    //   noPosts.innerHTML = '<b>No posts to display.</b>';
+    //   posts.appendChild(noPosts);
+    // }
 
-    else {
-      //  Loop through the posts and create a card for each of them with a like
-      //  and comment button and also display the comments for each post within the post card
-      for (let i = 0; i < this.posts.length; i++) {
-        const postCard = document.createElement('div');
-        postCard.className = 'card mb-2';
-        postCard.style.width = 'auto';
-        postCard.style.borderColor = '#212529';
+    // else {
+    //   //  Loop through the posts and create a card for each of them with a like
+    //   //  and comment button and also display the comments for each post within the post card
+    //   for (let i = 0; i < this.posts.length; i++) {
+    //     const postCard = document.createElement('div');
+    //     postCard.className = 'card mb-2';
+    //     postCard.style.width = 'auto';
+    //     postCard.style.borderColor = '#212529';
 
-        //  Create a card header with no background to show the timestamp of the post
-        const postCardHeader = document.createElement('div');
-        postCardHeader.className = 'card-header bg-dark text-white';
-        postCardHeader.style.textAlign = 'left';
-        postCardHeader.style.fontSize = '15px';
-        postCardHeader.innerHTML = this.posts[i].postTimeStamp.toDate().toDateString();
+    //     //  Create a card header with no background to show the timestamp of the post
+    //     const postCardHeader = document.createElement('div');
+    //     postCardHeader.className = 'card-header bg-dark text-white';
+    //     postCardHeader.style.textAlign = 'left';
+    //     postCardHeader.style.fontSize = '15px';
+    //     postCardHeader.innerHTML = this.posts[i].postTimeStamp.toDate().toDateString();
 
-        if (this.profile.profileHandle === this.currentUser.user.profile.profileHandle) {
-          //  Create a "-" button to delete the post when hovered on and has an info attribute that says "Delete this post?"
-          const deletePostButton = document.createElement('button');
-          deletePostButton.className = 'btn btn-outline-secondary';
-          deletePostButton.style.float = 'right';
-          deletePostButton.innerHTML = 'Delete Post';
-          deletePostButton.addEventListener('click', () => {
-            if (confirm("Are you sure you want to delete this post?")) {
-              this.deletePost(this.posts[i]);
-            }
-          });
+    //     if (this.profile.profileHandle === this.currentUser.user.profile.profileHandle) {
+    //       //  Create a "-" button to delete the post when hovered on and has an info attribute that says "Delete this post?"
+    //       const deletePostButton = document.createElement('button');
+    //       deletePostButton.className = 'btn btn-outline-secondary';
+    //       deletePostButton.style.float = 'right';
+    //       deletePostButton.innerHTML = 'Delete Post';
+    //       deletePostButton.addEventListener('click', () => {
+    //         if (confirm("Are you sure you want to delete this post?")) {
+    //           this.deletePost(this.posts[i]);
+    //         }
+    //       });
 
-          //  Change the background color of the delete post button when hovered on
-          deletePostButton.addEventListener('mouseover', () => {
-            deletePostButton.style.backgroundColor = 'red';
-          });
+    //       //  Change the background color of the delete post button when hovered on
+    //       deletePostButton.addEventListener('mouseover', () => {
+    //         deletePostButton.style.backgroundColor = 'red';
+    //       });
 
-          //  Change the background color of the delete post button when the mouse leaves the button
-          deletePostButton.addEventListener('mouseout', () => {
-            deletePostButton.style.backgroundColor = 'transparent';
-          });
+    //       //  Change the background color of the delete post button when the mouse leaves the button
+    //       deletePostButton.addEventListener('mouseout', () => {
+    //         deletePostButton.style.backgroundColor = 'transparent';
+    //       });
 
-          deletePostButton.setAttribute('data-toggle', 'tooltip');
-          deletePostButton.setAttribute('data-placement', 'top');
-          deletePostButton.setAttribute('title', 'Delete this post?');
+    //       deletePostButton.setAttribute('data-toggle', 'tooltip');
+    //       deletePostButton.setAttribute('data-placement', 'top');
+    //       deletePostButton.setAttribute('title', 'Delete this post?');
 
-          postCardHeader.appendChild(deletePostButton);
-        }
+    //       postCardHeader.appendChild(deletePostButton);
+    //     }
 
-        //  Create a card body to hold the post text, image, and the like and comment buttons
-        const postCardBody = document.createElement('div');
-        postCardBody.className = 'card-body';
+    //     //  Create a card body to hold the post text, image, and the like and comment buttons
+    //     const postCardBody = document.createElement('div');
+    //     postCardBody.className = 'card-body';
 
-        //  Create an image element to show post[i].postImg if it exists
-        const postCardImgWrapper = document.createElement('div');
-        postCardImgWrapper.style.display = 'flex';
-        postCardImgWrapper.style.justifyContent = 'center';
-        postCardImgWrapper.style.padding = '0';
-        postCardImgWrapper.className = 'pb-5';
+    //     //  Create an image element to show post[i].postImg if it exists
+    //     const postCardImgWrapper = document.createElement('div');
+    //     postCardImgWrapper.style.display = 'flex';
+    //     postCardImgWrapper.style.justifyContent = 'center';
+    //     postCardImgWrapper.style.padding = '0';
+    //     postCardImgWrapper.className = 'pb-5';
 
-        const postCardImg = document.createElement('img');
-        postCardImg.className = 'img-fluid';
-        postCardImg.style.width = 'auto';
-        postCardImg.style.height = '100%';
-        postCardImg.style.display = 'flex';
-        postCardImg.style.justifyContent = 'center';
-        postCardImg.style.borderRadius = '10px';
-        postCardImg.style.border = '1px solid black';
-        postCardImg.style.maxHeight = '60vh';
+    //     const postCardImg = document.createElement('img');
+    //     postCardImg.className = 'img-fluid';
+    //     postCardImg.style.width = 'auto';
+    //     postCardImg.style.height = '100%';
+    //     postCardImg.style.display = 'flex';
+    //     postCardImg.style.justifyContent = 'center';
+    //     postCardImg.style.borderRadius = '10px';
+    //     postCardImg.style.border = '1px solid black';
+    //     postCardImg.style.maxHeight = '60vh';
 
-        //  If the post has an image, display it
-        if (this.posts[i].postImg != '') {
-          postCardImg.src = this.posts[i].postImg;
-        }
+    //     //  If the post has an image, display it
+    //     if (this.posts[i].postImg != '') {
+    //       postCardImg.src = this.posts[i].postImg;
+    //     }
 
-        postCardImgWrapper.appendChild(postCardImg);
+    //     postCardImgWrapper.appendChild(postCardImg);
 
-        if (this.posts[i].postWorkout != '') {
-          const postCardWorkout = document.createElement('p');
-          postCardWorkout.className = 'card-text';
-          postCardWorkout.style.fontSize = '16px';
-          postCardWorkout.style.textAlign = 'left';
+    //     if (this.posts[i].postWorkout != '') {
+    //       const postCardWorkout = document.createElement('p');
+    //       postCardWorkout.className = 'card-text';
+    //       postCardWorkout.style.fontSize = '16px';
+    //       postCardWorkout.style.textAlign = 'left';
 
-          //  Adding all of the workout elements to the post, formatting the display, and appending them to the post.
-          const subscription = this.workoutService.getWorkout(this.posts[i].postWorkout).subscribe(workout => {
-            //  Create a card text to hold the workout name and description with a hyperlink to the workout's page held in the workout.name
-            postCardWorkout.innerHTML = "<b>Link to the full workout: </b>" + '<a href="#/workout/' + this.posts[i].postWorkout + '">' + workout.name + '</a><br>' + '<br><b>Workout description:</b><br> ' + workout.description + '<br>';
+    //       //  Adding all of the workout elements to the post, formatting the display, and appending them to the post.
+    //       const subscription = this.workoutService.getWorkout(this.posts[i].postWorkout).subscribe(workout => {
+    //         //  Create a card text to hold the workout name and description with a hyperlink to the workout's page held in the workout.name
+    //         postCardWorkout.innerHTML = "<b>Link to the full workout: </b>" + '<a href="#/workout/' + this.posts[i].postWorkout + '">' + workout.name + '</a><br>' + '<br><b>Workout description:</b><br> ' + workout.description + '<br>';
 
-            //  Loop through the groups and display the exercises in each group
-            for (let j = 0; j < workout.groups.length; j++) {
-              postCardWorkout.innerHTML += '<br>' + '<b>&nbsp;&nbsp;' + this.toTitleCase(workout.groups[j].groupType) + '</b>';
+    //         //  Loop through the groups and display the exercises in each group
+    //         for (let j = 0; j < workout.groups.length; j++) {
+    //           postCardWorkout.innerHTML += '<br>' + '<b>&nbsp;&nbsp;' + this.toTitleCase(workout.groups[j].groupType) + '</b>';
 
-              for (let k = 0; k < workout.groups[j].exercises.length; k++) {
-                postCardWorkout.innerHTML += '<br><b>&nbsp;&nbsp;&nbsp;&nbsp;' + workout.groups[j].exercises[k].name + '</b>';
-                if (workout.groups[j].exercises[k].sets != 0) {
-                  postCardWorkout.innerHTML += '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets: ' + workout.groups[j].exercises[k].sets;
-                }
-                if (workout.groups[j].exercises[k].reps != 0) {
-                  postCardWorkout.innerHTML += '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reps: ' + workout.groups[j].exercises[k].reps + '<br>';
-                }
-                if (workout.groups[j].exercises[k].sets == 0 && workout.groups[j].exercises[k].reps == 0) {
-                  postCardWorkout.innerHTML += '<br>';
-                }
-                postCardWorkout.innerHTML += '<b>&nbsp;&nbsp;&nbsp;&nbsp;Instructions: </b>' + workout.groups[j].exercises[k].instructions.substring(0, 50) + '...<br>';
-              }
-            }
-            subscription.unsubscribe();
-          });
+    //           for (let k = 0; k < workout.groups[j].exercises.length; k++) {
+    //             postCardWorkout.innerHTML += '<br><b>&nbsp;&nbsp;&nbsp;&nbsp;' + workout.groups[j].exercises[k].name + '</b>';
+    //             if (workout.groups[j].exercises[k].sets != 0) {
+    //               postCardWorkout.innerHTML += '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets: ' + workout.groups[j].exercises[k].sets;
+    //             }
+    //             if (workout.groups[j].exercises[k].reps != 0) {
+    //               postCardWorkout.innerHTML += '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reps: ' + workout.groups[j].exercises[k].reps + '<br>';
+    //             }
+    //             if (workout.groups[j].exercises[k].sets == 0 && workout.groups[j].exercises[k].reps == 0) {
+    //               postCardWorkout.innerHTML += '<br>';
+    //             }
+    //             postCardWorkout.innerHTML += '<b>&nbsp;&nbsp;&nbsp;&nbsp;Instructions: </b>' + workout.groups[j].exercises[k].instructions.substring(0, 50) + '...<br>';
+    //           }
+    //         }
+    //         subscription.unsubscribe();
+    //       });
 
-          postCardBody.appendChild(postCardWorkout);
-        }
+    //       postCardBody.appendChild(postCardWorkout);
+    //     }
 
-        const hr = document.createElement('hr');
-        hr.className = 'mb-5 mt-0';
+    //     const hr = document.createElement('hr');
+    //     hr.className = 'mb-5 mt-0';
 
-        //  Create a card text to hold the post text
-        const postCardText = document.createElement('p');
-        postCardText.className = 'card-text';
-        postCardText.style.fontSize = '20px';
-        postCardText.style.textAlign = 'left';
-        postCardText.innerHTML = this.posts[i].postText;
+    //     //  Create a card text to hold the post text
+    //     const postCardText = document.createElement('p');
+    //     postCardText.className = 'card-text';
+    //     postCardText.style.fontSize = '20px';
+    //     postCardText.style.textAlign = 'left';
+    //     postCardText.innerHTML = this.posts[i].postText;
 
-        const postCardLike = document.createElement('button');
-        postCardLike.className = 'btn btn-outline-secondary';
+    //     const postCardLike = document.createElement('button');
+    //     postCardLike.className = 'btn btn-outline-secondary';
 
-        //  Check if the current user has liked the post
-        if (this.posts[i].postLikeOwners.includes(this.currentUser.user.profile.profileHandle)) {
-          postCardLike.innerHTML = this.posts[i].postLikeCount + ' Unlike';
-          postCardLike.addEventListener('click', () => {
-            this.unlikePost(this.posts[i]);
-          });
+    //     //  Check if the current user has liked the post
+    //     if (this.posts[i].postLikeOwners.includes(this.currentUser.user.profile.profileHandle)) {
+    //       postCardLike.innerHTML = this.posts[i].postLikeCount + ' Unlike';
+    //       postCardLike.addEventListener('click', () => {
+    //         this.unlikePost(this.posts[i]);
+    //       });
 
-          //  Change the background color of the unlike button when hovered on
-          postCardLike.addEventListener('mouseover', () => {
-            postCardLike.style.backgroundColor = 'gray';
-          });
+    //       //  Change the background color of the unlike button when hovered on
+    //       postCardLike.addEventListener('mouseover', () => {
+    //         postCardLike.style.backgroundColor = 'gray';
+    //       });
 
-          //  Change the background color of the unlike button when the mouse leaves the button
-          postCardLike.addEventListener('mouseout', () => {
-            postCardLike.style.backgroundColor = 'white';
-          });
-        }
+    //       //  Change the background color of the unlike button when the mouse leaves the button
+    //       postCardLike.addEventListener('mouseout', () => {
+    //         postCardLike.style.backgroundColor = 'white';
+    //       });
+    //     }
 
-        else {
-          postCardLike.innerHTML = this.posts[i].postLikeCount + ' Like';
-          postCardLike.addEventListener('click', () => {
-            this.likePost(this.posts[i]);
-          });
+    //     else {
+    //       postCardLike.innerHTML = this.posts[i].postLikeCount + ' Like';
+    //       postCardLike.addEventListener('click', () => {
+    //         this.likePost(this.posts[i]);
+    //       });
 
-          //  Change the background color of the like button when hovered on
-          postCardLike.addEventListener('mouseover', () => {
-            postCardLike.style.backgroundColor = 'blue';
-          });
+    //       //  Change the background color of the like button when hovered on
+    //       postCardLike.addEventListener('mouseover', () => {
+    //         postCardLike.style.backgroundColor = 'blue';
+    //       });
 
-          //  Change the background color of the like button when the mouse leaves the button
-          postCardLike.addEventListener('mouseout', () => {
-            postCardLike.style.backgroundColor = 'white';
-          });
-        }
+    //       //  Change the background color of the like button when the mouse leaves the button
+    //       postCardLike.addEventListener('mouseout', () => {
+    //         postCardLike.style.backgroundColor = 'white';
+    //       });
+    //     }
 
-        //  Create a comment button under the textarea for the user to submit a comment
-        const commentButton = document.createElement('button');
-        commentButton.className = 'btn btn-outline-success';
-        commentButton.style.marginLeft = '3px';
-        commentButton.innerHTML = 'Comment';
-        commentButton.addEventListener('click', () => {
-          this.commentPost(this.posts[i], i);
-        });
+    //     //  Create a comment button under the textarea for the user to submit a comment
+    //     const commentButton = document.createElement('button');
+    //     commentButton.className = 'btn btn-outline-success';
+    //     commentButton.style.marginLeft = '3px';
+    //     commentButton.innerHTML = 'Comment';
+    //     commentButton.addEventListener('click', () => {
+    //       this.commentPost(this.posts[i], i);
+    //     });
 
-        //  Create a text area for the user to enter a comment underneath the postText
-        const commentTextArea = document.createElement('textarea');
-        commentTextArea.className = 'form-control';
-        commentTextArea.id = 'commentTextArea' + i;
-        commentTextArea.rows = 3;
-        commentTextArea.placeholder = 'Reply to @' + this.profile.profileHandle + '\'s post...';
+    //     //  Create a text area for the user to enter a comment underneath the postText
+    //     const commentTextArea = document.createElement('textarea');
+    //     commentTextArea.className = 'form-control';
+    //     commentTextArea.id = 'commentTextArea' + i;
+    //     commentTextArea.rows = 3;
+    //     commentTextArea.placeholder = 'Reply to @' + this.profile.profileHandle + '\'s post...';
 
-        //  Append the post card to the posts div
-        posts.appendChild(postCard);
-        postCard.appendChild(postCardHeader);
-        postCard.appendChild(postCardBody);
-        if (typeof this.posts[i].postImg !== 'undefined' && this.posts[i].postImg !== '') {
-          postCardBody.appendChild(postCardImgWrapper);
-          postCardBody.appendChild(hr);
-        }
-        postCardBody.appendChild(postCardText);
-        postCardBody.appendChild(commentTextArea);
-        postCardBody.appendChild(postCardLike);
-        postCardBody.appendChild(commentButton);
+    //     //  Append the post card to the posts div
+    //     posts.appendChild(postCard);
+    //     postCard.appendChild(postCardHeader);
+    //     postCard.appendChild(postCardBody);
+    //     if (typeof this.posts[i].postImg !== 'undefined' && this.posts[i].postImg !== '') {
+    //       postCardBody.appendChild(postCardImgWrapper);
+    //       postCardBody.appendChild(hr);
+    //     }
+    //     postCardBody.appendChild(postCardText);
+    //     postCardBody.appendChild(commentTextArea);
+    //     postCardBody.appendChild(postCardLike);
+    //     postCardBody.appendChild(commentButton);
 
-        if (this.posts[i].postComments.length > 0) {
-          //  Loop through this posts comments and create a paragraph for each of them with a like button for each comment
-          for (let j = 0; j < this.posts[i].postComments.length; j++) {
-            //  Only display comments that contain text. This is to prevent empty comments from being displayed.
-            if (this.posts[i].postComments[j].commentText !== '') {
-              const commentCard = document.createElement('div');
-              commentCard.className = 'card w-75 mb-2';
-              commentCard.style.width = '18rem';
-              commentCard.style.marginLeft = '25px';
+    //     if (this.posts[i].postComments.length > 0) {
+    //       //  Loop through this posts comments and create a paragraph for each of them with a like button for each comment
+    //       for (let j = 0; j < this.posts[i].postComments.length; j++) {
+    //         //  Only display comments that contain text. This is to prevent empty comments from being displayed.
+    //         if (this.posts[i].postComments[j].commentText !== '') {
+    //           const commentCard = document.createElement('div');
+    //           commentCard.className = 'card w-75 mb-2';
+    //           commentCard.style.width = '18rem';
+    //           commentCard.style.marginLeft = '25px';
 
-              const commentCardHeader = document.createElement('div');
-              commentCardHeader.className = 'card-header w-100';
-              commentCardHeader.style.backgroundColor = 'white';
-              commentCardHeader.style.textAlign = 'left';
-              commentCardHeader.style.fontSize = '15px';
-              //  Display the comment timestamp and the comment owner as a link to their profile
-              commentCardHeader.innerHTML = this.posts[i].postComments[j].commentTimeStamp.toDate().toDateString();
-              commentCardHeader.innerHTML += ' - <a href="#/profile/' + this.posts[i].postComments[j].commentOwner + '">' + this.posts[i].postComments[j].commentOwner + '</a>';
+    //           const commentCardHeader = document.createElement('div');
+    //           commentCardHeader.className = 'card-header w-100';
+    //           commentCardHeader.style.backgroundColor = 'white';
+    //           commentCardHeader.style.textAlign = 'left';
+    //           commentCardHeader.style.fontSize = '15px';
+    //           //  Display the comment timestamp and the comment owner as a link to their profile
+    //           commentCardHeader.innerHTML = this.posts[i].postComments[j].commentTimeStamp.toDate().toDateString();
+    //           commentCardHeader.innerHTML += ' - <a href="#/profile/' + this.posts[i].postComments[j].commentOwner + '">' + this.posts[i].postComments[j].commentOwner + '</a>';
 
-              //  Create a gear button to allow the user to delete their own comments
-              if (this.posts[i].postComments[j].commentOwner === this.currentUser.user.profile.profileHandle || this.profile.profileHandle === this.currentUser.user.profile.profileHandle) {
-                const commentCardGear = document.createElement('button');
-                commentCardGear.className = 'btn btn-outline-secondary';
-                commentCardGear.style.float = 'right';
-                commentCardGear.innerHTML = 'Delete Comment';
+    //           //  Create a gear button to allow the user to delete their own comments
+    //           if (this.posts[i].postComments[j].commentOwner === this.currentUser.user.profile.profileHandle || this.profile.profileHandle === this.currentUser.user.profile.profileHandle) {
+    //             const commentCardGear = document.createElement('button');
+    //             commentCardGear.className = 'btn btn-outline-secondary';
+    //             commentCardGear.style.float = 'right';
+    //             commentCardGear.innerHTML = 'Delete Comment';
 
-                //  Change backgroud color of the button to red on hover
-                commentCardGear.addEventListener('mouseover', () => {
-                  commentCardGear.style.backgroundColor = 'red';
-                });
+    //             //  Change backgroud color of the button to red on hover
+    //             commentCardGear.addEventListener('mouseover', () => {
+    //               commentCardGear.style.backgroundColor = 'red';
+    //             });
 
-                //  Change backgroud color of the button back to white on mouseout
-                commentCardGear.addEventListener('mouseout', () => {
-                  commentCardGear.style.backgroundColor = 'white';
-                });
+    //             //  Change backgroud color of the button back to white on mouseout
+    //             commentCardGear.addEventListener('mouseout', () => {
+    //               commentCardGear.style.backgroundColor = 'white';
+    //             });
 
-                commentCardGear.addEventListener('click', () => {
-                  if (confirm("Are you sure you want to delete this comment?")) {
-                    this.deleteComment(this.posts[i], this.posts[i].postComments[j]);
-                  }
-                });
+    //             commentCardGear.addEventListener('click', () => {
+    //               if (confirm("Are you sure you want to delete this comment?")) {
+    //                 this.deleteComment(this.posts[i], this.posts[i].postComments[j]);
+    //               }
+    //             });
 
-                //  Append the gear button to the card header
-                commentCardHeader.appendChild(commentCardGear);
-              }
+    //             //  Append the gear button to the card header
+    //             commentCardHeader.appendChild(commentCardGear);
+    //           }
 
-              const commentCardBody = document.createElement('div');
-              commentCardBody.className = 'card-body';
+    //           const commentCardBody = document.createElement('div');
+    //           commentCardBody.className = 'card-body';
 
-              const commentCardText = document.createElement('p');
-              commentCardText.className = 'card-text';
-              commentCardText.style.fontSize = '20px';
-              commentCardText.innerHTML = this.posts[i].postComments[j].commentText;
+    //           const commentCardText = document.createElement('p');
+    //           commentCardText.className = 'card-text';
+    //           commentCardText.style.fontSize = '20px';
+    //           commentCardText.innerHTML = this.posts[i].postComments[j].commentText;
 
-              const commentCardLike = document.createElement('button');
-              commentCardLike.className = 'btn btn-outline-secondary';
+    //           const commentCardLike = document.createElement('button');
+    //           commentCardLike.className = 'btn btn-outline-secondary';
 
-              //  Check if the current user has liked the comment
-              if (this.posts[i].postComments[j].commentLikeOwners.includes(this.currentUser.user.profile.profileHandle)) {
-                commentCardLike.innerHTML = this.posts[i].postComments[j].commentLikeCount + ' Unlike';
-                commentCardLike.addEventListener('click', () => {
-                  this.unlikeComment(this.posts[i], i, this.posts[i].postComments[j], j);
-                });
+    //           //  Check if the current user has liked the comment
+    //           if (this.posts[i].postComments[j].commentLikeOwners.includes(this.currentUser.user.profile.profileHandle)) {
+    //             commentCardLike.innerHTML = this.posts[i].postComments[j].commentLikeCount + ' Unlike';
+    //             commentCardLike.addEventListener('click', () => {
+    //               this.unlikeComment(this.posts[i], i, this.posts[i].postComments[j], j);
+    //             });
 
-                //  Change the background color of the unlike button when hovered on
-                commentCardLike.addEventListener('mouseover', () => {
-                  commentCardLike.style.backgroundColor = 'gray';
-                });
+    //             //  Change the background color of the unlike button when hovered on
+    //             commentCardLike.addEventListener('mouseover', () => {
+    //               commentCardLike.style.backgroundColor = 'gray';
+    //             });
 
-                //  Change the background color of the unlike button when the mouse leaves the button
-                commentCardLike.addEventListener('mouseout', () => {
-                  commentCardLike.style.backgroundColor = 'white';
-                });
-              }
+    //             //  Change the background color of the unlike button when the mouse leaves the button
+    //             commentCardLike.addEventListener('mouseout', () => {
+    //               commentCardLike.style.backgroundColor = 'white';
+    //             });
+    //           }
 
-              else {
-                commentCardLike.innerHTML = this.posts[i].postComments[j].commentLikeCount + ' Like';
-                commentCardLike.addEventListener('click', () => {
-                  this.likeComment(this.posts[i], i, this.posts[i].postComments[j], j);
-                });
+    //           else {
+    //             commentCardLike.innerHTML = this.posts[i].postComments[j].commentLikeCount + ' Like';
+    //             commentCardLike.addEventListener('click', () => {
+    //               this.likeComment(this.posts[i], i, this.posts[i].postComments[j], j);
+    //             });
 
-                //  Change the background color of the like button when hovered on
-                commentCardLike.addEventListener('mouseover', () => {
-                  commentCardLike.style.backgroundColor = 'blue';
-                });
+    //             //  Change the background color of the like button when hovered on
+    //             commentCardLike.addEventListener('mouseover', () => {
+    //               commentCardLike.style.backgroundColor = 'blue';
+    //             });
 
-                //  Change the background color of the like button when the mouse leaves the button
-                commentCardLike.addEventListener('mouseout', () => {
-                  commentCardLike.style.backgroundColor = 'white';
-                });
-              }
+    //             //  Change the background color of the like button when the mouse leaves the button
+    //             commentCardLike.addEventListener('mouseout', () => {
+    //               commentCardLike.style.backgroundColor = 'white';
+    //             });
+    //           }
 
-              commentCard.append(commentCardHeader);
-              commentCardBody.appendChild(commentCardText);
-              commentCardBody.appendChild(commentCardLike);
-              commentCard.appendChild(commentCardBody);
-              postCardBody.appendChild(commentCard);
-            }
-          }
-        }
-      }
-    }
+    //           commentCard.append(commentCardHeader);
+    //           commentCardBody.appendChild(commentCardText);
+    //           commentCardBody.appendChild(commentCardLike);
+    //           commentCard.appendChild(commentCardBody);
+    //           postCardBody.appendChild(commentCard);
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
   }
 
   commentPost(post, i) {
