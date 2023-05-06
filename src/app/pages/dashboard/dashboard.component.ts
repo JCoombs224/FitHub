@@ -4,6 +4,7 @@ import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { CurrentUserService } from 'src/app/services/current-user.service';
 import { faAward, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import { GoalsService } from 'src/app/services/goals.service';
@@ -61,11 +62,13 @@ export class DashboardComponent implements OnInit {
   progressValue: number;
   circumference = 2 * Math.PI * 82;
   strokeDashoffset: number;
-  curatedWorkoutID1: string;
-  curatedWorkoutID2: string;
-  curatedWorkoutID3: string;
-  curatedWorkoutID4: string;
-  curatedWorkoutID5: string;
+
+  curatedWorkout1: any = {uid: 'WvedR8vbPf4iJ68sWoXC'};
+  curatedWorkout2: any = {uid: '5CLBO860fZYSuSdFWwPz'};
+  curatedWorkout3: any = {uid: '3NwCSq83GXoLS0k0zV8z'};
+  curatedWorkout4: any = {uid: 'y3lH1SUZM2uaynLbXX8k'};
+  curatedWorkout5: any = {uid: 'gPO3yb3CYT0IgDj1yBeV'};
+
 
   constructor(
     private router: Router,
@@ -75,8 +78,15 @@ export class DashboardComponent implements OnInit {
     private toastr: ToastrService,
     public currentUserService: CurrentUserService,
     private goalsService: GoalsService,
-    private workoutsService: WorkoutsService
+    private workoutsService: WorkoutsService,
+    private firestore: AngularFirestore
   ) {}
+
+  getWorkoutByDocId(docId: string) {
+    return this.firestore.collection('workouts')
+    .doc(docId)
+    .valueChanges();
+  }
 
   ngOnInit(): void {
     console.log(this.currentUserService.user);
@@ -98,9 +108,25 @@ export class DashboardComponent implements OnInit {
       this.currentTipIndex = (this.currentTipIndex + 1) % this.personalizedTips.length;
     });
 
-    this.curatedWorkoutID1 = '6lBMRyzuS8B66IqBTeFe';
-    this.curatedWorkoutID2 = 'gPO3yb3CYT0IgDj1yBeV';
+    this.workoutsService.getCuratedWorkoutById('WvedR8vbPf4iJ68sWoXC').subscribe(workout => {
+      this.curatedWorkout1 = {...this.curatedWorkout1, ...workout};
+    });
 
+    this.workoutsService.getCuratedWorkoutById('5CLBO860fZYSuSdFWwPz').subscribe(workout => {
+      this.curatedWorkout2 = {...this.curatedWorkout2, ...workout};
+    });
+
+    this.workoutsService.getCuratedWorkoutById('3NwCSq83GXoLS0k0zV8z').subscribe(workout => {
+      this.curatedWorkout3 = {...this.curatedWorkout3, ...workout};
+    });
+
+    this.workoutsService.getCuratedWorkoutById('y3lH1SUZM2uaynLbXX8k').subscribe(workout => {
+      this.curatedWorkout4 = {...this.curatedWorkout4, ...workout};
+    });
+
+    this.workoutsService.getCuratedWorkoutById('5QzG6J6VFPNsS1KIXSGY').subscribe(workout => {
+      this.curatedWorkout5 = {...this.curatedWorkout5, ...workout};
+    });
   }
 
   calculateAverageTimeSpent(completedWorkouts: any[]): void {
@@ -144,7 +170,7 @@ export class DashboardComponent implements OnInit {
     return (1 - progressValue / 100) * (2 * Math.PI * circleRadius);
   }
 
-  goToCuratedWorkout(curatedWorkoutID: string): void {
-    this.router.navigate(['/workout', this.curatedWorkoutID1 || this.curatedWorkoutID2 || this.curatedWorkoutID3 || this.curatedWorkoutID4 || this.curatedWorkoutID5]);
+  goToCuratedWorkout(workoutId: string): void {
+    this.router.navigate(['/workout', workoutId]);
   }
 }

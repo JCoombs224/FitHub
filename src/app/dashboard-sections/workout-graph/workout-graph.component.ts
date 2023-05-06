@@ -27,9 +27,23 @@ export class WorkoutGraphComponent {
     private profileService: ProfileService
     ) {}
 
-  public barChartOptions: ChartOptions = {
-    responsive: true,
-  };
+    public barChartOptions: ChartOptions = {
+      responsive: true,
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: (context) => {
+              const label = context.dataset.label || '';
+              const value = context.parsed.y;
+              const minutes = Math.floor(value / 60);
+              const seconds = value % 60;
+              const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+              return `${label}: ${formattedTime}`;
+            },
+          },
+        },
+      },
+    };
   public barChartLabels: string[] = [];
   public barChartType: ChartType = 'bar';
   public barChartLegend = true;
