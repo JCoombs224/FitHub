@@ -164,12 +164,20 @@ export class WorkoutGraphComponent {
         const sunday = new Date(now.getTime() - dayOfWeek * 24 * 60 * 60 * 1000);
         startDate = sunday;
         endDate = new Date(sunday.getTime() + 7 * 24 * 60 * 60 * 1000);
-        formatLabel = date => date.toISOString().slice(0, 10); // day-by-day
+        formatLabel = date => new Intl.DateTimeFormat('en-US', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        }).format(date);
         break;
       case 'month':
         startDate = new Date(now.getFullYear(), now.getMonth(), 1); // Start at the first day of the current month
         endDate = new Date(now.getFullYear(), now.getMonth() + 1, 1); // Until the first day of the next month
-        formatLabel = date => date.toISOString().slice(0, 10); // day-by-day
+        formatLabel = date => new Intl.DateTimeFormat('en-US', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        }).format(date);
         break;
       case 'year':
         startDate = new Date(now.getFullYear(), 0, 1); // Start at January 1st of the current year
@@ -179,6 +187,7 @@ export class WorkoutGraphComponent {
       default:
         return;
     }
+
 
     // Initialize groupedData with all the labels and set values to 0
     for (let d = new Date(startDate); d < endDate; ) {
@@ -193,7 +202,7 @@ export class WorkoutGraphComponent {
           d.setDate(d.getDate() + 1); // Increment by 1 day
           break;
         case 'year':
-          d.setMonth(d.getMonth() + 1); // Increment by 1 day
+          d.setMonth(d.getMonth() + 1); // Increment by 1 month
           break;
       }
     }
@@ -249,5 +258,3 @@ export class WorkoutGraphComponent {
     });
   }
 }
-
-
