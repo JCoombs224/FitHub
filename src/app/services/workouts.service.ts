@@ -155,4 +155,10 @@ export class WorkoutsService {
       groups: workout.groups
     });
   }
+
+  getCuratedWorkoutById(id: string): Observable<any> {
+    return this.afs.collection('curatedWorkouts')
+    .doc(id)
+    .valueChanges();
+  }
 }

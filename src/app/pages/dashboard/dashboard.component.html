@@ -15,19 +15,6 @@
                 </li>
               </ul>
             </div>
-            <!-- Personalized Tips -->
-            <!-- <div class="bg-light p-3 rounded mb-3">
-              <h6 class="custom-text-color mb-3 pb-2 border-bottom border-dark">Personalized Tips</h6>
-              <ul class="list-unstyled tip-container">
-                <ng-container *ngFor="let tip of personalizedTips; let i = index">
-                  <li class="text-dark mb-2">
-                    <div class="tip" [ngClass]="{ 'fade': i === currentTipIndex }">
-                      <i class="faLightbulb text-warning"><fa-icon [icon]="faLightbulb"></fa-icon></i> {{ tip.description }}
-                    </div>
-                  </li>
-                </ng-container>
-              </ul>
-            </div> -->
           </div>
           <!-- Personalized Tips -->
           <div class="p-3 mb-3 text-center">
@@ -48,7 +35,7 @@
         <div class="row d-flex">
           <div class="col-12 col-lg-4 d-flex flex-column">
             <app-my-progress></app-my-progress>
-            <div class="card mt-5 mb-4 w-100">
+            <div class="card mt-4 mb-4 w-100">
               <div class="card-body text-center align-items-center">
                 <h5 class="card-title custom-text-color mt-1 mb-4">Quick Stats</h5>
                 <div class="row">
@@ -92,53 +79,56 @@
                   </div>
                   <div class="row">
                     <div class="col-lg-6 mb-4">
-                      <div class="card h-100">
-                        <img src="assets/Images/MainFeature.jpg" class="card-img-top" alt="Main Feature">
+                      <button class="card h-100" (click)="goToCuratedWorkout(curatedWorkoutID1)">
+                        <img src="assets/Images/Feature1.jpg" class="card-img-top" alt="Main Feature">
                         <div class="card-body">
-                          <h4 class="card-title">Main Feature</h4>
-                          <p class="card-text">Description of the main feature.</p>
+                          <h4 class="card-title mb-4 mt-2">Main Feature</h4>
+                          <p class="card-text">Unleash the power of an invigorating gym leg workout
+                            specifically designed to sculpt and strengthen your lower body. Combining a
+                            variety of dynamic exercises that target your quadriceps, hamstrings, glutes,
+                            and calves, this routine helps you achieve toned, powerful legs.</p>
                         </div>
-                      </div>
+                      </button>
                     </div>
                     <div class="col-lg-6">
                       <div class="row">
                         <div class="col-md-6 mb-4">
-                          <div class="card h-100">
-                            <img src="assets/Images/Feature1.jpg" class="card-img-top" alt="Feature 1">
+                          <button class="card h-100" (click)="goToCuratedWorkout(curatedWorkoutID2)">
+                            <img src="assets/Images/MainFeature.jpg" class="card-img-top" alt="Feature 1">
                             <div class="card-body">
                               <h5 class="card-title">Feature 1</h5>
                               <p class="card-text">Description of the first feature.</p>
                             </div>
-                          </div>
+                          </button>
                         </div>
                         <div class="col-md-6 mb-4">
-                          <div class="card h-100">
+                          <button class="card h-100" (click)="goToCuratedWorkout(curatedWorkoutID3)">
                             <img src="assets/Images/Feature2.jfif" class="card-img-top" alt="Feature 2">
                             <div class="card-body">
                               <h5 class="card-title">Feature 2</h5>
                               <p class="card-text">Description of the second feature.</p>
                             </div>
-                          </div>
+                          </button>
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-md-6 mb-4">
-                          <div class="card h-100">
+                          <button class="card h-100" (click)="goToCuratedWorkout(curatedWorkoutID4)">
                             <img src="assets/Images/Feature3.jpg" class="card-img-top" alt="Feature 3">
                             <div class="card-body">
                               <h5 class="card-title">Feature 3</h5>
                               <p class="card-text">Description of the third feature.</p>
                             </div>
-                          </div>
+                          </button>
                         </div>
                         <div class="col-md-6 mb-4">
-                          <div class="card h-100">
+                          <button class="card h-100" (click)="goToCuratedWorkout(curatedWorkoutID5)">
                             <img src="assets/Images/Feature4.jpg" class="card-img-top" alt="Feature 4">
                             <div class="card-body">
-                              <h5 class="card-title">Feature 4</h5>
-                              <p class="card-text">Description of the fourth feature.</p>
+                              <h5 class="card-title">Home Workout</h5>
+                              <p class="card-text">Discover the perfect home arm workout designed to tone and strengthen your biceps, triceps, using minimal equipment!</p>
                             </div>
-                          </div>
+                          </button>
                         </div>
                       </div>
                     </div>

@@ -1,31 +1,33 @@
 <!-- My Progress Component -->
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <div class="card w-100 align-items-center custom-height">
-        <div class="card-body text-center d-flex flex-column justify-content-center">
-          <h5 class="card-title custom-text-color mt-3 mb-4">My Progress</h5>
-          <div class="progress-wrapper">
-            <svg class="progress-ring" width="200" height="200">
-              <circle class="progress-ring__circle" stroke="lightgrey" stroke-width="30" fill="transparent" r="82" cx="100" cy="100" />
-              <circle class="progress-ring__circle progress-ring__circle--value" stroke="Green" stroke-width="30" [attr.stroke-dasharray]="circumference" [attr.stroke-dashoffset]="strokeDashoffset" fill="transparent" r="82" cx="100" cy="100" />
-            </svg>
-            <span class="progress-value h3 font-weight-bold">{{progressValue}}<sup class="small">%</sup></span>
-          </div>
-          <p class="card-text mt-3">{{progressSummary}}</p>
-          <button routerLink="/progress" class="btn btn-outline-success" data-mdb-ripple-color="dark">View My Progress</button>
-          <div class="goals-group mt-4">
-            <h6 class="font-weight-bold">Weekly Goals</h6>
-            <ul class="list-group">
-              <li class="list-group-item" *ngFor="let goal of goals; let i = index">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" [id]="'goal' + i" [checked]="goal.completed" (change)="completeGoal(i, !goal.completed)">
-                  <label class="form-check-label" [for]="'goal' + i">
-                    {{goal.description}}
-                  </label>
-                </div>
-              </li>
-            </ul>
+<div class="row min-vh-50">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-lg-12">
+        <div class="card w-100 align-items-center custom-height">
+          <div class="card-body text-center d-flex flex-column justify-content-center">
+            <h5 class="card-title custom-text-color mt-3 mb-4">My Progress</h5>
+            <div class="progress-wrapper">
+              <svg class="progress-ring" width="200" height="200">
+                <circle class="progress-ring__circle" stroke="lightgrey" stroke-width="30" fill="transparent" r="82" cx="100" cy="100" />
+                <circle class="progress-ring__circle progress-ring__circle--value" stroke="Green" stroke-width="30" [attr.stroke-dasharray]="circumference" [attr.stroke-dashoffset]="strokeDashoffset" fill="transparent" r="82" cx="100" cy="100" />
+              </svg>
+              <span class="progress-value h3 font-weight-bold">{{progressValue}}<sup class="small">%</sup></span>
+            </div>
+            <p class="card-text mt-3">{{progressSummary}}</p>
+            <button routerLink="/progress" class="btn btn-outline-success" data-mdb-ripple-color="dark">View My Progress</button>
+            <div class="goals-group mt-4">
+              <h6 class="font-weight-bold">Weekly Goals</h6>
+              <ul class="list-group">
+                <li class="list-group-item" *ngFor="let goal of goals; let i = index">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" [id]="'goal' + i" [checked]="goal.completed" (change)="completeGoal(i, !goal.completed)">
+                    <label class="form-check-label" [for]="'goal' + i">
+                      {{goal.description}}
+                    </label>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>

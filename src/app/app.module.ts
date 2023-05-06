@@ -81,7 +81,7 @@ import { WorkoutGraphComponent } from './dashboard-sections/workout-graph/workou
     FavoriteWorkoutsComponent,
     MyProgressComponent,
     GoalsComponent,
-    WorkoutGraphComponent
+    WorkoutGraphComponent,
   ],
 
   imports: [

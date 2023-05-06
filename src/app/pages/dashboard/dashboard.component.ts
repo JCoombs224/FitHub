@@ -61,6 +61,11 @@ export class DashboardComponent implements OnInit {
   progressValue: number;
   circumference = 2 * Math.PI * 82;
   strokeDashoffset: number;
+  curatedWorkoutID1: string;
+  curatedWorkoutID2: string;
+  curatedWorkoutID3: string;
+  curatedWorkoutID4: string;
+  curatedWorkoutID5: string;
 
   constructor(
     private router: Router,
@@ -92,6 +97,10 @@ export class DashboardComponent implements OnInit {
     interval(8000).subscribe(() => {
       this.currentTipIndex = (this.currentTipIndex + 1) % this.personalizedTips.length;
     });
+
+    this.curatedWorkoutID1 = '6lBMRyzuS8B66IqBTeFe';
+    this.curatedWorkoutID2 = 'gPO3yb3CYT0IgDj1yBeV';
+
   }
 
   calculateAverageTimeSpent(completedWorkouts: any[]): void {
@@ -133,5 +142,9 @@ export class DashboardComponent implements OnInit {
 
   calculateStrokeDashoffset(progressValue: number, circleRadius: number): number {
     return (1 - progressValue / 100) * (2 * Math.PI * circleRadius);
+  }
+
+  goToCuratedWorkout(curatedWorkoutID: string): void {
+    this.router.navigate(['/workout', this.curatedWorkoutID1 || this.curatedWorkoutID2 || this.curatedWorkoutID3 || this.curatedWorkoutID4 || this.curatedWorkoutID5]);
   }
 }
