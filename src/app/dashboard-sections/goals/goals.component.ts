@@ -8,7 +8,6 @@ import { GoalsService, Goal } from 'src/app/services/goals.service';
 })
 export class GoalsComponent implements OnInit {
   availableGoals: Goal[] = [];
-  selectedGoals: Goal[] = [];
 
   newGoalDescription: string = '';
 
@@ -20,19 +19,14 @@ export class GoalsComponent implements OnInit {
     });
   }
 
-  onSelectGoal(goal: Goal) {
-    this.selectedGoals.push(goal);
-  }
-
   onCreateNewGoal() {
     if (this.newGoalDescription) {
       const newGoal: Goal = {
         description: this.newGoalDescription,
         completed: false
       };
-      this.selectedGoals.push(newGoal);
+      this.availableGoals.push(newGoal);
       this.newGoalDescription = '';
     }
   }
 }
-

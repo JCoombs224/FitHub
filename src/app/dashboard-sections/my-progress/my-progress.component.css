@@ -67,3 +67,56 @@ h1 {
   transform: translate(-50%, -50%);
 }
 
+.modal {
+  display: none;
+  position: fixed;
+  background-color: rgba(202, 202, 202, 0.9);
+  left: 50%;
+  top: 50%;
+  width: 30%;
+  height: 40%;
+  overflow-y: auto;
+  transform: translate(-50%, -50%);
+  overflow: auto;
+  border-color: rgba(0,0,0,0.5);
+  border-radius: 2%;
+}
+
+.modal-content {
+  background-color: transparent;
+  margin: auto;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border: none;
+}
+
+.modal-title {
+  border-bottom: 2px solid rgba(16, 141, 0, 0.493);
+  padding-bottom: 5px;
+  width: 50%;
+}
+
+.modal-body {
+  flex-grow: 1;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+  border: none;
+}
+
+
+

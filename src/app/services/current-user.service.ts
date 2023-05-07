@@ -141,8 +141,27 @@ export class CurrentUserService {
         sessionStorage.setItem(this.USER_INFO, JSON.stringify(this.user));
       }
     });
-
   }
+
+  updateProfile(data: Partial<any>) {
+    // Merge the new data into the user's profile
+    this.user.profile = { ...this.user.profile, ...data };
+
+    // Update the profile in the Firestore
+    const profileRef: AngularFirestoreDocument<any> = this.afs.doc(
+      `profiles/${this.user.account.profileHandle}`
+    );
+    return profileRef.update(data).then(() => {
+      if (isPlatformBrowser(this.platformId)) {
+        localStorage.removeItem(this.USER_INFO);
+        localStorage.setItem(this.USER_INFO, JSON.stringify(this.user));
+
+        sessionStorage.removeItem(this.USER_INFO);
+        sessionStorage.setItem(this.USER_INFO, JSON.stringify(this.user));
+      }
+    });
+  }
+
 
   setUser(user) {
     this.user.account.uid = user.uid;
@@ -154,7 +173,7 @@ export class CurrentUserService {
     if (user.profileHandle) {
       // Update the profile info and navigate to dashboard if profile exists or create profile if not
       this.fetchProfile(user);
-      setTimeout(() => { 
+      setTimeout(() => {
         this.router.navigate(["/dashboard"]);
        }, 500);
     } else {
@@ -179,7 +198,7 @@ export class CurrentUserService {
       sessionStorage.removeItem(this.USER_INFO);
     }
     setTimeout(() => {
-      this.user = this.BASE_USER;   
+      this.user = this.BASE_USER;
       // this.account.next(this.account_data);
       this.router.navigate(['']);
     }, 500);

@@ -92,7 +92,7 @@ export class ActiveWorkoutComponent implements OnInit, OnDestroy {
         }
         this.checkBoxes.push(temp);
       }
-      
+
       this.title.setTitle(this.workout.name + " | Workout | FitHub");
       this.loading = false;
       this.subscription.unsubscribe();
