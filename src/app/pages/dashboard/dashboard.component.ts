@@ -60,7 +60,7 @@ export class DashboardComponent implements OnInit {
 
   goals: any[] = [];
   progressValue: number;
-  circumference = 2 * Math.PI * 82;
+  circumference = 2 * Math.PI * 120;
   strokeDashoffset: number;
 
   curatedWorkout1: any = {uid: 'WvedR8vbPf4iJ68sWoXC'};
@@ -96,7 +96,6 @@ export class DashboardComponent implements OnInit {
     }
     this.goalsService.getGoals().subscribe((goals) => {
       this.goals = goals;
-      this.updateProgress();
     });
 
     this.workoutsService.getCompletedWorkouts().pipe(take(1)).subscribe((completedWorkouts) => {
@@ -127,6 +126,8 @@ export class DashboardComponent implements OnInit {
     this.workoutsService.getCuratedWorkoutById('5QzG6J6VFPNsS1KIXSGY').subscribe(workout => {
       this.curatedWorkout5 = {...this.curatedWorkout5, ...workout};
     });
+
+    this.updateProgress();
   }
 
   calculateAverageTimeSpent(completedWorkouts: any[]): void {
@@ -156,18 +157,19 @@ export class DashboardComponent implements OnInit {
   completeGoal(goalIndex: number, completed: boolean): void {
     this.goalsService.completeGoal(goalIndex, completed).then(() => {
       this.goals[goalIndex].completed = completed;
-      this.updateProgress();
     });
+
+    this.updateProgress();
   }
 
   updateProgress(): void {
     const completedGoals = this.goals.filter((goal) => goal.completed).length;
     this.progressValue = (completedGoals / this.goals.length) * 100;
-    this.strokeDashoffset = this.calculateStrokeDashoffset(this.progressValue, 82);
+    this.strokeDashoffset = this.calculateStrokeDashoffset(this.progressValue);
   }
 
-  calculateStrokeDashoffset(progressValue: number, circleRadius: number): number {
-    return (1 - progressValue / 100) * (2 * Math.PI * circleRadius);
+  calculateStrokeDashoffset(progressValue: number): number {
+    return (1 - progressValue / 100) * this.circumference;
   }
 
   goToCuratedWorkout(workoutId: string): void {

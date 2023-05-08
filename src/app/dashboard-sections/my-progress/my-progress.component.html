@@ -1,28 +1,38 @@
-<!-- My Progress Component -->
 <div class="row min-vh-50">
   <div class="container">
     <div class="row">
       <div class="col-12 col-lg-12">
         <div class="card w-100 align-items-center custom-height">
           <div class="card-body text-center d-flex flex-column justify-content-center">
-            <h5 class="card-title custom-text-color mt-3 mb-4">My Progress</h5>
-            <div class="progress-wrapper">
+            <h2 class="card-title custom-text-color mb-4">My Progress</h2>
+            <div class="progress-wrapper align-items-center" >
               <svg class="progress-ring" width="400" height="400">
-                <circle class="progress-ring__circle" stroke="lightgrey" stroke-width="40" fill="transparent" r="120" cx="200" cy="200" />
-                <circle class="progress-ring__circle progress-ring__circle--value" stroke="Green" stroke-width="40" [attr.stroke-dasharray]="circumference" [attr.stroke-dashoffset]="strokeDashoffset" fill="transparent" r="120" cx="200" cy="200" />
+                <circle class="progress-ring__circle" stroke="lightgrey" stroke-width="50" fill="transparent" r="120" cx="200" cy="200" />
+                <circle
+                  class="progress-ring__circle progress-ring__circle--value"
+                  stroke="Green"
+                  stroke-width="50"
+                  stroke-dasharray="755"
+                  [attr.stroke-dashoffset]="calculateStrokeDashoffset(progressValue)"
+                  fill="transparent"
+                  r="120"
+                  cx="200"
+                  cy="200">
+                </circle>
               </svg>
               <span class="progress-value h3 font-weight-bold">{{progressValue}}<sup class="small">%</sup></span>
             </div>
             <p class="card-text mt-3">{{progressSummary}}</p>
-            <button class="btn btn-outline-success mt-3" data-mdb-ripple-color="dark" (click)="openGoalsModal()">Select Goals</button>
+            <button class="btn btn-outline-success select-goals-btn" data-mdb-ripple-color="dark" (click)="openGoalsModal()"><h5>Select Your Goals!</h5></button>
             <div class="goals-group mt-4">
               <!-- Display selected goals -->
-              <div class="selected-goals-container">
-                <h5>Your Goals</h5>
+              <div class="selected-goals-container mt-5">
+                <h4>Your Goals</h4>
+                <p *ngIf="selectedGoals.length === 0">No goals selected</p>
                 <ul class="list-group">
                   <li class="list-group-item" *ngFor="let goal of selectedGoals; let i = index">
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" [id]="'selectedGoal' + i" [(ngModel)]="goal.completed" (ngModelChange)="updateProgress()">
+                      <input class="form-check-input" type="checkbox" [id]="'selectedGoal' + i" [(ngModel)]="goal.completed" (ngModelChange)="completeGoal(i, goal.completed); updateProgress();">
                       <label class="form-check-label" [for]="'selectedGoal' + i">
                         {{goal.description}}
                       </label>
@@ -41,16 +51,16 @@
 <div #goalsModal class="modal">
   <div class="modal-content">
     <div class="modal-header">
-      <h5 class="modal-title m-2">Select Goals</h5>
+      <h3 class="modal-title m-2">Select Goals</h3>
       <button type="button" class="btn-close m-2" (click)="closeGoalsModal()"></button>
     </div>
     <!-- Available Goals -->
     <div class="modal-body">
-      <h6 class="font-weight-bold mb-2">Select your goals</h6>
+      <h5 class="font-weight-bold mb-2">Select your goals (Choose up to 5)</h5>
       <ul class="list-group mb-4">
         <li class="list-group-item" *ngFor="let goal of availableGoals; let i = index">
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" [id]="'availableGoal' + i" [(ngModel)]="goal.selected" (change)="toggleGoalSelection(i)" [disabled]="goal.selected !== true && numberOfSelectedGoals() >= 8">
+            <input class="form-check-input" type="checkbox" [id]="'availableGoal' + i" [(ngModel)]="goal.selected" (change)="toggleGoalSelection(i)" [disabled]="goal.selected !== true && numberOfSelectedGoals() >= 5">
             <label class="form-check-label" [for]="'availableGoal' + i">
               {{goal.description}}
             </label>
@@ -58,7 +68,8 @@
         </li>
       </ul>
       <!-- Selected Goals -->
-      <h6 class="font-weight-bold">Your goals</h6>
+      <h5 class="font-weight-bold">Selected Goals</h5>
+      <p *ngIf="selectedGoals.length === 0">No goals selected</p>
       <ul class="list-group">
         <li class="list-group-item" *ngFor="let goal of selectedGoals; let i = index">
           <div class="form-check">

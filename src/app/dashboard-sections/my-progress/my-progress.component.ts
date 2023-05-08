@@ -18,7 +18,7 @@ import { Observable } from 'rxjs';
 })
 export class MyProgressComponent {
   progressSummary = 'Track your progress and reach your fitness goals!';
-  progressValue: number;
+  progressValue = 0;
   circumference = 2 * Math.PI * 120;
   strokeDashoffset: number;
 
@@ -50,6 +50,7 @@ export class MyProgressComponent {
     });
 
     this.loadSelectedGoals();
+    this.updateProgress();
   }
 
   numberOfSelectedGoals(): number {
@@ -64,7 +65,7 @@ export class MyProgressComponent {
   toggleGoalSelection(index: number) {
     const goal = this.availableGoals[index];
     if (goal.selected) {
-      this.selectedGoals.push(goal);
+      this.selectedGoals.push({ ...goal, completed: false }); // Add the goal to the selectedGoals array with completed set to false
       goal.selected = false;
     } else {
       const selectedIndex = this.selectedGoals.findIndex(selectedGoal => selectedGoal.id === goal.id);
@@ -73,6 +74,7 @@ export class MyProgressComponent {
       }
     }
   }
+
 
   @ViewChild('goalsModal', { static: false }) goalsModal: ElementRef;
 
@@ -127,34 +129,40 @@ export class MyProgressComponent {
   }
 
   completeGoal(goalIndex: number, completed: boolean): void {
-    this.goalsService.completeGoal(goalIndex, completed).then(() => {
-      const goal = this.selectedGoals[goalIndex];
-      goal.completed = completed;
+    const goal = this.selectedGoals[goalIndex];
+    goal.completed = completed;
 
-      if (completed) {
-        // Remove the goal from selectedGoals and add it to completedGoals
-        this.selectedGoals.splice(goalIndex, 1);
-        this.completedGoals.push(goal);
-      } else {
-        // Remove the goal from completedGoals and add it back to selectedGoals
-        const completedGoalIndex = this.completedGoals.findIndex(
-          (completedGoal) => completedGoal.id === goal.id
-        );
-        this.completedGoals.splice(completedGoalIndex, 1);
-        this.selectedGoals.push(goal);
-      }
-
-      this.updateProgress();
-    });
+    if (completed) {
+      // Remove the goal from selectedGoals and add it to completedGoals
+      this.selectedGoals.splice(goalIndex, 1);
+      this.completedGoals.push(goal);
+      // Update the user's profile
+      this.currentUserService.updateProfile({
+        goals: this.selectedGoals,
+        completedGoals: this.completedGoals,
+      });
+    }
   }
+
+
 
   updateProgress(): void {
-    const completedGoals = this.selectedGoals.filter((goal) => goal.completed).length;
-    this.progressValue = (completedGoals / this.selectedGoals.length) * 100;
-    this.strokeDashoffset = this.calculateStrokeDashoffset(this.progressValue, 120);
+    const totalGoals = this.selectedGoals.length + this.completedGoals.length;
+    if (totalGoals === 0) {
+      this.progressValue = 0;
+      this.strokeDashoffset = this.circumference;
+    } else {
+      const completedGoals = this.completedGoals.length;
+      this.progressValue = (completedGoals / totalGoals) * 100;
+      this.strokeDashoffset = this.calculateStrokeDashoffset(this.progressValue);
+    }
   }
 
-  calculateStrokeDashoffset(progressValue: number, circleRadius: number): number {
-    return (1 - progressValue / 100) * (2 * Math.PI * circleRadius);
+
+  calculateStrokeDashoffset(progressValue: number): number {
+    if (progressValue === 0) {
+      return this.circumference;
+    }
+    return (1 - progressValue / 100) * this.circumference;
   }
 }

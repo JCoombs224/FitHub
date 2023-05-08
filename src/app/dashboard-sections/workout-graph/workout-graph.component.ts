@@ -66,7 +66,7 @@ export class WorkoutGraphComponent {
 
   public allWorkoutData: any[] = [];
 
-  ngOnInit(): void {
+    ngOnInit(): void {
     console.log(this.currentUserService.user);
     this.title.setTitle('Dashboard | FitHub');
     if (this.currentUserService.user.profile.profileHandle == '') {
@@ -97,8 +97,8 @@ export class WorkoutGraphComponent {
 
       // Update the chart based on the new data
       const currentDate = new Date();
-      const startDate = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
-      const filteredData = this.allWorkoutData.filter(workout => new Date(workout.date) >= startDate);
+      const startOfWeek = this.getStartOfWeek(currentDate); // <-- Calculate the start of the week (Sunday)
+      const filteredData = this.allWorkoutData.filter(workout => new Date(workout.date) >= startOfWeek); // <-- Filter workouts based on the startOfWeek
       console.log('Filtered Data:', filteredData); // Debug: log the filteredData
 
       const groupedData = this.groupDataByRange(filteredData, this.selectedTimeRange);
@@ -109,6 +109,13 @@ export class WorkoutGraphComponent {
     });
 
     this.updateTimeline();
+  }
+
+
+  getStartOfWeek(date: Date): Date {
+    const dayOfWeek = date.getDay(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
+    const startOfWeek = new Date(date.getTime() - dayOfWeek * 24 * 60 * 60 * 1000); // Calculate Sunday
+    return startOfWeek;
   }
 
   calculateTimeSpent(timeToComplete: string, percentCompleted: number): number {
@@ -243,12 +250,16 @@ export class WorkoutGraphComponent {
   }
 
   updateTimeline() {
-    // Reset all days to inactive
-    const days = document.querySelectorAll('.timeline-day');
-    days.forEach(day => day.classList.remove('active'));
+    // Get the start of the week (Sunday)
+    const startOfWeek = this.getStartOfWeek(new Date());
 
-    // Set active days based on completed workouts
-    this.allWorkoutData.forEach(workout => {
+    // Filter workouts based on the start of the week
+    const currentWeekWorkouts = this.allWorkoutData.filter(workout =>
+      new Date(workout.date) >= startOfWeek
+    );
+
+    // Set active days based on completed workouts for the current week
+    currentWeekWorkouts.forEach(workout => {
       const workoutDate = new Date(workout.date);
       const day = workoutDate.toLocaleString('en-US', { weekday: 'long' });
       const dayElement = document.querySelector(`#timeline-${day.toLowerCase()}`);

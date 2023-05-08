@@ -3,7 +3,7 @@
 }
 
 .card.custom-height {
-  min-height: 50vh;
+  min-height: 70vh;
 }
 
 .custom-text-color {
@@ -27,6 +27,7 @@ h1 {
 
 .card-title {
   font-weight: bold;
+  top:0;
 }
 
 .form-check {
@@ -66,6 +67,25 @@ h1 {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.select-goals-btn {
+  border-radius: 4rem;
+  padding: 0.4rem 1rem;
+  border: rgb(11, 128, 0) solid 2px;
+}
+
+.select-goals-btn:hover {
+  background-color: rgba(11, 128, 0, 0.829);
+  color: white;
+  cursor: pointer;
+}
+/* .progress-summary-container {
+  padding-bottom: 50%;
+}
+
+.goals-group {
+  padding-bottom: 50%;
+} */
 
 .modal {
   display: none;

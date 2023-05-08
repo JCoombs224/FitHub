@@ -47,7 +47,6 @@ import { NgChartsModule } from 'ng2-charts';
 import { EquipmentModalComponent } from './modals/equipment-modal/equipment-modal.component';
 import { ConfirmDeleteModalComponent } from './modals/confirm-delete-modal/confirm-delete-modal.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
-import { ProgressComponent } from './pages/progress/progress.component';
 import { ViewWorkoutComponent } from './pages/view-workout/view-workout.component';
 import { ActiveWorkoutComponent } from './pages/active-workout/active-workout.component';
 import { NgPipesModule } from 'ngx-pipes';
@@ -56,7 +55,6 @@ import { MyProgressComponent } from 'src/app/dashboard-sections/my-progress/my-p
 import { GoalsComponent } from 'src/app/dashboard-sections/goals/goals.component';
 import { WorkoutGraphComponent } from './dashboard-sections/workout-graph/workout-graph.component';
 import { FeedComponent } from './pages/social-feed/feed/feed.component';
-// import { GoalSelectionModalComponent } from './goal-selection-modal/goal-selection-modal.component';
 
 @NgModule({
   declarations: [
@@ -77,13 +75,11 @@ import { FeedComponent } from './pages/social-feed/feed/feed.component';
     AddExerciseModalComponent,
     EquipmentModalComponent,
     ConfirmDeleteModalComponent,
-    ProgressComponent,
     ViewWorkoutComponent,
     ActiveWorkoutComponent,
     FavoriteWorkoutsComponent,
     MyProgressComponent,
     GoalsComponent,
-    // GoalSelectionModalComponent,
     WorkoutGraphComponent,
     FeedComponent,
   ],

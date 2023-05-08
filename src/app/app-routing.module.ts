@@ -12,7 +12,6 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { CreateWorkoutComponent } from './pages/create-workout/create-workout.component';
 import { CreatePostComponent } from './pages/create-post/create-post.component';
 import { EditProfileComponent } from './pages/edit-profile/edit-profile.component';
-import { ProgressComponent } from './pages/progress/progress.component';
 import { ViewWorkoutComponent } from './pages/view-workout/view-workout.component';
 import { ActiveWorkoutComponent } from './pages/active-workout/active-workout.component';
 
@@ -32,7 +31,6 @@ const routes: Routes = [
   { path: 'active-workout/:profile/:uid', component: ActiveWorkoutComponent, canActivate: [AuthGuard]}, // Route for a workout that is currently in progress
   { path: 'profile/:name/create-post', component: CreatePostComponent, canActivate: [AuthGuard]},
   { path: 'profile/:name/edit-profile', component: EditProfileComponent, canActivate: [AuthGuard]},
-  { path: 'progress', component: ProgressComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({
