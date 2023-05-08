@@ -81,7 +81,7 @@ import { FeedComponent } from './pages/social-feed/feed/feed.component';
     MyProgressComponent,
     GoalsComponent,
     WorkoutGraphComponent,
-    FeedComponent,
+    FeedComponent
   ],
 
   imports: [
