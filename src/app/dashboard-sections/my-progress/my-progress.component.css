@@ -91,16 +91,18 @@ h1 {
   display: none;
   position: fixed;
   background-color: rgba(202, 202, 202, 0.9);
-  left: 50%;
-  top: 50%;
+  left: 35%;
+  top: 30%;
   width: 30%;
   height: 40%;
   overflow-y: auto;
-  transform: translate(-50%, -50%);
+  align-items: center;
+  justify-content: center;
   overflow: auto;
   border-color: rgba(0,0,0,0.5);
   border-radius: 2%;
 }
+
 
 .modal-content {
   background-color: transparent;

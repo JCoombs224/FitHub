@@ -10,6 +10,8 @@ import { WorkoutsService } from 'src/app/services/workouts.service';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { combineLatest } from 'rxjs';
+
 
 @Component({
   selector: 'app-my-progress',
@@ -18,7 +20,7 @@ import { Observable } from 'rxjs';
 })
 export class MyProgressComponent {
   progressSummary = 'Track your progress and reach your fitness goals!';
-  progressValue = 0;
+  progressValue: number;
   circumference = 2 * Math.PI * 120;
   strokeDashoffset: number;
 
@@ -75,7 +77,6 @@ export class MyProgressComponent {
     }
   }
 
-
   @ViewChild('goalsModal', { static: false }) goalsModal: ElementRef;
 
   openGoalsModal(): void {
@@ -97,6 +98,9 @@ export class MyProgressComponent {
         this.availableGoals.forEach(goal => {
           goal.selected = this.selectedGoals.some(selectedGoal => selectedGoal.id === goal.id);
         });
+
+        // Update the progress
+        this.updateProgress();
       }
     });
   }
@@ -105,6 +109,9 @@ export class MyProgressComponent {
     this.currentUserService.account.subscribe((user) => {
       if (user.profile.completedGoals) {
         this.completedGoals = user.profile.completedGoals;
+
+        // Update the progress
+        this.updateProgress();
       }
     });
   }
@@ -136,28 +143,43 @@ export class MyProgressComponent {
       // Remove the goal from selectedGoals and add it to completedGoals
       this.selectedGoals.splice(goalIndex, 1);
       this.completedGoals.push(goal);
-      // Update the user's profile
-      this.currentUserService.updateProfile({
-        goals: this.selectedGoals,
-        completedGoals: this.completedGoals,
-      });
+    } else {
+      // Remove the goal from completedGoals and add it back to selectedGoals
+      const completedIndex = this.completedGoals.findIndex(completedGoal => completedGoal.id === goal.id);
+      if (completedIndex > -1) {
+        this.completedGoals.splice(completedIndex, 1);
+        this.selectedGoals.push(goal);
+      }
     }
+
+    // Update the user's profile
+    this.currentUserService.updateProfile({
+      goals: this.selectedGoals,
+      completedGoals: this.completedGoals,
+    });
+
+    // Update the progress
+    this.updateProgress();
   }
-
-
 
   updateProgress(): void {
     const totalGoals = this.selectedGoals.length + this.completedGoals.length;
     if (totalGoals === 0) {
       this.progressValue = 0;
       this.strokeDashoffset = this.circumference;
-    } else {
+    }
+
+    else {
       const completedGoals = this.completedGoals.length;
       this.progressValue = (completedGoals / totalGoals) * 100;
+      if (this.progressValue === Math.floor(this.progressValue)) {
+        this.progressValue = parseInt(this.progressValue.toFixed(0));
+      } else {
+        this.progressValue = parseFloat(this.progressValue.toFixed(2));
+      }
       this.strokeDashoffset = this.calculateStrokeDashoffset(this.progressValue);
     }
   }
-
 
   calculateStrokeDashoffset(progressValue: number): number {
     if (progressValue === 0) {
@@ -165,4 +187,5 @@ export class MyProgressComponent {
     }
     return (1 - progressValue / 100) * this.circumference;
   }
+
 }

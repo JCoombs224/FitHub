@@ -126,8 +126,6 @@ export class DashboardComponent implements OnInit {
     this.workoutsService.getCuratedWorkoutById('5QzG6J6VFPNsS1KIXSGY').subscribe(workout => {
       this.curatedWorkout5 = {...this.curatedWorkout5, ...workout};
     });
-
-    this.updateProgress();
   }
 
   calculateAverageTimeSpent(completedWorkouts: any[]): void {
@@ -158,7 +156,6 @@ export class DashboardComponent implements OnInit {
     this.goalsService.completeGoal(goalIndex, completed).then(() => {
       this.goals[goalIndex].completed = completed;
     });
-
     this.updateProgress();
   }
 

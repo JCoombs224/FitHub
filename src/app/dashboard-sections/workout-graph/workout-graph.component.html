@@ -1,12 +1,12 @@
 <h5 class="card-title custom-text-color mb-1 mt-3">Weekly Workout Tracker</h5>
 <div class="timeline-container">
-  <div id="timeline-sunday" class="timeline-day" data-day="Sunday">S</div>
-  <div id="timeline-monday" class="timeline-day" data-day="Monday">M</div>
-  <div id="timeline-tuesday" class="timeline-day" data-day="Tuesday">T</div>
-  <div id="timeline-wednesday" class="timeline-day" data-day="Wednesday">W</div>
-  <div id="timeline-thursday" class="timeline-day" data-day="Thursday">Th</div>
-  <div id="timeline-friday" class="timeline-day" data-day="Friday">F</div>
-  <div id="timeline-saturday" class="timeline-day" data-day="Saturday">S</div>
+  <div *ngFor="let day of ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']"
+       [ngClass]="{ 'active': isWorkoutCompletedOnDay(day) }"
+       id="timeline-{{ day.toLowerCase() }}"
+       class="timeline-day"
+       [attr.data-day]="day">
+    {{ day === 'Thursday' ? 'Th' : day.charAt(0) }}
+  </div>
 </div>
 <h5 class="card-title custom-text-color mb-4">Workout History</h5>
 <div class="d-flex justify-content-center">

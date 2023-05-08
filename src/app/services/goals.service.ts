@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { map, first } from 'rxjs/operators';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { AuthService } from './auth.service';
 import { CurrentUserService } from 'src/app/services/current-user.service';
 
@@ -34,8 +34,12 @@ export class GoalsService {
   }
 
   getGoals() {
+    if (!this.goalsDoc) return of([]);
     return this.goalsDoc.valueChanges().pipe(
       map((data: any) => {
+        if (!data || !data.Goals) {
+          return [];
+        }
         const goalsArray = data.Goals.map((goalDescription: string, index: number) => {
           return {
             description: goalDescription,
@@ -45,6 +49,7 @@ export class GoalsService {
         return goalsArray;
       })
     );
+
   }
 
   async completeGoal(goalIndex: number, completed: boolean): Promise<void> {

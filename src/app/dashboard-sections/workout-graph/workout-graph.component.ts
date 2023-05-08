@@ -108,7 +108,7 @@ export class WorkoutGraphComponent {
       this.changeTimeRange('week');
     });
 
-    this.updateTimeline();
+    this.isWorkoutCompletedOnDay('day');
   }
 
 
@@ -153,7 +153,7 @@ export class WorkoutGraphComponent {
     console.log('Grouped Data:', groupedData); // Debug: log the groupedData
 
     this.updateChartData(groupedData);
-    this.updateTimeline();
+    this.isWorkoutCompletedOnDay('day');
   }
 
   groupDataByRange(data: any[], range: string) {
@@ -249,23 +249,20 @@ export class WorkoutGraphComponent {
     console.log('Updated Bar Chart Data:', this.barChartData);
   }
 
-  updateTimeline() {
-    // Get the start of the week (Sunday)
+  isWorkoutCompletedOnDay(day: string): boolean {
     const startOfWeek = this.getStartOfWeek(new Date());
+    const dayIndex = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].indexOf(day);
+    const targetDate = new Date(startOfWeek.getTime() + dayIndex * 24 * 60 * 60 * 1000);
 
-    // Filter workouts based on the start of the week
-    const currentWeekWorkouts = this.allWorkoutData.filter(workout =>
-      new Date(workout.date) >= startOfWeek
-    );
-
-    // Set active days based on completed workouts for the current week
-    currentWeekWorkouts.forEach(workout => {
+    return this.allWorkoutData.some(workout => {
       const workoutDate = new Date(workout.date);
-      const day = workoutDate.toLocaleString('en-US', { weekday: 'long' });
-      const dayElement = document.querySelector(`#timeline-${day.toLowerCase()}`);
-      if (dayElement) {
-        dayElement.classList.add('active');
-      }
+      return (
+        workoutDate.getFullYear() === targetDate.getFullYear() &&
+        workoutDate.getMonth() === targetDate.getMonth() &&
+        workoutDate.getDate() === targetDate.getDate()
+      );
     });
   }
+
+
 }

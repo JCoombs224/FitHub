@@ -83,6 +83,7 @@
       <!-- Completed Goals -->
       <div class="completed-goals-container mt-3">
         <h5>Completed Goals</h5>
+        <p *ngIf="completedGoals.length === 0">You don't have any completed goals</p>
         <ul class="list-group">
           <li class="list-group-item" *ngFor="let goal of completedGoals; let i = index">
             <del>{{goal.description}}</del>
