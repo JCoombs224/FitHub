@@ -29,6 +29,18 @@ export class WorkoutGraphComponent {
 
     public barChartOptions: ChartOptions = {
       responsive: true,
+      scales: {
+        y: {
+          ticks: {
+            callback: (value) => {
+              const numValue = Number(value);
+              const minutes = Math.floor(numValue / 60);
+              const seconds = numValue % 60;
+              return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            },
+          },
+        },
+      },
       plugins: {
         tooltip: {
           callbacks: {
