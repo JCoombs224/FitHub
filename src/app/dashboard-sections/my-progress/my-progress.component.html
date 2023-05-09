@@ -4,7 +4,7 @@
       <div class="col-12 col-lg-12">
         <div class="card w-100 align-items-center custom-height">
           <div class="card-body text-center d-flex flex-column justify-content-center">
-            <h2 class="card-title custom-text-color mb-4">My Progress</h2>
+            <h2 class="card-title custom-text mb-4">My Progress</h2>
             <div class="progress-wrapper align-items-center" >
               <svg class="progress-ring" width="400" height="400">
                 <circle class="progress-ring__circle" stroke="lightgrey" stroke-width="50" fill="transparent" r="120" cx="200" cy="200" />
@@ -27,7 +27,7 @@
             <div class="goals-group mt-4">
               <!-- Display selected goals -->
               <div class="selected-goals-container mt-5">
-                <h4>Your Goals</h4>
+                <h4 class="custom-text">Your Goals</h4>
                 <p *ngIf="selectedGoals.length === 0">No goals selected</p>
                 <ul class="list-group">
                   <li class="list-group-item" *ngFor="let goal of selectedGoals; let i = index">

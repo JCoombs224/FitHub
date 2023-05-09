@@ -120,6 +120,18 @@ export class WorkoutsService {
         timeToComplete: data.elapsedTime,
         dateCompleted: data.date,
       })
+    }).then(() => {
+      this.getCompletedWorkouts().subscribe(completedWorkouts => {
+        if (completedWorkouts.length === 1) {
+          this.addAchievement('Completed your first workout');
+        }
+      });
+    });
+  }
+
+  addAchievement(description: string) {
+    return this.afs.collection('profiles').doc(this.currentUser.user.profile.profileHandle).update({
+      achievements: firebase.firestore.FieldValue.arrayUnion({ description })
     });
   }
 

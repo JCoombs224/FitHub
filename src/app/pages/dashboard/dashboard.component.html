@@ -4,21 +4,21 @@
       <div class="col-12 col-lg-2 d-flex feed-section">
         <div class="card w-100 d-flex flex-column mb-4 feed-card">
           <div class="card-body text-center">
-            <h5 class="card-title custom-text-color mt-3 mb-4">Feed</h5>
+            <h5 class="card-title custom-text mt-3 mb-4">Feed</h5>
             <app-favorite-workouts></app-favorite-workouts>
             <!-- Goals and Achievements -->
-            <div class="bg-light p-3 rounded mb-3">
-              <h6 class="custom-text-color mb-3 pb-2 border-bottom border-dark">Recent Achievements</h6>
+            <div *ngIf="recentAchievements.length > 0" class="bg-light p-3 rounded mb-3">
+              <h6 class="custom-text mb-3 pb-2 border-bottom border-dark">Recent Achievements</h6>
               <ul class="list-unstyled">
-                <li *ngFor="let achievement of recentAchievements" class="text-dark mb-2">
-                  <i class="faAward text-warning"><fa-icon [icon]="faAward" ></fa-icon></i> {{ achievement.description }}
+                <li *ngFor="let achievement of recentAchievements">
+                  <i class="faAward text-warning"><fa-icon [icon]="faAward"></fa-icon></i> {{ achievement.description }}
                 </li>
               </ul>
             </div>
           </div>
           <!-- Personalized Tips -->
           <div class="p-3 mb-3 text-center">
-            <h6 class="custom-text-color mb-3 pb-2 border-bottom border-dark">Personalized Tips</h6>
+            <h6 class="custom-text mb-3 pb-2 border-bottom border-dark">Personalized Tips</h6>
             <ul class="list-unstyled tip-container">
               <ng-container *ngFor="let tip of personalizedTips; let i = index">
                 <li class="text-dark">
@@ -37,12 +37,12 @@
             <app-my-progress></app-my-progress>
             <div class="card mt-4 mb-4 w-100">
               <div class="card-body text-center align-items-center">
-                <h5 class="card-title custom-text-color mt-1 mb-4">Quick Stats</h5>
+                <h5 class="card-title custom-text mt-1 mb-4">Quick Stats</h5>
                 <div class="row">
                   <div class="col-6 col-lg-6">
                     <div class="card mb-2">
                       <div class="card-body">
-                        <h6 class="card-subtitle mb-2 custom-text-color mb-3 pb-2 border-bottom border-dark">Average Time per Workout</h6>
+                        <h6 class="card-subtitle mb-2 custom-text mb-3 pb-2 border-bottom border-dark">Average Time per Workout</h6>
                         <p class="card-text">{{ averageTimeSpent }}</p>
                       </div>
                     </div>
@@ -50,7 +50,7 @@
                   <div class="col-6 col-lg-6">
                     <div class="card mb-2">
                       <div class="card-body">
-                        <h6 class="card-subtitle mb-2 custom-text-color mb-3 pb-2 border-bottom border-dark">Most frequently used workout</h6>
+                        <h6 class="card-subtitle mb-2 custom-text mb-3 pb-2 border-bottom border-dark">Most frequently used workout</h6>
                         <p class="card-text">{{ mostUsedWorkout }}</p>
                       </div>
                     </div>
@@ -74,7 +74,7 @@
                 <div class="container mt-5">
                   <div class="row">
                     <div class="col-12 text-center">
-                      <h1 class="mb-5">Explore Our Features</h1>
+                      <h1 class="mb-5 custom-text">Explore Our Features</h1>
                     </div>
                   </div>
                   <div class="row">
@@ -82,7 +82,7 @@
                       <button class="card h-100" (click)="goToCuratedWorkout(curatedWorkout1.uid)">
                         <img src="assets/Images/Feature1.jpg" class="card-img-top" alt="Main Feature">
                         <div class="card-body">
-                          <h4 class="card-title mb-4 mt-2">Gluteus to the Maximus</h4>
+                          <h4 class="card-title mb-4 mt-2 custom-text">Gluteus to the Maximus</h4>
                           <p class="card-text">Unleash the power of an invigorating gym leg workout
                             specifically designed to sculpt and strengthen your lower body. Combining a
                             variety of dynamic exercises that target your quadriceps, hamstrings, glutes,
@@ -96,7 +96,7 @@
                           <button class="card h-100" (click)="goToCuratedWorkout(curatedWorkout2.uid)">
                             <img src="assets/Images/MainFeature.jpg" class="card-img-top" alt="Feature 1">
                             <div class="card-body">
-                              <h5 class="card-title">Cardio Crusader</h5>
+                              <h5 class="card-title custom-text">Cardio Crusader</h5>
                               <p class="card-text">Rev up your heart and boost your endurance with our invigorating cardio!</p>
                             </div>
                           </button>
@@ -105,7 +105,7 @@
                           <button class="card h-100" (click)="goToCuratedWorkout(curatedWorkout3.uid)">
                             <img src="assets/Images/Feature2.jfif" class="card-img-top" alt="Feature 2">
                             <div class="card-body">
-                              <h5 class="card-title">Daily Dose of Motion</h5>
+                              <h5 class="card-title custom-text">Daily Dose of Motion</h5>
                               <p class="card-text">Unlock your body's potential with our Functional Training! This workout approach
                                 focuses on strengthening the muscles you use every day by mimicking real-life movements and activities.</p>
                             </div>
@@ -117,7 +117,7 @@
                           <button class="card h-100" (click)="goToCuratedWorkout(curatedWorkout4.uid)">
                             <img src="assets/Images/Feature3.jpg" class="card-img-top" alt="Feature 3">
                             <div class="card-body">
-                              <h5 class="card-title">Press for Success</h5>
+                              <h5 class="card-title custom-text">Press for Success</h5>
                               <p class="card-text">Unlock the potential of your chest muscles with our tailored
                                 chest workout, designed to engage and strengthen your pectorals for a powerful,
                                 chiseled upper body!</p>
@@ -128,7 +128,7 @@
                           <button class="card h-100" (click)="goToCuratedWorkout(curatedWorkout5.uid)">
                             <img src="assets/Images/Feature4.jpg" class="card-img-top" alt="Feature 4">
                             <div class="card-body">
-                              <h5 class="card-title">Household Guns</h5>
+                              <h5 class="card-title custom-text">Household Guns</h5>
                               <p class="card-text">Discover the perfect home arm workout designed to tone and
                                 strengthen your biceps, triceps, using minimal equipment!</p>
                             </div>

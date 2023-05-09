@@ -6,7 +6,7 @@
   min-height: 70vh;
 }
 
-.custom-text-color {
+.custom-text {
   color: #0b8200;
 }
 
@@ -162,6 +162,38 @@ h1 {
 
   .modal-content {
     height: 80%;
+  }
+
+  .modal-title {
+    width: 60%;
+  }
+}
+
+@media (max-width: 1500px) {
+  .card-text {
+    width : 90%;
+    margin-left: 5%;
+  }
+
+  .select-goals-btn {
+    width: 100%;
+    max-width: 20rem;
+    margin: 0.5rem auto;
+  }
+
+  .modal {
+    left: 25%;
+    top: 15%;
+    width: 50%;
+    height: 80%;
+    border-radius: 0;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-content {
+    height: 80%;
+    margin-top: 5%;
   }
 
   .modal-title {

@@ -131,6 +131,8 @@ export class CurrentUserService {
       this.user.profile.following = profile.following;
       this.user.profile.posts = profile.posts;
       this.user.profile.completedWorkouts = profile.completedWorkouts;
+      this.user.profile.achievements = profile.achievements;
+      this.user.profile.completedGoals = profile.completedGoals;
       this.user.profile.isPrivate= profile.isPrivate;
 
       if (isPlatformBrowser(this.platformId)) {

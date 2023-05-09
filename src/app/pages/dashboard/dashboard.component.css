@@ -6,7 +6,7 @@
   min-height: 80vh;
 }
 
-.custom-text-color {
+.custom-text {
   color: #0b8200;
 }
 
@@ -115,4 +115,44 @@ h6 {
   }
 }
 
+/* @media (max-width: 1500px) {
+  .feed-section {
+    height: auto;
+    width: 20%;
+  }
 
+  .feed-card {
+    height: auto;
+  }
+
+  .custom-text {
+    font-size: 1rem;
+  }
+
+  .main-content {
+    height: auto;
+    width: 100%;
+    padding-left: 20%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .feed-section {
+    height: auto;
+    width: 25%;
+  }
+
+  .feed-card {
+    height: auto;
+  }
+
+  .custom-text {
+    font-size: 0.9rem;
+  }
+
+  .main-content {
+    height: auto;
+    width: 100%;
+    padding-left: 25%;
+  }
+} */

@@ -1,11 +1,9 @@
-.fav-workout {
-  cursor: pointer;
-}
-
-.custom-text-color {
+.custom-text {
   color: #0b8200;
 }
 
-h6 {
-  font-weight: bold;
+@media (max-width: 1500px) {
+  .custom-text {
+    font-size: 1rem;
+  }
 }

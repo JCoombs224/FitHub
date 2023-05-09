@@ -29,7 +29,9 @@ export class ProfileService {
       workouts: [{}],
       followers: [],
       following: [],
-      posts: []
+      posts: [],
+      achievements: [],
+      completedGoals: []
     };
   }
 

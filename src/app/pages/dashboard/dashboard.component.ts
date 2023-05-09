@@ -11,6 +11,7 @@ import { GoalsService } from 'src/app/services/goals.service';
 import { WorkoutsService } from 'src/app/services/workouts.service';
 import { take } from 'rxjs/operators';
 import { interval } from 'rxjs';
+import { ProfileService } from 'src/app/services/profile.service';
 
 
 @Component({
@@ -29,10 +30,7 @@ export class DashboardComponent implements OnInit {
   faAward = faAward;
   faLightbulb = faLightbulb;
 
-  recentAchievements = [
-    { description: 'Completed a 30-day workout challenge' },
-    { description: 'Reached a new personal best in running' },
-  ];
+  recentAchievements = [];
 
   personalizedTips = [
     { description: 'Stay hydrated during workouts' },
@@ -79,7 +77,8 @@ export class DashboardComponent implements OnInit {
     public currentUserService: CurrentUserService,
     private goalsService: GoalsService,
     private workoutsService: WorkoutsService,
-    private firestore: AngularFirestore
+    private firestore: AngularFirestore,
+    private profileService: ProfileService
   ) {}
 
   getWorkoutByDocId(docId: string) {
@@ -126,6 +125,11 @@ export class DashboardComponent implements OnInit {
     this.workoutsService.getCuratedWorkoutById('5QzG6J6VFPNsS1KIXSGY').subscribe(workout => {
       this.curatedWorkout5 = {...this.curatedWorkout5, ...workout};
     });
+
+    const username = this.currentUserService.user.profile.profileHandle;
+    this.profileService.getProfile(username).valueChanges().subscribe(profile => {
+    this.recentAchievements = profile.achievements || [];
+  });
   }
 
   calculateAverageTimeSpent(completedWorkouts: any[]): void {

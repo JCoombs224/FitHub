@@ -1,5 +1,5 @@
 <div class="bg-light p-3 rounded mb-3 mb-3 pb-2">
-  <h6 class="custom-text-color mb-3 pb-2 border-bottom border-dark">Favorite Workouts</h6>
+  <h6 class="custom-text mb-3 pb-2 border-bottom border-dark">Favorite Workouts</h6>
   <div *ngFor="let workout of favoriteWorkouts" class="bg-white p-3 mb-2 rounded shadow-sm d-flex">
     <a class="fav-workout text-decoration-none text-dark align-items-center text-center" (click)="onFavoriteClicked(workout.uid)">{{workout.name}}</a>
     <i class="fas fa-heart text-danger"></i>
