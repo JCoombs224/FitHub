@@ -134,6 +134,7 @@ export class CurrentUserService {
       this.user.profile.achievements = profile.achievements;
       this.user.profile.completedGoals = profile.completedGoals;
       this.user.profile.isPrivate= profile.isPrivate;
+      this.user.profile.goals = profile.goals;
 
       if (isPlatformBrowser(this.platformId)) {
         localStorage.removeItem(this.USER_INFO);

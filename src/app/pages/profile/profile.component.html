@@ -1,18 +1,18 @@
 <div class="row min-vh-100 main-bg">
   <div class="container mt-xl-5">
     <div class="row">
-      <div class="col-12 col-xl-10 col-xxl-7 min-vh-100 col-profile d-flex" style="margin: 0 auto" >
+      <div class="col-12 col-xl-10 col-xxl-7 min-vh-100 col-profile d-flex" style="margin: 0 auto">
         <div class="card w-100 min-vh-100 flex-column mb-5" style="border: none; transform: none; background-color: rgba(255, 255, 255, 0.85)">
           <div class="card-header text-white" style="background-color: rgba(9, 106, 46, 1);">
             <div>
               <div class="row">
                 <div class="col-md-auto d-flex align-items-center justify-content-start">
                   <div style="position: relative" (mouseenter)="showUploadButton = true" (mouseleave)="showUploadButton = false">
-                     <div *ngIf="loadingImage" class="spinner-border text-center text-light" role="status">
-                    <span class="sr-only">Loading...</span>
-                  </div>
-                  <img [src]="profilePictureUrl" class="img-fluid" style="max-width: 256px">
-                  <button *ngIf="showUploadButton && userProfile" class="btn btn-light btn-image-upload" (click)="onUploadButtonClick()"><fa-icon [icon]="faEdit"></fa-icon></button>
+                    <div *ngIf="loadingImage" class="spinner-border text-center text-light" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                    <img [src]="profilePictureUrl" class="img-fluid" style="max-width: 256px">
+                    <button *ngIf="showUploadButton && userProfile" class="btn btn-light btn-image-upload" (click)="onUploadButtonClick()"><fa-icon [icon]="faEdit"></fa-icon></button>
                   </div>
                 </div>
                 <div *ngIf="showCropper" class="crop-container">
@@ -39,25 +39,30 @@
                   <p class="pt-2" style="font-size: 1.1rem;">{{profile.about}}</p>
                 </div>
                 <div class="card col-md-auto" style="padding-left: 1%; background:none; border:none;">
-                  <button class="btn zoom-btn btn-outline-success w-100" display="flex-row" style="margin: 5px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" (click)="showFollowersModal()">
+                  <button class="btn zoom-btn btn-outline-success w-100" display="flex-row" style="margin: 5px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark"
+                    (click)="showFollowersModal()">
                     <h5 style="text-align: center;">{{profile.followers.length}}</h5>
                     <p class="mb-1 no-wrap">Followers</p>
                   </button>
-                  <button class="btn zoom-btn btn-outline-success w-100" display="flex-row" style="margin: 5px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" (click)="showFollowingModal()">
+                  <button class="btn zoom-btn btn-outline-success w-100" display="flex-row" style="margin: 5px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark"
+                    (click)="showFollowingModal()">
                     <h5>{{profile.following.length}}</h5>
                     <p class="mb-1 no-wrap">Following</p>
                   </button>
                   <hr>
                   <div *ngIf="userProfile">
-                    <button class="btn zoom-btn btn-outline-success w-100" display="flex-row" style="margin: 5px; margin-bottom: 10px; background-color: #b0dfba;" data-mdb-ripple-color="dark" id="editProfile" (click)="showEditProfileModal()">
+                    <button class="btn zoom-btn btn-outline-success w-100" display="flex-row" style="margin: 5px; margin-bottom: 10px; background-color: #b0dfba;" data-mdb-ripple-color="dark"
+                      id="editProfile" (click)="showEditProfileModal()">
                       Edit Profile
                     </button>
                   </div>
                   <div *ngIf="!userProfile">
-                    <button class="btn zoom-btn btn-outline-success w-100" display="flex-row" style="margin: 5px; margin-bottom: 10px; background-color: #b0dfba;" data-mdb-ripple-color="dark" *ngIf="!checkFollowers()" (click)="addToFollowing()">
+                    <button class="btn zoom-btn btn-outline-success w-100" display="flex-row" style="margin: 5px; margin-bottom: 10px; background-color: #b0dfba;" data-mdb-ripple-color="dark"
+                      *ngIf="!checkFollowers()" (click)="addToFollowing()">
                       <h5>Follow+</h5>
                     </button>
-                    <button class="btn zoom-btn btn-outline-success w-100" display="flex-row" style="margin: 5px; margin-bottom: 10px; background-color: #b0dfba;" data-mdb-ripple-color="dark" *ngIf="checkFollowers()" (click)="removeFromFollowing()">
+                    <button class="btn zoom-btn btn-outline-success w-100" display="flex-row" style="margin: 5px; margin-bottom: 10px; background-color: #b0dfba;" data-mdb-ripple-color="dark"
+                      *ngIf="checkFollowers()" (click)="removeFromFollowing()">
                       <h5>Unfollow-</h5>
                     </button>
                   </div>
@@ -72,7 +77,8 @@
               </div>
               <div class="card-body" style="background: none;">
                 <div class="row ms-4 me-4 ps-5 pe-5">
-                  <button *ngIf="userProfile" type="button" id="createPost" class="btn btn-outline-success" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px;" (click)="showPostsModal()">
+                  <button *ngIf="userProfile" type="button" id="createPost" class="btn btn-outline-success" data-mdb-ripple-color="dark"
+                    style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px;" (click)="showPostsModal()">
                     Create Post+
                   </button>
                 </div>
@@ -91,10 +97,12 @@
                 <div class="card-footer w-100" style="background: none;">
                   <div class="row" style="bottom: 0;">
                     <div *ngIf="userProfile">
-                      <button type="button" id="createWorkout" class="btn btn-outline-success mb-1" routerLink="/my-workouts/create" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; width: 100%;">
+                      <button type="button" id="createWorkout" class="btn btn-outline-success mb-1" routerLink="/my-workouts/create" data-mdb-ripple-color="dark"
+                        style="background-color: #b0dfba; margin: 0 auto; margin-top: 20px; width: 100%;">
                         Create Workout+
                       </button>
-                      <button type="button" id="viewAllWorkouts" class="btn btn-outline-success" routerLink="/my-workouts" data-mdb-ripple-color="dark" style="background-color: #b0dfba; margin: 0 auto; width: 100%;">
+                      <button type="button" id="viewAllWorkouts" class="btn btn-outline-success" routerLink="/my-workouts" data-mdb-ripple-color="dark"
+                        style="background-color: #b0dfba; margin: 0 auto; width: 100%;">
                         View All Workouts
                       </button>
                     </div>
@@ -112,11 +120,12 @@
 <!--Followers modal-->
 <div #followersModal class="modal" style="width: 30%; min-width: 450px; min-height: 300px;">
   <h5 class="modal-header">
-      @{{urlProfileHandle}}'s Followers
+    @{{urlProfileHandle}}'s Followers
   </h5>
   <div class="modal-body">
     <li *ngFor="let follower of profile.followers">
-      <button class="btn zoom-btn btn-outline-success" style="margin: 3px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" href="#" routerLink="/profile/{{follower}}">@{{follower}}</button>
+      <button class="btn zoom-btn btn-outline-success" style="margin: 3px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" href="#"
+        routerLink="/profile/{{follower}}">@{{follower}}</button>
     </li>
   </div>
   <div class="modal-footer" style="width: 90%;">
@@ -127,11 +136,12 @@
 <!--Following modal-->
 <div #followingModal class="modal" style="width: 30%; min-width: 450px; min-height: 300px;">
   <h5 class="modal-header">
-      Profiles @{{urlProfileHandle}} follows
+    Profiles @{{urlProfileHandle}} follows
   </h5>
   <div class="modal-body">
     <li *ngFor="let followed of profile.following">
-      <button class="btn zoom-btn btn-outline-success" style="margin: 3px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" href="#" routerLink="/profile/{{followed}}">@{{followed}}</button>
+      <button class="btn zoom-btn btn-outline-success" style="margin: 3px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" href="#"
+        routerLink="/profile/{{followed}}">@{{followed}}</button>
     </li>
   </div>
   <div class="modal-footer" style="width: 90%;">
@@ -149,7 +159,7 @@
   <div class="modal-body" style="min-height: 70%;">
     <div>
       <h5 class="mt-4">Upload an image:</h5>
-      <input class="mb-2" type="file" id="ImageToPost" accept="image/*" aria-label="Choose an Image"/>
+      <input class="mb-2" type="file" id="ImageToPost" accept="image/*" aria-label="Choose an Image" />
     </div>
     <div class="form-group">
       <h5>Enter text:</h5>
@@ -216,7 +226,8 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button class="btn zoom-btn btn-outline-success" style="margin: 3px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark" (click)="updateProfile(); closeEditProfileModal();">Save</button>
+    <button class="btn zoom-btn btn-outline-success" style="margin: 3px; z-index: 1; background-color: #b0dfba;" data-mdb-ripple-color="dark"
+      (click)="updateProfile(); closeEditProfileModal();">Save</button>
     <button class="btn zoom-btn btn-outline-secondary" style="background-color: rgba(255, 255, 255, 0.8);" (click)="closeEditProfileModal()">Close</button>
   </div>
 </div>

@@ -168,9 +168,10 @@ export class WorkoutsService {
     });
   }
 
-  getCuratedWorkoutById(id: string): Observable<any> {
+  getCuratedWorkoutById(id: string) {
     return this.afs.collection('curatedWorkouts')
     .doc(id)
-    .valueChanges();
+    .ref
+    .get();
   }
 }

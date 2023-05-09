@@ -63,7 +63,7 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
   equipment = [];
   
   workoutForm = this.fb.group({
-    name: [''],
+    name: ['', Validators.required],
     equipment_group_name: [''],
     equipment: ['*'],
     description: [''],
@@ -278,6 +278,12 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
 
   // save workout to firebase under the current users profile
   saveWorkout() {
+    this.workoutForm.markAllAsTouched();
+    // If the form is invalid, don't submit it
+    if (this.workoutForm.invalid) {
+      this.toastr.error("Please enter a name for your workout and add at least one exercise.");
+      return;
+    }
     // If we're editing a workout, update it
     if (this.editingWorkout) {
       this.workoutService.updateWorkout({ uid: this.uid, workout: this.workoutForm.getRawValue() }).then(() => {

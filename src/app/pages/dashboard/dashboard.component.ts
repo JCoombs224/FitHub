@@ -56,7 +56,7 @@ export class DashboardComponent implements OnInit {
   ];
 
 
-  goals: any[] = [];
+  goals = [];
   progressValue: number;
   circumference = 2 * Math.PI * 120;
   strokeDashoffset: number;
@@ -93,37 +93,47 @@ export class DashboardComponent implements OnInit {
     if (this.currentUserService.user.profile.profileHandle == '') {
       this.router.navigate(['/create-profile']);
     }
-    this.goalsService.getGoals().subscribe((goals) => {
-      this.goals = goals;
-    });
 
-    this.workoutsService.getCompletedWorkouts().pipe(take(1)).subscribe((completedWorkouts) => {
+    const subscription = this.workoutsService.getCompletedWorkouts().pipe(take(1)).subscribe((completedWorkouts) => {
       this.calculateAverageTimeSpent(completedWorkouts);
       this.findMostUsedWorkout(completedWorkouts);
+      subscription.unsubscribe();
     });
 
     interval(8000).subscribe(() => {
       this.currentTipIndex = (this.currentTipIndex + 1) % this.personalizedTips.length;
     });
 
-    this.workoutsService.getCuratedWorkoutById('WvedR8vbPf4iJ68sWoXC').subscribe(workout => {
-      this.curatedWorkout1 = {...this.curatedWorkout1, ...workout};
+    const workoutId1 = 'WvedR8vbPf4iJ68sWoXC';
+    const workoutId2 = '5CLBO860fZYSuSdFWwPz';
+    const workoutId3 = '3NwCSq83GXoLS0k0zV8z';
+    const workoutId4 = 'y3lH1SUZM2uaynLbXX8k';
+    const workoutId5 = '5QzG6J6VFPNsS1KIXSGY';
+
+    this.workoutsService.getCuratedWorkoutById(workoutId1).then(workout => {
+      console.log(workout.data());
+      this.curatedWorkout1 = workout.data();
+      this.curatedWorkout1.uid = workoutId1;
     });
 
-    this.workoutsService.getCuratedWorkoutById('5CLBO860fZYSuSdFWwPz').subscribe(workout => {
-      this.curatedWorkout2 = {...this.curatedWorkout2, ...workout};
+    this.workoutsService.getCuratedWorkoutById(workoutId2).then(workout => {
+      this.curatedWorkout2 = workout.data();
+      this.curatedWorkout2.uid = workoutId2;
     });
 
-    this.workoutsService.getCuratedWorkoutById('3NwCSq83GXoLS0k0zV8z').subscribe(workout => {
-      this.curatedWorkout3 = {...this.curatedWorkout3, ...workout};
+    this.workoutsService.getCuratedWorkoutById(workoutId3).then(workout => {
+      this.curatedWorkout3 = workout.data();
+      this.curatedWorkout3.uid = workoutId3;
     });
 
-    this.workoutsService.getCuratedWorkoutById('y3lH1SUZM2uaynLbXX8k').subscribe(workout => {
-      this.curatedWorkout4 = {...this.curatedWorkout4, ...workout};
+    this.workoutsService.getCuratedWorkoutById(workoutId4).then(workout => {
+      this.curatedWorkout4 = workout.data();
+      this.curatedWorkout4.uid = workoutId4;
     });
 
-    this.workoutsService.getCuratedWorkoutById('5QzG6J6VFPNsS1KIXSGY').subscribe(workout => {
-      this.curatedWorkout5 = {...this.curatedWorkout5, ...workout};
+    this.workoutsService.getCuratedWorkoutById(workoutId5).then(workout => {
+      this.curatedWorkout5 = workout.data();
+      this.curatedWorkout5.uid = workoutId5;
     });
 
     const username = this.currentUserService.user.profile.profileHandle;
@@ -174,6 +184,6 @@ export class DashboardComponent implements OnInit {
   }
 
   goToCuratedWorkout(workoutId: string): void {
-    this.router.navigate(['/workout', workoutId]);
+    this.router.navigate(['/workout', 'curated', workoutId]);
   }
 }

@@ -86,12 +86,21 @@ export class ViewWorkoutComponent implements OnInit{
     }
 
     // Get the workout from the database
-    this.subscription = this.workoutService.getWorkout(this.uid, this.profile).subscribe((workout) => {
-      this.workout = workout;
-      this.title.setTitle(this.workout.name+" | Workout | FitHub");
-      this.loading = false;
-      this.subscription.unsubscribe();
-    });
+    if(this.profile == 'curated') {
+      this.workoutService.getCuratedWorkoutById(this.uid).then((workout) => {
+        this.workout = workout.data();
+        this.title.setTitle(this.workout.name+" | Workout | FitHub");
+        this.loading = false;
+      });
+    } else {
+      this.subscription = this.workoutService.getWorkout(this.uid, this.profile).subscribe((workout) => {
+        this.workout = workout;
+        this.title.setTitle(this.workout.name+" | Workout | FitHub");
+        this.loading = false;
+        this.subscription.unsubscribe();
+      });
+    }
+    
   }
 
   startWorkout() {

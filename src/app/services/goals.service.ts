@@ -17,6 +17,7 @@ export class GoalsService {
   private goalsDoc;
   private availableGoalsDoc = this.afs.collection('availableGoals').doc('RurqXsPUJfxUBXZ5nDkp');
   private progress$ = new BehaviorSubject<number>(0);
+  private subscription;
 
   constructor(private afs: AngularFirestore, private currentUserService: CurrentUserService) {
 
@@ -26,7 +27,7 @@ export class GoalsService {
       }
     });
 
-    this.getGoals().subscribe((goals) => {
+    const subscription = this.getGoals().subscribe((goals) => {
       const completedGoals = goals.filter((goal) => goal.completed).length;
       const completionPercentage = (completedGoals / goals.length) * 100;
       this.progress$.next(completionPercentage);
@@ -34,7 +35,6 @@ export class GoalsService {
   }
 
   getGoals() {
-    if (!this.goalsDoc) return of([]);
     return this.goalsDoc.valueChanges().pipe(
       map((data: any) => {
         if (!data || !data.Goals) {
@@ -53,7 +53,7 @@ export class GoalsService {
   }
 
   async completeGoal(goalIndex: number, completed: boolean): Promise<void> {
-    this.getGoals()
+    const subscription = this.getGoals()
       .pipe(first())
       .subscribe(async (goals) => {
         goals[goalIndex].completed = completed;
@@ -64,6 +64,7 @@ export class GoalsService {
         const completedGoals = goals.filter((goal) => goal.completed).length;
         const completionPercentage = (completedGoals / goals.length) * 100;
         this.progress$.next(completionPercentage);
+        subscription.unsubscribe();
       });
   }
 

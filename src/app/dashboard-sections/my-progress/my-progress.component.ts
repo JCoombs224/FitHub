@@ -24,6 +24,12 @@ export class MyProgressComponent {
   circumference = 2 * Math.PI * 120;
   strokeDashoffset: number;
 
+  // Add availableGoals array and ViewChild for the goals modal
+  availableGoals: any[] = [];
+  selectedGoals: any[] = [];
+  completedGoals: any[] = [];
+
+
   constructor(
     private router: Router,
     private title: Title,
@@ -42,14 +48,19 @@ export class MyProgressComponent {
     if (this.currentUserService.user.profile.profileHandle == '') {
       this.router.navigate(['/create-profile']);
     }
+    this.selectedGoals = this.currentUserService.user.profile.goals;
 
-    this.currentUserService.account.subscribe((user) => {
-      this.selectedGoals = user.profile.goals || [];
+    const subscription = this.goalsService.getAvailableGoals().subscribe((availableGoals) => {
+      availableGoals.forEach((goal) => {
+        const selectedGoal = this.selectedGoals.find(selectedGoal => selectedGoal.description == goal.description);
+        if(!selectedGoal) {
+          this.availableGoals.push({...goal});
+        }
+      });
+      subscription.unsubscribe();
     });
 
-    this.goalsService.getAvailableGoals().subscribe((availableGoals) => {
-      this.availableGoals = availableGoals;
-    });
+    console.log("selected goals", this.selectedGoals);
 
     this.loadSelectedGoals();
     this.updateProgress();
@@ -58,11 +69,6 @@ export class MyProgressComponent {
   numberOfSelectedGoals(): number {
     return this.availableGoals.filter(goal => goal.selected).length;
   }
-
-  // Add availableGoals array and ViewChild for the goals modal
-  availableGoals: any[] = [];
-  selectedGoals: any[] = [];
-  completedGoals: any[] = [];
 
   toggleGoalSelection(index: number) {
     const goal = this.availableGoals[index];
@@ -84,34 +90,23 @@ export class MyProgressComponent {
     this.goalsModal.nativeElement.style.display = "block";
     document.body.classList.add("modal-open");
 
+
     this.loadSelectedGoals();
     this.loadCompletedGoals();
   }
 
   loadSelectedGoals() {
-    this.currentUserService.account.subscribe(user => {
-      this.selectedGoals = []; // clear the selectedGoals array
-      if (user.profile.goals) {
-        this.selectedGoals = user.profile.goals;
-
-        // Update the 'selected' property of available goals
-        this.availableGoals.forEach(goal => {
-          goal.selected = this.selectedGoals.some(selectedGoal => selectedGoal.id === goal.id);
-        });
-
-        // Update the progress
-        this.updateProgress();
-      }
-    });
+    this.selectedGoals = this.currentUserService.user.profile.goals;
   }
 
   loadCompletedGoals() {
-    this.currentUserService.account.subscribe((user) => {
+    const subscription = this.currentUserService.account.subscribe((user) => {
       if (user.profile.completedGoals) {
         this.completedGoals = user.profile.completedGoals;
 
         // Update the progress
         this.updateProgress();
+        subscription.unsubscribe();
       }
     });
   }

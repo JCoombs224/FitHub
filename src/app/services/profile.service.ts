@@ -31,7 +31,8 @@ export class ProfileService {
       following: [],
       posts: [],
       achievements: [],
-      completedGoals: []
+      completedGoals: [],
+      goals: [],
     };
   }
 

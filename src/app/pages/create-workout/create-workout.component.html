@@ -45,13 +45,14 @@
             <button class="btn btn-success" (click)="saveWorkout()">Save</button>
           </div>
         </div>
-        <form [formGroup]="workoutForm" (ngSubmit)="editingName = false">
+        <form [formGroup]="workoutForm" (ngSubmit)="editingName = name.valid ? false : true">
           <div class="row justify-content-center text-center">
             <div class="col-8">
               <div class="input-group" *ngIf="editingName">
-                <input type="text" class="form-control form-control-lg text-center" formControlName="name" placeholder="Enter Workout Name">
+                <input type="text" class="form-control form-control-lg text-center" formControlName="name" placeholder="Enter Workout Name" [class.is-invalid]="name.invalid && name.touched">
                 <button class="btn btn-outline-secondary" type="submit">Done</button>
               </div>
+              <small class="mt-2" *ngIf="name.invalid && name.touched" class="text-danger">Name is required</small>
               <h1 class="display-4" *ngIf="!editingName">{{name.value}} <fa-icon [icon]="faEdit" (click)="editingName = true;" style="cursor: pointer; font-size: 2rem;"></fa-icon></h1>
             </div>
           </div>
@@ -95,7 +96,7 @@
             </div>
           </div>
         </div>
-        <form [formGroup]="workoutForm" *ngIf="this.name.value && !editingName" [@slideOutAnimation]>
+        <form [formGroup]="workoutForm" [@slideOutAnimation]>
           <div class="row mb-4 justify-content-center">
             <div class="col-auto">
               <label>Workout Description</label>
