@@ -74,7 +74,7 @@ export class FeedComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     if (!this.profileFeed) {
-      this.postsService.getSocialFeed(true).then(feed => {
+      this.postsService.getSocialFeed().then(feed => {
         this.feed = feed;
         this.loadWorkoutCards();
       });
