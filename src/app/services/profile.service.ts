@@ -25,13 +25,14 @@ export class ProfileService {
       about: '',
       profilePicture: '',
       isPrivate: false,
-      completedWorkouts: [{}],
-      workouts: [{}],
+      completedWorkouts: [],
+      workouts: [],
       followers: [],
       following: [],
       posts: [],
       achievements: [],
       completedGoals: [],
+      selectedGoals: [],
       goals: [],
     };
   }

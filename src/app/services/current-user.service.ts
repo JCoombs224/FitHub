@@ -127,14 +127,14 @@ export class CurrentUserService {
       this.user.profile.heightInches = profile.heightInches;
       this.user.profile.sex = profile.sex;
       this.user.profile.about = profile.about;
-      this.user.profile.followers = profile.followers;
-      this.user.profile.following = profile.following;
+      this.user.profile.followers = profile.followers || [];
+      this.user.profile.following = profile.following || [];
       this.user.profile.posts = profile.posts;
-      this.user.profile.completedWorkouts = profile.completedWorkouts;
-      this.user.profile.achievements = profile.achievements;
-      this.user.profile.completedGoals = profile.completedGoals;
+      this.user.profile.completedWorkouts = profile.completedWorkouts || [];
+      this.user.profile.achievements = profile.achievements || [];
+      this.user.profile.completedGoals = profile.completedGoals || [];
       this.user.profile.isPrivate= profile.isPrivate;
-      this.user.profile.goals = profile.goals;
+      this.user.profile.goals = profile.goals || [];
 
       if (isPlatformBrowser(this.platformId)) {
         localStorage.removeItem(this.USER_INFO);
