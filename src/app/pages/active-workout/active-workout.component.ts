@@ -81,29 +81,45 @@ export class ActiveWorkoutComponent implements OnInit, OnDestroy {
     this.profile = this.route.snapshot.paramMap.get('profile');
 
     // Get the workout from the database
-    this.subscription = this.workoutService.getWorkout(this.uid, this.profile).subscribe((workout) => {
-      this.workout = workout;
-
-      // Create the checkbox indices for the exercises
-      for(let group of workout.groups) {
-        const temp = []
-        for(let exercise of group.exercises) {
-          temp.push(false);
+    // Get the workout from the database
+    if (this.profile == 'curated') {
+      this.workoutService.getCuratedWorkoutById(this.uid).then((workout) => {
+        this.workout = workout.data();
+        this.title.setTitle(this.workout.name + " | Workout | FitHub");
+        // Create the checkbox indices for the exercises
+        for (let group of this.workout.groups) {
+          const temp = []
+          for (let exercise of group.exercises) {
+            temp.push(false);
+          }
+          this.checkBoxes.push(temp);
         }
-        this.checkBoxes.push(temp);
-      }
+        this.loading = false;
+      });
+    } else {
+      this.subscription = this.workoutService.getWorkout(this.uid, this.profile).subscribe((workout) => {
+        this.workout = workout;
+        this.title.setTitle(this.workout.name + " | Workout | FitHub");
+        // Create the checkbox indices for the exercises
+        for (let group of workout.groups) {
+          const temp = []
+          for (let exercise of group.exercises) {
+            temp.push(false);
+          }
+          this.checkBoxes.push(temp);
+        }
+        this.loading = false;
+        this.subscription.unsubscribe();
+      });
+    }
 
-      this.title.setTitle(this.workout.name + " | Workout | FitHub");
-      this.loading = false;
-      this.subscription.unsubscribe();
-    });
 
     const storedStartTime = localStorage.getItem('stopwatchStartTime');
     const storedElapsedTime = localStorage.getItem('stopwatchElapsedTime');
     this.startTime = storedStartTime ? parseInt(storedStartTime, 10) : 0;
     this.elapsedTime = storedElapsedTime ? parseInt(storedElapsedTime, 10) : 0;
     this.updateDisplayTime();
-    if(storedStartTime) {
+    if (storedStartTime) {
       this.start();
     }
     this.startTime = Date.now() - this.elapsedTime;
@@ -116,10 +132,10 @@ export class ActiveWorkoutComponent implements OnInit, OnDestroy {
   getPercentComplete() {
     let total = 0;
     let completed = 0;
-    for(let i = 0; i < this.checkBoxes.length; i++) {
-      for(let j = 0; j < this.checkBoxes[i].length; j++) {
+    for (let i = 0; i < this.checkBoxes.length; i++) {
+      for (let j = 0; j < this.checkBoxes[i].length; j++) {
         total++;
-        if(this.checkBoxes[i][j]) {
+        if (this.checkBoxes[i][j]) {
           completed++;
         }
       }
@@ -128,7 +144,7 @@ export class ActiveWorkoutComponent implements OnInit, OnDestroy {
   }
 
   openExercise(i, j) {
-    if(this.exerciseOpen[0] === i && this.exerciseOpen[1] === j) {
+    if (this.exerciseOpen[0] === i && this.exerciseOpen[1] === j) {
       this.exerciseOpen = [-1, -1];
     }
     else {
@@ -184,7 +200,7 @@ export class ActiveWorkoutComponent implements OnInit, OnDestroy {
   }
 
   completeWorkout() {
-    const data = {uid: this.uid, name: this.workout.name, createdBy: this.profile, percentComplete: this.getPercentComplete(), elapsedTime: this.getElapsedTime().toString(), date: new Timestamp(Date.now() / 1000, 0)};
+    const data = { uid: this.uid, name: this.workout.name, createdBy: this.profile, percentComplete: this.getPercentComplete(), elapsedTime: this.getElapsedTime().toString(), date: new Timestamp(Date.now() / 1000, 0) };
     this.workoutService.completeWorkout(data).then(() => {
       // Update the local profile to reflect the changes
       this.currentUser.fetchProfile(this.currentUser.user.account);
