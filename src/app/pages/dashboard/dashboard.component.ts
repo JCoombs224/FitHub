@@ -62,10 +62,10 @@ export class DashboardComponent implements OnInit {
   strokeDashoffset: number;
 
   curatedWorkout1: any = {uid: 'WvedR8vbPf4iJ68sWoXC'};
-  curatedWorkout2: any = {uid: '5CLBO860fZYSuSdFWwPz'};
-  curatedWorkout3: any = {uid: '3NwCSq83GXoLS0k0zV8z'};
-  curatedWorkout4: any = {uid: 'y3lH1SUZM2uaynLbXX8k'};
-  curatedWorkout5: any = {uid: 'gPO3yb3CYT0IgDj1yBeV'};
+  curatedWorkout2: any = {uid: 'cHlnUlE5kzNgvx2CCMrq'};
+  curatedWorkout3: any = {uid: 'xwTw3e7EN5cKqETDxVFR'};
+  curatedWorkout4: any = {uid: '9twmoZDkdYgg3OEcKDPA'};
+  curatedWorkout5: any = {uid: '4G8mF9PLMxeSIsZowp9x'};
 
 
   constructor(
@@ -105,10 +105,10 @@ export class DashboardComponent implements OnInit {
     });
 
     const workoutId1 = 'WvedR8vbPf4iJ68sWoXC';
-    const workoutId2 = '5CLBO860fZYSuSdFWwPz';
-    const workoutId3 = '3NwCSq83GXoLS0k0zV8z';
-    const workoutId4 = 'y3lH1SUZM2uaynLbXX8k';
-    const workoutId5 = '5QzG6J6VFPNsS1KIXSGY';
+    const workoutId2 = 'cHlnUlE5kzNgvx2CCMrq';
+    const workoutId3 = 'xwTw3e7EN5cKqETDxVFR';
+    const workoutId4 = '9twmoZDkdYgg3OEcKDPA';
+    const workoutId5 = '4G8mF9PLMxeSIsZowp9x';
 
     this.workoutsService.getCuratedWorkoutById(workoutId1).then(workout => {
       console.log(workout.data());
