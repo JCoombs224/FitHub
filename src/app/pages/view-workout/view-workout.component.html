@@ -61,15 +61,19 @@
             </div>
             <div class="card-body">
               <ol class="list-group list-group-flush list-group-numbered">
-                <li class="list-group-item" *ngFor="let item of group.exercises">
+                <li class="list-group-item" *ngFor="let item of group.exercises;">
                   <h4 class="d-inline">{{item.name}}</h4>
                   <div class="row mb-3 mt-3">
-                    <div class="col-auto border-end" *ngIf="item.sets && item.reps">
+                    <div class="col-auto border-end" *ngIf="item.sets && item.reps;">
                       <h6 class="ms-3">{{item.sets}} sets of {{item.reps}} reps</h6>
                     </div>
                     <div class="col">
                       <h5>Instructions:</h5>
-                      <p>{{item.instructions}}</p>
+                      <ul class="mb-3">
+                        <ng-container *ngFor="let inst of item.instructions.split('.'); let end = last">
+                          <li *ngIf="!end">{{inst}}</li>
+                        </ng-container>
+                      </ul>
                       <h6 *ngIf="item.secondaryMuscles" class="d-inline">Secondary Muscles: </h6>{{item.secondaryMuscles|titlecase}}
                     </div>
                   </div>
