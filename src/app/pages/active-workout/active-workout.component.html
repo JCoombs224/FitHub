@@ -77,7 +77,11 @@
                         <div *ngIf="isOpen(i, j)" class="bg-white row border-top pt-3" [@slideOutAnimation]>
                           <div class="col">
                             <h5>Instructions:</h5>
-                            <p>{{item.instructions}}</p>
+                            <ul class="mb-3">
+                              <ng-container *ngFor="let inst of item.instructions.split('.'); let end = last">
+                                <li *ngIf="!end">{{inst}}</li>
+                              </ng-container>
+                            </ul>
                             <h6 *ngIf="item.secondaryMuscles" class="d-inline">Secondary Muscles: </h6>{{item.secondaryMuscles|titlecase}}
                           </div>
                         </div>

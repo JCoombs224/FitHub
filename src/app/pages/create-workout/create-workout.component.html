@@ -140,7 +140,12 @@
                           <span class="display-6">{{ex.value.name}}</span>
                           <span class="float-end"><fa-icon [icon]="faX" (click)="removeExerciseAt(i, j)" style="cursor: pointer; font-size: 1.3rem;"></fa-icon></span>
                           <hr>
-                          <p><strong>Instructions: </strong> {{ex.value.instructions}} </p>
+                          <strong>Instructions: </strong>
+                          <ul class="mb-3">
+                            <ng-container *ngFor="let inst of ex.value.instructions.split('.'); let end = last">
+                              <li *ngIf="!end">{{inst}}</li>
+                            </ng-container>
+                          </ul>
                           <p *ngIf="ex.value.secondaryMuscles"><strong>Secondary Muscles: </strong> {{ex.value.secondaryMuscles|titlecase}} </p>
                           <hr>
                           <div class="row justify-content-center mt-3 mb-3">
