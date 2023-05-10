@@ -56,6 +56,9 @@ export class MyProgressComponent {
         if(!selectedGoal) {
           this.availableGoals.push({...goal});
         }
+        else {
+          this.availableGoals.splice(this.availableGoals.findIndex(availableGoal => availableGoal.description == goal.description), 1);
+        }
       });
       subscription.unsubscribe();
     });
@@ -73,8 +76,9 @@ export class MyProgressComponent {
   toggleGoalSelection(index: number) {
     const goal = this.availableGoals[index];
     if (goal.selected) {
-      this.selectedGoals.push({ ...goal, completed: false }); // Add the goal to the selectedGoals array with completed set to false
-      goal.selected = false;
+      this.selectedGoals.push({ ...goal, completed: false });
+      // goal.selected = false;
+      goal.splice(index, 1);
     } else {
       const selectedIndex = this.selectedGoals.findIndex(selectedGoal => selectedGoal.id === goal.id);
       if (selectedIndex > -1) {
@@ -140,11 +144,11 @@ export class MyProgressComponent {
       this.completedGoals.push(goal);
     } else {
       // Remove the goal from completedGoals and add it back to selectedGoals
-      const completedIndex = this.completedGoals.findIndex(completedGoal => completedGoal.id === goal.id);
-      if (completedIndex > -1) {
-        this.completedGoals.splice(completedIndex, 1);
-        this.selectedGoals.push(goal);
-      }
+      // const completedIndex = this.completedGoals.findIndex(completedGoal => completedGoal.id === goal.id);
+      // if (completedIndex > -1) {
+      //   this.completedGoals.splice(completedIndex, 1);
+      //   this.selectedGoals.push(goal);
+      // }
     }
 
     // Update the user's profile

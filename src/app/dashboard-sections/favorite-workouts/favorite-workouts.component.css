@@ -1,5 +1,6 @@
 .custom-text {
   color: #0b8200;
+  font-weight: bold;
 }
 
 @media (max-width: 1500px) {

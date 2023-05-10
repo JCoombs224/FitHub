@@ -7,13 +7,15 @@
             <h5 class="card-title custom-text mt-3 mb-4">Feed</h5>
             <app-favorite-workouts></app-favorite-workouts>
             <!-- Goals and Achievements -->
-            <div *ngIf="recentAchievements.length > 0" class="bg-light p-3 rounded mb-3">
+            <div class="bg-light p-3 rounded mb-3 mb-3 pb-2">
               <h6 class="custom-text mb-3 pb-2 border-bottom border-dark">Recent Achievements</h6>
-              <ul class="list-unstyled">
-                <li *ngFor="let achievement of recentAchievements">
-                  <i class="faAward text-warning"><fa-icon [icon]="faAward"></fa-icon></i> {{ achievement.description }}
-                </li>
-              </ul>
+                <div *ngIf="recentAchievements.length > 0" class="bg-light p-3 rounded mb-3">
+                  <ul class="list-unstyled">
+                    <li *ngFor="let achievement of recentAchievements">
+                      <i class="faAward text-warning"><fa-icon [icon]="faAward"></fa-icon></i> {{ achievement.description }}
+                    </li>
+                  </ul>
+              </div>
             </div>
           </div>
           <!-- Personalized Tips -->

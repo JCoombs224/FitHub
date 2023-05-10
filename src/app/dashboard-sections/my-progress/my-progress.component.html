@@ -60,7 +60,7 @@
       <ul class="list-group mb-4">
         <li class="list-group-item" *ngFor="let goal of availableGoals; let i = index">
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" [id]="'availableGoal' + i" [(ngModel)]="goal.selected" (change)="toggleGoalSelection(i)" [disabled]="goal.selected !== true && numberOfSelectedGoals() == 5">
+            <input class="form-check-input" type="checkbox" [id]="'availableGoal' + i" [(ngModel)]="goal.selected" (change)="toggleGoalSelection(i)" [disabled]="goal.selected !== true && numberOfSelectedGoals() === 5">
             <label class="form-check-label" [for]="'availableGoal' + i">
               {{goal.description}}
             </label>
