@@ -67,10 +67,10 @@ export class ViewWorkoutComponent implements OnInit{
     private workoutService: WorkoutsService) { }
 
   ngOnInit() {
-    window.scroll({ 
-      top: 0, 
-      left: 0, 
-      behavior: 'smooth' 
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
     });
 
     // Get the workout UID from the URL
@@ -100,7 +100,7 @@ export class ViewWorkoutComponent implements OnInit{
         this.subscription.unsubscribe();
       });
     }
-    
+
   }
 
   startWorkout() {
